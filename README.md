@@ -1,9 +1,7 @@
 # GeekText
-
 CEN4010 - Group XIV
 
 ## !!Important!!
-
 * Any Change to the SQL File of the Database containing the DML and DDL needs to be notify it to the team.
 * DO NOT use the branches "Testing" and "Stage".
 * Any Commit should have a summary and description.
