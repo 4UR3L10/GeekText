@@ -5,5 +5,5 @@ CEN4010 - Group XIV
 * Any Change to the SQL File of the Database containing the DML and DDL needs to be notify it to the team.
 * DO NOT use the branches "Testing" and "Stage".
 * Any Commit should have a summary and description.
-* If you need to move or edit someonelse code you shuoul leave a comment in the file when making the changes. 
+* If you need to move or edit someonelse code you shuuld leave a comment in the file when making the changes. 
 * Every Team member is responsable for checking the Issues tab of the project. 
