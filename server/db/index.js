@@ -11,7 +11,7 @@ const pool = mysql.createPool({
 
 let geekdb = {};
 
-geekdb.all = () => {
+geekdb.allUsers = () => {
   return new Promise((resolve, reject) => {
     pool.query("SELECT * FROM user", (err, results) => {
       if (err) {
@@ -22,7 +22,7 @@ geekdb.all = () => {
   });
 };
 
-geekdb.one = (UserID) => {
+geekdb.oneUser = (UserID) => {
   return new Promise((resolve, reject) => {
     pool.query(
       "SELECT * FROM user WHERE UserID = ?",
@@ -37,8 +37,23 @@ geekdb.one = (UserID) => {
   });
 };
 
-// Insert
-// Update
-// Delete
+geekdb.oneEmail = (NickName) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      "SELECT * FROM user WHERE NickName = ?",
+      [NickName],
+      (err, results) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(results[0]);
+      }
+    );
+  });
+};
+// Select -> GET
+// Insert -> PUT
+// Update -> POST
+// Delete -> DELETE
 
 module.exports = geekdb;
