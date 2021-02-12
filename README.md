@@ -9,4 +9,11 @@ CEN4010 - Group XIV
 - Any Commit should have a summary and description.
 - If you need to move or edit someonelse code you shuuld leave a comment in the file when making the changes.
 - Every Team member is responsable for checking the Issues tab of the project.
-- Client Folder is for Front-End and Client folder is for Back-End.
+- Client Folder is for Front-End and backend folder is for Back-End.
+
+## Commands
+
+| Language | Commands      |
+| -------- | ------------- |
+| React    | "npm start"   |
+| Node     | "npm run dev" |
