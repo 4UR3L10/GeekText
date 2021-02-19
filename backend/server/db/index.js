@@ -42,4 +42,24 @@ geekdb.one = (UserID) => {
 // Update
 // Delete
 
+geekdb.signin = () => {
+  const username = "ASDFG";
+  const password = "ASASA";
+  return new Promise((resolve, reject) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    pool.query(
+      "INSERT INTO publisher (PublisherName, PublisherInfo) VALUES (?, ?);",
+      [username, password],
+      (err, results) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(results);
+      }
+    );
+  });
+};
+
 module.exports = geekdb;

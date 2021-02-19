@@ -1,7 +1,20 @@
 import React, { useState } from "react";
 import "./App.css";
+import Axios from "axios";
 
 function App() {
+  const [usernameReg, setUsernameReg] = useState("");
+  const [passwordReg, setPasswordReg] = useState("");
+
+  const register = () => {
+    Axios.post("http://localhost3001/register", {
+      username: usernameReg,
+      password: passwordReg,
+    }).then((response) => {
+      console.log(response);
+    });
+  };
+
   return (
     <div className="App">
       <div className="registration">
@@ -12,7 +25,14 @@ function App() {
           <div>
             <div>
               Email:
-              <input name="TextBoxEmail" type="text" id="TextBoxEmail" />
+              <input
+                name="TextBoxEmail"
+                type="text"
+                id="TextBoxEmail"
+                onChange={(e) => {
+                  setUsernameReg(e.target.value);
+                }}
+              />
             </div>
             <div>
               Password:
@@ -20,11 +40,15 @@ function App() {
                 name="TextBoxPassword"
                 type="password"
                 id="TextBoxPassword"
+                onChange={(e) => {
+                  setPasswordReg(e.target.value);
+                }}
               />
             </div>
             <div>
               <div>
                 <input
+                  onClick={register}
                   type="submit"
                   name="ButtonSignIn"
                   value="Sign In"
