@@ -13,7 +13,7 @@ CEN4010 - Group XIV
 
 ## Commands
 
-| Language | Commands      |
-| -------- | ------------- |
-| React    | "npm start"   |
-| Node     | "npm run dev" |
+| Language | Commands        |
+| -------- | --------------- |
+| React    | "npm start"     |
+| Node     | "node index.js" |
