@@ -3,13 +3,13 @@ import "./App.css";
 import Axios from "axios";
 
 function App() {
-  const [usernameReg, setUsernameReg] = useState("");
-  const [passwordReg, setPasswordReg] = useState("");
+  const [EmailAddressReg, setEmailAddressReg] = useState("");
+  const [PasswordReg, setPasswordReg] = useState("");
 
   const register = () => {
-    Axios.post("http://localhost3001/register", {
-      username: usernameReg,
-      password: passwordReg,
+    Axios.post("http://localhost:3001/signup/test", {
+      EmailAddress: EmailAddressReg,
+      Password: PasswordReg,
     }).then((response) => {
       console.log(response);
     });
@@ -18,72 +18,28 @@ function App() {
   return (
     <div className="App">
       <div className="registration">
-        <div>
-          <div>
-            <h2 id="dialog-title">Sign in or Create an Account</h2>
-          </div>
-          <div>
-            <div>
-              Email:
-              <input
-                name="TextBoxEmail"
-                type="text"
-                id="TextBoxEmail"
-                onChange={(e) => {
-                  setUsernameReg(e.target.value);
-                }}
-              />
-            </div>
-            <div>
-              Password:
-              <input
-                name="TextBoxPassword"
-                type="password"
-                id="TextBoxPassword"
-                onChange={(e) => {
-                  setPasswordReg(e.target.value);
-                }}
-              />
-            </div>
-            <div>
-              <div>
-                <input
-                  onClick={register}
-                  type="submit"
-                  name="ButtonSignIn"
-                  value="Sign In"
-                  id="ButtonSignIn"
-                />
-                <input
-                  type="submit"
-                  name="ButtonCancel"
-                  value="Cancel"
-                  id="ButtonCancel"
-                />
-              </div>
-            </div>
-          </div>
-          <div>
-            <p>
-              By signing in you are agreeing to our{" "}
-              <a href="#" class="link--underline">
-                Terms of Use
-              </a>{" "}
-              and our{" "}
-              <a href="#" class="link--underline">
-                Privacy Policy
-              </a>
-            </p>
-          </div>
-          <div>
-            <p>
-              Don't have an account?{" "}
-              <a href="#" class="link--underline">
-                Create an Account
-              </a>
-            </p>
-          </div>
-        </div>
+        <h1>Registration</h1>
+        <label>Email</label>
+        <input
+          type="text"
+          onChange={(e) => {
+            setEmailAddressReg(e.target.value);
+          }}
+        />
+        <label>Password</label>
+        <input
+          type="text"
+          onChange={(e) => {
+            setPasswordReg(e.target.value);
+          }}
+        />
+        <button onClick={register}>Register</button>
+      </div>
+      <div className="login">
+        <h1>Registration</h1>
+        <input type="text" placeholder="Username..." />
+        <input type="text" placeholder="Password..." />
+        <button>Register</button>
       </div>
     </div>
   );

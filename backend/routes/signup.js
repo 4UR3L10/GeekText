@@ -24,4 +24,22 @@ router.post("/", (req, res) => {
   }
 });
 
+// [SignUp] Insert User with Email and Password.
+router.post("/test", (req, res) => {
+  //const { EmailAddress, Password } = req.body;
+  const EmailAddress = req.body.EmailAddress;
+  const Password = req.body.Password;
+
+  if (Password && EmailAddress) {
+    try {
+      db.promise().query(
+        `INSERT INTO user VALUES('${0}','Testing Test','${Password}','${EmailAddress}','N','Fulana','N')`
+      );
+      res.status(201).send({ msg: "Created User" });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+});
+
 module.exports = router;
