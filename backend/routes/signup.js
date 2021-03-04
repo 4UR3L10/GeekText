@@ -24,7 +24,26 @@ router.post("/", (req, res) => {
   }
 });
 
-// [SignUp] Insert User with Email and Password.
+// [SignUp] Insert User Information..
+router.post("/user", (req, res) => {  
+  const UserFullName = req.body.UserFullName;
+  const EmailAddress = req.body.EmailAddress;
+  const Password = req.body.Password;
+  const NickName = req.body.NickName;
+
+  if (Password && EmailAddress && UserFullName && NickName) {
+    try {
+      db.promise().query(
+        `INSERT INTO user VALUES('${0}','${UserFullName}','${Password}','${EmailAddress}','N','${NickName}','N')`
+      );
+      res.status(201).send({ msg: "Created User" });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+});
+
+// [SignUp] Testing Insert User with Email and Password.
 router.post("/test", (req, res) => {
   //const { EmailAddress, Password } = req.body;
   const EmailAddress = req.body.EmailAddress;

@@ -15,13 +15,17 @@ import Container from 'react-bootstrap/Container' // Container ReactBootsrap.
 import Alert from 'react-bootstrap/Alert' // Alert ReactBootsrap.
 
 function App() {
+  const [UserFullNameReg, setUserFullNameReg] = useState("");
   const [EmailAddressReg, setEmailAddressReg] = useState("");
   const [PasswordReg, setPasswordReg] = useState("");
+  const [NickNameReg, setNickNameReg] = useState("");
 
   const register = () => {
-    Axios.post("http://localhost:3001/signup/test", {
+    Axios.post("http://localhost:3001/signup/user", {
+      UserFullName: UserFullNameReg,
       EmailAddress: EmailAddressReg,
       Password: PasswordReg,
+      NickName: NickNameReg,
     }).then((response) => {
       console.log(response);
     });
@@ -79,7 +83,7 @@ function App() {
               <InputGroup.Prepend>
               <InputGroup.Text id="inputGroup-sizing-sm">Fullname</InputGroup.Text>
               </InputGroup.Prepend>
-              <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+              <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" onChange={(e) => {setUserFullNameReg(e.target.value);}}/>
             </InputGroup>
 
             {/* Email.*/}
@@ -112,7 +116,15 @@ function App() {
               <InputGroup.Text id="inputGroup-sizing-sm">Confirm Passsword</InputGroup.Text>
               </InputGroup.Prepend>
               <FormControl type="password" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
-            </InputGroup>          
+            </InputGroup>    
+
+            {/* Nickname.*/}
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Prepend>
+              <InputGroup.Text id="inputGroup-sizing-sm">Nickname</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" onChange={(e) => {setNickNameReg(e.target.value);}}/>
+            </InputGroup>      
           </label>
 
           {/* Buttons.*/}
