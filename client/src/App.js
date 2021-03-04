@@ -37,20 +37,21 @@ function App() {
 
       {/* NavBar.*/}
       <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
-        <Navbar.Brand href="#home">GeekText</Navbar.Brand>
+        <Navbar.Brand href="/">GeekText</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="#features">Sign In</Nav.Link>
-            <Nav.Link href="#pricing">Sign Up</Nav.Link>
+            <Nav.Link href="/signin">Sign In</Nav.Link>
+            <Nav.Link href="/signup">Sign Up</Nav.Link>
             <NavDropdown title="Manage" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Settings</NavDropdown.Item>
+              <NavDropdown.Item href="/mngaccount">Account</NavDropdown.Item>
+              <NavDropdown.Item href="/mngsettings">Settings</NavDropdown.Item>              
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.2">Shipping Address</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Shipping Address New</NavDropdown.Item>
+              <NavDropdown.Item href="/mngshipaddress">Shipping Address</NavDropdown.Item>
+              <NavDropdown.Item href="/newshipaddress">Shipping Address New</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">Payment</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.4">Payment New</NavDropdown.Item>
+              <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
+              <NavDropdown.Item href="/newpayment">Payment New</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Nav>
@@ -67,8 +68,8 @@ function App() {
           <Container>
             <h1>Create an Account</h1>
             <p>
-            Fill in the fields below to create a Barnes & Noble.com account.
-            If you already have an account, please. <Alert.Link href="#">Sign In</Alert.Link>.
+            Fill in the fields below to create a GeekText account.
+            If you already have an account, please. <Alert.Link href="/signin">Sign In</Alert.Link>.
             </p>
           </Container>
   
