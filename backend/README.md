@@ -108,19 +108,19 @@ function to use the sql session that has been created.
 
 4. We also need to catch any potential errors and send that to client when it happens. So the
 full statment for route `api/publishers` is 
-        ```js
-        router.get('/', function (req, res) {
-          const queryString = `SELECT * FROM geektext.publisher`;
-          mysqlx.getSession(credentials)
-            .then(session => session.sql(queryString).execute())
-            .then(result => queryResultToJson(result))
-            .then(result => res.json(result))
-            .catch((err) => {
-              console.log(err)
-              res.status(500).send('Server Error')
-            });
+    ```js
+    router.get('/', function (req, res) {
+      const queryString = `SELECT * FROM geektext.publisher`;
+      mysqlx.getSession(credentials)
+        .then(session => session.sql(queryString).execute())
+        .then(result => queryResultToJson(result))
+        .then(result => res.json(result))
+        .catch((err) => {
+          console.log(err)
+          res.status(500).send('Server Error')
         });
-        ```
+    });
+    ```
 
 ## References
 The following is a list of references used in the creation of the backend. 
