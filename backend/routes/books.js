@@ -19,7 +19,6 @@ router.get('/:id', (req, res) => {
   // Validate input
   const book_id = req.params.id
   if (!parseInt(book_id)) {
-    console.log('ho')
     return res.status(400).send(`Invalid input: ${book_id}`)
   }
 
