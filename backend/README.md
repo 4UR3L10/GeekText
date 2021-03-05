@@ -63,8 +63,7 @@ more information is available.
 ```
 ## Adding to the REST API
 Let's say, for example, I wanted to add a link (URI) called `/publishers` that gets all the publishers found in the
-database, and I also wanted to add the link `/publishers/{id}` that get's a specific publisher based on the id.
-How would I go about doing so?
+database. How would I go about doing so?
 
 ### Step 1: Initialization
 1. Create a file in the routes/ folder called `publishers.js`. 
@@ -115,9 +114,67 @@ sandwiched in-between the import statements and the export statement.
     ...
     ```
 
-2. Start the server and in your browser, navigate to `localhost:4000/publishers`. You sould see the
+2. Start the server and in your browser, navigate to `localhost:4000/api/publishers`. You sould see the
 message that was sent in the function above. `This is the publisher page!!`
 
+### Step 3: Connect to and using the database
+I now what to get the publishers from the database using the /publishers route.
+
+1. To connect to the database, we will use two imports: `mysqlx`, which is the library
+we are using to connect to MySQL, and `credentials`, which is a file that has the login in
+credentials for MySQL. To make a connection, call the following funciton.
+    ```js
+    mysqlx.getSession(credentials)
+    ```
+2. When this funciton is done executing, call the [then](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then)
+function to use the sql session that has been created.
+    ```js
+    mysqlx.getSession(credentials)
+        .then(session => {
+            // use mysql session here
+        })
+    ```
+    In our case, we want to use the mysql session to get all the publishers from the database. The sql statement to do that is
+    ```sql
+    SELECT * FROM geektext.publisher
+    ```
+    To execute this sql in our javascript, we do the following
+    ```js
+    const queryString = `SELECT * FROM geektext.publisher`;
+    mysqlx.getSession(credentials)
+        .then(session => session.sql(queryString).execute())
+        .then(result => queryResultToJson(result))
+        .then(result => {
+            // result holds the data from the query
+        })
+    ```
+    
+3. To send that data to the the client, call `res.json(...)` in the body of the method
+    ```js
+    const queryString = `SELECT * FROM geektext.publisher`;
+    mysqlx.getSession(credentials)
+        .then(session => session.sql(queryString).execute())
+        .then(result => queryResultToJson(result))
+        .then(result => {
+            res.json(result)
+        })
+    ```
+
+4. We also need to catch any potential errors and send that to client when it happens. So the
+full statment for route `api/publishers` is 
+        ```js
+        router.get('/', function (req, res) {
+          const queryString = `SELECT * FROM geektext.publisher`;
+          mysqlx.getSession(credentials)
+            .then(session => session.sql(queryString).execute())
+            .then(result => queryResultToJson(result))
+            .then(result => res.json(result))
+            .catch((err) => {
+              console.log(err)
+              res.status(500).send('Server Error')
+            });
+        });
+        ```
 
 ## References
 The following is a list of references used in the creation of the backend. 
