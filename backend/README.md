@@ -124,10 +124,12 @@ full statment for route `api/publishers` is
 
 ## References
 The following is a list of references used in the creation of the backend. 
-I strongly recommend looking at these for more understanding of how to add to the backend.
+I strongly recommend looking at these for more understanding of how to add to the backend. 
+I'm sure that the stuff written in this README isn't enough. 
 * [How to design a REST API](https://restfulapi.net/rest-api-design-tutorial-with-example/)
 * [REST Resource Naming Guide](https://restfulapi.net/resource-naming/)
 * [Building a REST API Video Tutorial](https://www.youtube.com/watch?v=pKd0Rpw7O48)   
+* [MySQL NodeJS Guide](https://dev.mysql.com/doc/x-devapi-userguide/en/)
 
 ## Model URIs
 The following are links (or URIs) that the REST API will use to access 
