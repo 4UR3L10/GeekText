@@ -22,3 +22,4 @@ yarn-error.log*
 
 .vscode
 .cache
+database/geektext_model.mwb.bak
