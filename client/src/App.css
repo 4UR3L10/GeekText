@@ -1,38 +1,227 @@
+/* Main App */
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Tanjiro*/
+.c {
+  position: relative;
+  width: 90vmin;
+  height: calc(90vmin * 9 / 16);
+  margin: auto;
+  overflow: hidden;
+  box-shadow: 0 1.25em 1em -0.5em #0005;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.i {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+  object-fit: contain;
+  -o-object-position: 0% 50%;
+  object-position: 0% 50%;
+  transition: transform 1s;
+}
+.c:hover .img {
+  transform: translateX(-3%);
+  transition-duration: 5s;
+}
+
+:root {
+  --s1-w: 40vmin;
+  --s2-w: 60vmin;
+  --s3-w: 10vmin;
+}
+
+@-webkit-keyframes move-x {
+  50% {
+    transform: translateX(var(--x1));
+  }
+  100% {
+    transform: translateX(var(--x2));
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+@keyframes move-x {
+  50% {
+    transform: translateX(var(--x1));
+  }
+  100% {
+    transform: translateX(var(--x2));
+  }
+}
+
+.s1,
+.s2,
+.s3 {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  -webkit-animation: gg 0.5s ease-out forwards;
+  animation: gg 0.5s ease-out forwards;
+  pointer-events: none;
+}
+.c:hover .s1,
+.c:hover .s2,
+.c:hover .s3 {
+  -webkit-animation-name: move-x;
+  animation-name: move-x;
+}
+
+.s1 {
+  left: 100%;
+  z-index: 1;
+  width: var(--s1-w);
+  background-color: #fff;
+  mix-blend-mode: difference;
+  --x1: -110vmin;
+  --x2: -50vmin;
+}
+
+.s2 {
+  z-index: 2;
+  width: calc(var(--s2-w) * 2);
+  left: calc(100% + var(--s1-w));
+  background-color: #000;
+  --x1: -110vmin;
+  --x2: -90vmin;
+}
+
+.s3 {
+  z-index: 2;
+  width: 10vmin;
+  right: 100%;
+  background-color: #000;
+  -webkit-animation-delay: 0.1s;
+  animation-delay: 0.1s;
+  --x1: 0;
+  --x2: 95%;
+}
+/*
+body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-evenly;
+  min-height: 100vh;
+  margin: 0;
+  background: #333;
+  color: #cca;
+}
+*/
+h1 {
+  text-align: center;
+}
+
+.info {
+  align-self: flex-end;
+  margin: 3rem 1rem 1rem;
+  text-align: right;
+  font-size: 0.85em;
+  font-style: italic;
+  font-family: serif;
+  opacity: 0.75;
+}
+.info a {
+  color: inherit;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Sigmar+One);
+
+/* pokemone pictures */
+
+.pokemon {
+  width: 500px;
+  height: 500px;
+  /* center content using flex box */
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  /* overlay */
+  box-shadow: 0 0 0 100px inset, 0 0 5px grey;
+  /* hover out transition */
+  transition: box-shadow 1s;
+  float: left;
+  margin: 10px;
+}
+
+/* pokemone names */
+
+.pokemon::after {
+  width: 80%;
+  height: 80%;
+  display: block;
+  white-space: pre;
+  font: 15pt "sigmar one";
   color: white;
+  border: 2px solid;
+  text-align: center;
+  /* center content using flex box */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* hover out transition */
+  transition: opacity 1s 0.5s;
 }
 
-.App-link {
-  color: #61dafb;
+/* reveal pokemone picture on hover */
+
+.pokemon:hover {
+  box-shadow: 0 0 0 5px inset, 0 0 5px grey, 0 0 10px grey inset;
+  transition: box-shadow 1s;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* hide pokemone name on hover */
+
+.pokemon:hover::after {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+#bulbasaur {
+  background-image: url(https://m.media-amazon.com/images/I/71TGiGkFkjL._SS500_.jpg);
+  color: rgba(65, 102, 114, 0.9);
+}
+
+#bulbasaur::after {
+  content: "Mystery";
+}
+
+#charmander {
+  background-image: url(https://i1.sndcdn.com/artworks-000201378934-ld2q9v-t500x500.jpg);
+  color: rgba(221, 86, 63, 0.9);
+}
+
+#charmander::after {
+  content: "Action";
+}
+
+#squirtle {
+  background-image: url(https://jabulanisafari.com/wp-content/uploads/2019/02/2019-jabulani-honeymoons-500x500.jpg);
+  color: rgba(71, 121, 94, 0.9);
+}
+
+#squirtle::after {
+  content: "Romance";
+}
+
+#pikachu {
+  background-image: url(https://otakustore.net/wp-content/uploads/2018/09/7619-unox8y.jpg);
+  color: rgba(179, 152, 98, 0.9);
+}
+
+#pikachu::after {
+  content: "Education";
+}
+
+#wrapper {
+  width: 500px;
+  height: 500px;
+  margin: auto;
 }

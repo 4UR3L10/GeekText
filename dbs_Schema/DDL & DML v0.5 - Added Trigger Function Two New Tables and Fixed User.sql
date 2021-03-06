@@ -9,7 +9,7 @@ CREATE TABLE `user`
 (
   `UserID` int NOT NULL AUTO_INCREMENT,
   `UserFullName` varchar(50) NOT NULL,
-  `Password` varchar(30) NOT NULL,
+  `Password` varchar(70) NOT NULL,
   `EmailAddress` varchar(50) NOT NULL,
   `EmlAddrssVld` char(1) NOT NULL,
   `NickName` varchar(20) NOT NULL,

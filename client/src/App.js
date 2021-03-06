@@ -13,6 +13,8 @@ import NavDropdown from "react-bootstrap/NavDropdown"; // NavDropDown ReactBoots
 import Jumbotron from "react-bootstrap/Jumbotron"; // Jumbotron ReactBootsrap.
 import Container from "react-bootstrap/Container"; // Container ReactBootsrap.
 import Alert from "react-bootstrap/Alert"; // Alert ReactBootsrap.
+import Card from "react-bootstrap/Card"; // Card ReactBootsrap.
+import Image from "react-bootstrap/Image"; // Image ReactBootsrap.
 
 function App() {
   const [UserFullNameReg, setUserFullNameReg] = useState("");
@@ -83,111 +85,28 @@ function App() {
         </Container>
       </div>
 
-      <div className="signup">
-        {/* SignUp.*/}
-        <div>
-          <label>
-            {/* Fullname.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Fullname
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setUserFullNameReg(e.target.value);
-                }}
-              />
-            </InputGroup>
+      {/*
+      <Image
+        src="https://i.pinimg.com/originals/1b/38/f3/1b38f3ade75e9d3717e9a60cef8e9c25.jpg"
+        fluid
+      />
+      */}
 
-            {/* Email.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Email
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setEmailAddressReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-
-            {/* Confirm Email.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Confirm Email
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-              />
-            </InputGroup>
-
-            {/* Passsword.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Passsword
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                type="password"
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setPasswordReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-
-            {/* Confirm Passsword.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Confirm Passsword
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                type="password"
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-              />
-            </InputGroup>
-
-            {/* Nickname.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Nickname
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setNickNameReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-          </label>
-
-          {/* Buttons.*/}
-          <div>
-            <Button variant="primary" onClick={register}>
-              Sign Up
-            </Button>{" "}
-            <Button variant="secondary">Cancel</Button>{" "}
-          </div>
+      {/*Image Tanjiro*/}
+      <div class="c">
+        <div class="i">
+          <img class="img" src="https://i.imgur.com/jLEfHF1.png" />
         </div>
+        <div class="s1"></div>
+        <div class="s2"></div>
+        <div class="s3"></div>
+      </div>
+
+      <div id="wrapper">
+        <div id="bulbasaur" class="pokemon"></div>
+        <div id="charmander" class="pokemon"></div>
+        <div id="squirtle" class="pokemon"></div>
+        <div id="pikachu" class="pokemon"></div>
       </div>
     </div>
   );

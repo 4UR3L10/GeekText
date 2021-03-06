@@ -126,7 +126,9 @@ function SignIn() {
             <Button variant="primary" onClick={refresh}>
               Sign In
             </Button>{" "}
-            <Button variant="secondary">Cancel</Button>{" "}
+            <Button variant="secondary" href="/">
+              Cancel
+            </Button>{" "}
           </div>
         </div>
       </div>

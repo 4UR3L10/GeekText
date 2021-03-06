@@ -16,23 +16,110 @@ import Container from "react-bootstrap/Container"; // Container ReactBootsrap.
 import Alert from "react-bootstrap/Alert"; // Alert ReactBootsrap.
 
 // placeholder="Readonly input here..." in formCONTROL
+// blank validation.
 
 function SignUp() {
   const [UserFullNameReg, setUserFullNameReg] = useState("");
   const [EmailAddressReg, setEmailAddressReg] = useState("");
+  const [EmailAddressConfReg, setEmailAddressConfReg] = useState("");
   const [PasswordReg, setPasswordReg] = useState("");
+  const [PasswordConfReg, setPasswordConfReg] = useState("");
   const [NickNameReg, setNickNameReg] = useState("");
 
+  // Register User Arrow Function.
   const register = () => {
-    Axios.post("http://localhost:3001/signup/user", {
-      UserFullName: UserFullNameReg,
-      EmailAddress: EmailAddressReg,
-      Password: PasswordReg,
-      NickName: NickNameReg,
-    }).then((response) => {
-      console.log(response);
-    });
-    window.location.reload();
+    try {
+      //checkEmail();
+      checkPassword();
+
+      Axios.post("http://localhost:3001/signup/user", {
+        UserFullName: UserFullNameReg,
+        EmailAddress: EmailAddressReg,
+        Password: PasswordReg,
+        NickName: NickNameReg,
+      }).then((response) => {
+        console.log(response);
+      });
+
+      // Refresh.
+      window.location.reload();
+    } catch (e) {
+      // PopUp.
+      alert(e);
+
+      // Refresh.
+      window.location.reload();
+    }
+  };
+
+  // Check Email Arrow Function.
+  const checkEmail = () => {
+    const email = EmailAddressReg;
+
+    if (email.includes("@") && email.includes(".")) {
+      console.log("Valid Email Address");
+    } else {
+      throw "Email Must Contain '@' and '.'";
+    }
+
+    const confEmail = EmailAddressConfReg;
+
+    if (confEmail === email) {
+      console.log("Emails Matched");
+    } else {
+      throw "Emails Do Not Matched";
+    }
+  };
+
+  // Check Password Arrow Function.
+  const checkPassword = () => {
+    const password = PasswordReg;
+
+    if (password.length > 5) {
+      console.log("Valid Password Length");
+    } else {
+      throw "Password Must be at least 6 character long";
+    }
+
+    const numberCheck = /\d/g;
+
+    if (numberCheck.test(password)) {
+      console.log("Contains a number");
+    } else {
+      throw "Passwords Must have a number";
+    }
+
+    const lowercase = /[a-z]/;
+
+    if (lowercase.test(password)) {
+      console.log("Contains a lowercase");
+    } else {
+      throw "Passwords Must have a lowercase letter";
+    }
+
+    const upercase = /[A-Z]/;
+
+    if (upercase.test(password)) {
+      console.log("Contains a upercase");
+    } else {
+      throw "Passwords Must have a upercase letter";
+    }
+
+    const symbol = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+
+    if (symbol.test(password)) {
+      console.log("Contains a symbol");
+    } else {
+      throw "Passwords Must have a symbol";
+    }
+
+    const confpassword = PasswordConfReg;
+
+    if (confpassword === password) {
+      console.log("Passwords Matched");
+    } else {
+      throw "Passwords Did Not Matched";
+    }
   };
 
   return (
@@ -132,6 +219,9 @@ function SignUp() {
               <FormControl
                 aria-label="Small"
                 aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setEmailAddressConfReg(e.target.value);
+                }}
               />
             </InputGroup>
 
@@ -163,6 +253,9 @@ function SignUp() {
                 type="password"
                 aria-label="Small"
                 aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setPasswordConfReg(e.target.value);
+                }}
               />
             </InputGroup>
 
@@ -188,7 +281,9 @@ function SignUp() {
             <Button variant="primary" onClick={register}>
               Sign Up
             </Button>{" "}
-            <Button variant="secondary">Cancel</Button>{" "}
+            <Button variant="secondary" href="/">
+              Cancel
+            </Button>{" "}
           </div>
         </div>
       </div>
