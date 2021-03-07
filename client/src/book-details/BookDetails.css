@@ -22,3 +22,24 @@
     padding-left: 0.8rem;
     padding-right: 0.8rem;
 }
+
+.gt-bd-hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+        border-top-color: currentcolor;
+        border-top-style: none;
+        border-top-width: 0px;
+    border-top: 1px solid rgba(0,0,0,.1);
+}
+
+.gt-bd-price-span {
+    font-family: Lato,sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2.125rem;
+    margin-right: .75rem;
+    text-align: right;
+    margin-top: -.1875rem;
+    margin-left: 0 !important;
+}
