@@ -85,13 +85,6 @@ function App() {
         </Container>
       </div>
 
-      {/*
-      <Image
-        src="https://i.pinimg.com/originals/1b/38/f3/1b38f3ade75e9d3717e9a60cef8e9c25.jpg"
-        fluid
-      />
-      */}
-
       {/*Image Tanjiro*/}
       <div class="c">
         <div class="i">

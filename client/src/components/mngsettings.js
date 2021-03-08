@@ -100,7 +100,7 @@ function ManageSettings() {
 
             {/* Buttons.*/}
             <div>
-              <Button variant="primary" onClick={"#"}>
+              <Button variant="primary" href={"#"}>
                 Save Changes
               </Button>{" "}
               <Button variant="secondary">Cancel</Button>{" "}
@@ -145,7 +145,7 @@ function ManageSettings() {
 
             {/* Buttons.*/}
             <div>
-              <Button variant="primary" onClick={"#"}>
+              <Button variant="primary" href={"#"}>
                 Save Changes
               </Button>{" "}
               <Button variant="secondary">Cancel</Button>{" "}
@@ -209,7 +209,7 @@ function ManageSettings() {
 
             {/* Buttons.*/}
             <div>
-              <Button variant="primary" onClick={"#"}>
+              <Button variant="primary" href={"#"}>
                 Save Changes
               </Button>{" "}
               <Button variant="secondary">Cancel</Button>{" "}
@@ -321,7 +321,7 @@ function ManageSettings() {
 
             {/* Buttons.*/}
             <div>
-              <Button variant="primary" onClick={"#"}>
+              <Button variant="primary" href={"#"}>
                 Save Changes
               </Button>{" "}
               <Button variant="secondary">Cancel</Button>{" "}
@@ -342,7 +342,7 @@ function ManageSettings() {
 
             {/* Buttons.*/}
             <div>
-              <Button variant="primary" onClick={"#"}>
+              <Button variant="primary" href={"#"}>
                 Save Changes
               </Button>{" "}
               <Button variant="secondary">Cancel</Button>{" "}
@@ -375,7 +375,7 @@ function ManageSettings() {
 
           {/* Buttons.*/}
           <div>
-            <Button variant="primary" onClick={"#"}>
+            <Button variant="primary" href={"#"}>
               Save Changes
             </Button>{" "}
             <Button variant="secondary">Cancel</Button>{" "}

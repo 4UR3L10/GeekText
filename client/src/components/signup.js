@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import "./signup.css";
 import Axios from "axios";
+//import bcrypt from "bcrypt-nodejs";
 
 // Boostrap.
 import "bootstrap/dist/css/bootstrap.min.css"; // Necessary For ReactBootsrap.
@@ -17,7 +18,6 @@ import Alert from "react-bootstrap/Alert"; // Alert ReactBootsrap.
 
 // placeholder="Readonly input here..." in formCONTROL
 // blank validation.
-
 function SignUp() {
   const [UserFullNameReg, setUserFullNameReg] = useState("");
   const [EmailAddressReg, setEmailAddressReg] = useState("");
@@ -29,26 +29,12 @@ function SignUp() {
   // Register User Arrow Function.
   const register = () => {
     try {
-      //checkEmail();
+      checkEmail();
       checkPassword();
-
-      Axios.post("http://localhost:3001/signup/user", {
-        UserFullName: UserFullNameReg,
-        EmailAddress: EmailAddressReg,
-        Password: PasswordReg,
-        NickName: NickNameReg,
-      }).then((response) => {
-        console.log(response);
-      });
-
-      // Refresh.
-      window.location.reload();
+      encryptPassword();
     } catch (e) {
       // PopUp.
       alert(e);
-
-      // Refresh.
-      window.location.reload();
     }
   };
 
@@ -120,6 +106,29 @@ function SignUp() {
     } else {
       throw "Passwords Did Not Matched";
     }
+  };
+
+  const encryptPassword = () => {
+    const bcrypt = require("bcrypt-nodejs");
+    const saltRounds = 10;
+    let passwordTemp = PasswordReg;
+
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      bcrypt.hash(passwordTemp, salt, null, function (err, hash) {
+        // Store hash in your password DB.
+        Axios.post("http://localhost:3001/signup/user", {
+          UserFullName: UserFullNameReg,
+          EmailAddress: EmailAddressReg,
+          Password: hash,
+          NickName: NickNameReg,
+        }).then((response) => {
+          console.log(response);
+        });
+
+        // Refresh.
+        window.location.reload();
+      });
+    });
   };
 
   return (
@@ -281,7 +290,7 @@ function SignUp() {
             <Button variant="primary" onClick={register}>
               Sign Up
             </Button>{" "}
-            <Button variant="secondary" href="/">
+            <Button variant="secondary" onClick={encryptPassword}>
               Cancel
             </Button>{" "}
           </div>
