@@ -1,0 +1,52 @@
+.gt-bd-title {
+    font-family: Poynter,Georgia,serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 2.08rem;
+    line-height: 1.25;
+    margin: 0rem;
+}
+
+.gt-bd-page-container {
+    max-width: 1024px;
+    margin: auto;
+}
+
+.gt-bd-book-details-container {
+    padding-bottom: 2.25rem;
+    padding-left: 1.23rem;
+    padding-right: 1.23rem;
+}
+
+.gt-bd-book-image-container {
+    width: 50%;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+}
+
+.gt-bd-hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0,0,0,.1);
+}
+
+.gt-bd-price-span {
+    font-family: Lato,sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2.125rem;
+    margin-right: .75rem;
+    text-align: right;
+    margin-top: -.1875rem;
+    margin-left: 0 !important;
+}
+
+
+.gt-bd-book-img {
+    display: block;
+    max-width:550px;
+    max-height:406px;
+    width: auto;
+    height: auto;
+  }
