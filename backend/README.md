@@ -145,7 +145,6 @@ more information is available.
 /books/{id}/publisher
 /books/{id}/reviews
 /books/{id}/reviews/{user-id}
-/books/search
 
 /authors
 /authors/{id}
