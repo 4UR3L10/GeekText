@@ -141,10 +141,7 @@ more information is available.
 /books
 /books/{id}
 /books/{id}/authors
-/books/{id}/authors/{id}
-/books/{id}/publisher
 /books/{id}/reviews
-/books/{id}/reviews/{user-id}
 
 /authors
 /authors/{id}
