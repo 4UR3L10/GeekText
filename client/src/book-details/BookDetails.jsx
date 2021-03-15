@@ -10,6 +10,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function BookDetails(props) {
     const [book, setBook] = useState(null);
+    const [readMore, setReadMore] = useState(false);
+    const [hover, setHover] = useState(false);
 
     useEffect(() => {
         getBook();
@@ -34,12 +36,12 @@ function BookDetails(props) {
                 <Container style={{ maxWidth: "1024px", margin: "auto" }} class="d-flex justify-content-center">
                     <Row>
                         <Col>
-                            <BookImage class="gt-bd-book-img" style={{ display: "block", marginLeft: "auto", marginRight: "auto" }} />
+                            <BookImage />
                         </Col>
                         <Col>
                             <h1 class="gt-bd-title">{book.book_title}</h1>
-                            <h6>by <a href="https://getbootstrap.com/docs/4.0/utilities/text/">Naima Coster</a></h6>
-                            <h6 style={{ color: "gray" }}> Grand Central Publishing, 2021-03-02, {book.genre}</h6>
+                            <h6>by <a href="https://getbootstrap.com/docs/4.0/utilities/text/">{book.author_name}</a></h6>
+                            <h6 style={{ color: "gray" }}> {book.publisher_name}, {book.published_date.substring(0, 10)}, {book.genre}</h6>
                             <h6><u>Rating:</u> {book.avg_rating}</h6>
                             <hr class="gt-bd-hr" />
                             <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
@@ -49,25 +51,23 @@ function BookDetails(props) {
                                 <sup>$</sup>
                             {book.price}
                         </span>
-                            <p>
-                                Bacon ipsum dolor amet doner picanha tri-tip biltong leberkas salami meatball tongue filet mignon landjaeger tail. Kielbasa salami tenderloin picanha spare ribs, beef ribs strip steak jerky cow. Pork chop chicken ham hock beef ribs turkey jerky. Shoulder
-                                beef capicola doner, tongue tail sausage short ribs andouille. Rump frankfurter landjaeger t-bone, kielbasa doner ham hock shankle venison. Cupim capicola kielbasa t-bone, ball tip chicken andouille venison pork chop doner bacon beef ribs kevin shankle.
-                                Short loin leberkas tenderloin ground round shank, brisket strip steak ham hock ham.
-                        </p>
-
+                        <div dangerouslySetInnerHTML={{ 
+                            __html: (!readMore) ? book.description.substring(0, 520) + "..." : book.description
+                        }} />
+                        <a onClick={() => setReadMore(!readMore)} role="button" href="javascript:void(0)">
+                            {readMore ? "Read Less":"Read More"}
+                        </a>
                         </Col>
                     </Row>
                     <Row>
                         <div style={{ marginTop: "2.5rem", marginBottom: "2.5rem" }}>
                             <h2 class="gt-bd-title" style={{ fontSize: "1.5rem", marginBottom: "1rem", fontStyle: "italic" }}>
                                 About the Author
-                        </h2>
+                            </h2>
                             <div style={{ marginTop: "0rem", borderStyle: "solid", borderColor: "lightgray" }}>
-                                <p style={{ margin: "1.5rem" }}>
-                                    Bacon ipsum dolor amet doner picanha tri-tip biltong leberkas salami meatball tongue filet mignon landjaeger tail. Kielbasa salami tenderloin picanha spare ribs, beef ribs strip steak jerky cow. Pork chop chicken ham hock beef ribs turkey jerky. Shoulder
-                                    beef capicola doner, tongue tail sausage short ribs andouille. Rump frankfurter landjaeger t-bone, kielbasa doner ham hock shankle venison. Cupim capicola kielbasa t-bone, ball tip chicken andouille venison pork chop doner bacon beef ribs kevin shankle.
-                                    Short loin leberkas tenderloin ground round shank, brisket strip steak ham hock ham.
-                            </p>
+                                <p style={{ margin: "1.5rem" }} dangerouslySetInnerHTML={{
+                                    __html: book.author_bio
+                                }} />
                             </div>
                         </div>
                     </Row>
@@ -76,10 +76,21 @@ function BookDetails(props) {
         </Container>
     );
 
+    function doNothing() {
+        console.log("Hello yuh!")
+    }
+
     function BookImage(props) {
         return (
-            <img src={book.cover}
-                {...props}></img>
+            <a href="javascript:void(0)">
+                <img src={book.cover}
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+                class="gt-bd-book-img" 
+                style={{ display: "block", marginLeft: "auto", marginRight: "auto", 
+                        maxHeight: "500px", maxWidth: "100%", padding: "5px",
+                ...(hover) && {borderStyle: "solid", borderColor: "black", borderWidth: "2px"},}}/>
+            </a>
         );
     }
 }
