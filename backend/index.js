@@ -1,6 +1,8 @@
 // Imports.
 const express = require("express");
 const signUpRoute = require("./routes/signup");
+const signInRoute = require("./routes/signin");
+const ManageSettingsRoute = require("./routes/mngsettings");
 const app = express();
 const cors = require("cors");
 
@@ -12,6 +14,12 @@ app.use(express.urlencoded({ extended: false }));
 
 // Call SignUp Section.
 app.use("/signup", signUpRoute);
+
+// Call SignIn Section.
+app.use("/signin", signInRoute);
+
+// Call ManageSettings Section.
+app.use("/mngsettings", ManageSettingsRoute);
 
 // Run the Server PORT 3001.
 app.listen(3001, () => {

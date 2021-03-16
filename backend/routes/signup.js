@@ -25,7 +25,7 @@ router.post("/", (req, res) => {
 });
 
 // [SignUp] Insert User Information..
-router.post("/user", (req, res) => {  
+router.post("/user", (req, res) => {
   const UserFullName = req.body.UserFullName;
   const EmailAddress = req.body.EmailAddress;
   const Password = req.body.Password;
@@ -60,5 +60,13 @@ router.post("/test", (req, res) => {
     }
   }
 });
+
+// testoken.
+router.use("/user", (req, res) => {
+  res.send({
+    token: "test123",
+  });
+});
+// testoken.
 
 module.exports = router;

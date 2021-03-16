@@ -29,6 +29,17 @@ function ManageSettings() {
   const [AddressReg, setAddressReg] = useState("");
   const [CountryReg, setCountryReg] = useState("");
 
+  const updateName = () => {
+    // Update Fullname.
+    Axios.put("http://localhost:3001/mngsettings/fullname", {
+      UserFullName: UserFullNameReg,
+    }).then((response) => {
+      console.log(response);
+    });
+
+    window.location.reload();
+  };
+
   return (
     <div className="ManageSettings">
       {/* Testing.*/}
@@ -100,7 +111,7 @@ function ManageSettings() {
 
             {/* Buttons.*/}
             <div>
-              <Button variant="primary" href={"#"}>
+              <Button variant="primary" onClick={updateName}>
                 Save Changes
               </Button>{" "}
               <Button variant="secondary">Cancel</Button>{" "}

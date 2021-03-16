@@ -21,7 +21,8 @@ function SignIn() {
 
   // CHANGE THE FUNCTIONNNNNNNNNNNNNNNNN FOR THE ONE TO RETRIEVE AND COMPARE NOT INSERT [SIGNIN]
   const register = () => {
-    Axios.post("http://localhost:3001/signup/user", {
+    console.log("log test");
+    Axios.get("http://localhost:3001/signin/user", {
       EmailAddress: EmailAddressReg,
       Password: PasswordReg,
     }).then((response) => {
@@ -123,7 +124,7 @@ function SignIn() {
 
           {/* Buttons.*/}
           <div>
-            <Button variant="primary" onClick={refresh}>
+            <Button variant="primary" onClick={register}>
               Sign In
             </Button>{" "}
             <Button variant="secondary" href="/">

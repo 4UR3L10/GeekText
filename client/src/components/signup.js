@@ -17,7 +17,7 @@ import Container from "react-bootstrap/Container"; // Container ReactBootsrap.
 import Alert from "react-bootstrap/Alert"; // Alert ReactBootsrap.
 
 // placeholder="Readonly input here..." in formCONTROL
-// blank validation.
+// blank validation. // testoken.
 function SignUp() {
   const [UserFullNameReg, setUserFullNameReg] = useState("");
   const [EmailAddressReg, setEmailAddressReg] = useState("");
@@ -290,7 +290,10 @@ function SignUp() {
             <Button variant="primary" onClick={register}>
               Sign Up
             </Button>{" "}
-            <Button variant="secondary" onClick={encryptPassword}>
+            <Button
+              variant="secondary"
+              onClick={encryptPassword /*WHYYYYYYYYYYYYYYYYYYYYY*/}
+            >
               Cancel
             </Button>{" "}
           </div>

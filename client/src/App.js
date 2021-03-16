@@ -16,11 +16,15 @@ import Alert from "react-bootstrap/Alert"; // Alert ReactBootsrap.
 import Card from "react-bootstrap/Card"; // Card ReactBootsrap.
 import Image from "react-bootstrap/Image"; // Image ReactBootsrap.
 
+import Login from "./components/signup"; // testoken.
+
 function App() {
   const [UserFullNameReg, setUserFullNameReg] = useState("");
   const [EmailAddressReg, setEmailAddressReg] = useState("");
   const [PasswordReg, setPasswordReg] = useState("");
   const [NickNameReg, setNickNameReg] = useState("");
+
+  const [token, setToken] = useState(); // testoken.
 
   const register = () => {
     Axios.post("http://localhost:3001/signup/user", {
