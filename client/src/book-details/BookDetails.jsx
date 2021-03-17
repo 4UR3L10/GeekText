@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./BookDetails.css"
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-//500 chars max for for book desc
+import Modal from 'react-bootstrap/Modal';
 
 function BookDetails(props) {
     const [book, setBook] = useState(null);
     const [readMore, setReadMore] = useState(false);
     const [hover, setHover] = useState(false);
+    const [showLargeImage, setShowLargeImage] = useState(false);
 
     useEffect(() => {
         getBook();
@@ -28,11 +28,45 @@ function BookDetails(props) {
             .catch((err) => console.log(err));
     };
 
-    return (
+    function handleBookClick() {
+        setShowLargeImage(true);
+        setHover(false);
+    }
 
+    function LargeBookImage() {
+        return (
+            <Modal show={showLargeImage} onHide={() => setShowLargeImage(false)}>
+                <Modal.Header closeButton/>
+                <Modal.Body>
+                    <img src={book.cover} style={{
+                        display: "block", 
+                        marginLeft: "auto", 
+                        marginRight: "auto",}}/>
+                </Modal.Body>
+            </Modal>
+        );
+    }
+
+    function BookImage(props) {
+        return (
+            <a href="javascript:void(0)" onClick={handleBookClick}>
+                <img src={book.cover}
+                    onMouseEnter={() => setHover(true)}
+                    onMouseLeave={() => setHover(false)}
+                    class="gt-bd-book-img"
+                    style={{
+                        display: "block", marginLeft: "auto", marginRight: "auto",
+                        maxHeight: "500px", maxWidth: "100%", padding: "5px",
+                        ...(hover) && { borderStyle: "solid", borderColor: "black", borderWidth: "2px" },
+                    }} />
+            </a>
+        );
+    }
+
+    return (
         <Container style={{ width: "100%" }}>
             <FakeNavBar />
-            {book  &&
+            {book &&
                 <Container style={{ maxWidth: "1024px", margin: "auto" }} class="d-flex justify-content-center">
                     <Row>
                         <Col>
@@ -49,14 +83,14 @@ function BookDetails(props) {
                             </h6>
                             <span class="gt-bd-price-span" style={{ fontSize: "2rem", marginBottom: "2rem" }}>
                                 <sup>$</sup>
-                            {book.price}
-                        </span>
-                        <div dangerouslySetInnerHTML={{ 
-                            __html: (!readMore) ? book.description.substring(0, 520) + "..." : book.description
-                        }} />
-                        <a onClick={() => setReadMore(!readMore)} role="button" href="javascript:void(0)">
-                            {readMore ? "Read Less":"Read More"}
-                        </a>
+                                {book.price}
+                            </span>
+                            <div dangerouslySetInnerHTML={{
+                                __html: (!readMore) ? book.description.substring(0, 520) + "..." : book.description
+                            }} />
+                            <a onClick={() => setReadMore(!readMore)} role="button" href="javascript:void(0)">
+                                {readMore ? "Read Less" : "Read More"}
+                            </a>
                         </Col>
                     </Row>
                     <Row>
@@ -71,28 +105,15 @@ function BookDetails(props) {
                             </div>
                         </div>
                     </Row>
+                    <LargeBookImage/>
                 </Container>
             }
+            
         </Container>
+        
     );
 
-    function doNothing() {
-        console.log("Hello yuh!")
-    }
 
-    function BookImage(props) {
-        return (
-            <a href="javascript:void(0)">
-                <img src={book.cover}
-                onMouseEnter={() => setHover(true)}
-                onMouseLeave={() => setHover(false)}
-                class="gt-bd-book-img" 
-                style={{ display: "block", marginLeft: "auto", marginRight: "auto", 
-                        maxHeight: "500px", maxWidth: "100%", padding: "5px",
-                ...(hover) && {borderStyle: "solid", borderColor: "black", borderWidth: "2px"},}}/>
-            </a>
-        );
-    }
 }
 
 
