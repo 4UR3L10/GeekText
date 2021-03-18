@@ -27,7 +27,23 @@ function NewShippingAddress() {
   const [ZipCodeReg, setZipCodeReg] = useState("");
   const [CountryReg, setCountryReg] = useState("");
 
-  // Missing Function to Isert The Address.
+  // Function Insert  Shipping Address.
+  const insertShipAddress = () => {
+    Axios.post("http://localhost:3001/shipaddress/newshipaddress", {
+      FirstName: FirstNameReg,
+      LastName: LastNameReg,
+      Address: AddressReg,
+      Address2: Address2Reg,
+      City: CityReg,
+      State: StateReg,
+      ZipCode: ZipCodeReg,
+      Country: CountryReg,
+    }).then((response) => {
+      console.log(response);
+    });
+    //window.location.reload();
+  };
+
   return (
     <div className="NewShippingAddress">
       {/* Testing.*/}
@@ -218,7 +234,7 @@ function NewShippingAddress() {
 
           {/* Buttons.*/}
           <div>
-            <Button variant="primary" onClick={"#"}>
+            <Button variant="primary" onClick={insertShipAddress}>
               Save
             </Button>{" "}
             <Button variant="secondary">Cancel</Button>{" "}

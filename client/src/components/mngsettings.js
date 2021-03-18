@@ -19,9 +19,12 @@ import Form from "react-bootstrap/Form"; // Form ReactBootsrap.
 function ManageSettings() {
   const [UserFullNameReg, setUserFullNameReg] = useState("");
   const [EmailAddressReg, setEmailAddressReg] = useState("");
+  const [EmailVerAddressReg, setEmailVerAddressReg] = useState("");
   const [PasswordReg, setPasswordReg] = useState("");
+  const [PasswordConfReg, setPasswordConfReg] = useState("");
   const [CurrentPasswordReg, setCurrentPasswordReg] = useState("");
   const [NickNameReg, setNickNameReg] = useState("");
+  const [AnonymusStatReg, setAnonymusStatReg] = useState("");
   const [ZipCodeReg, setZipCodeReg] = useState("");
   const [StateReg, setStateReg] = useState("");
   const [CityReg, setCityReg] = useState("");
@@ -29,6 +32,7 @@ function ManageSettings() {
   const [AddressReg, setAddressReg] = useState("");
   const [CountryReg, setCountryReg] = useState("");
 
+  // Function Update Name.
   const updateName = () => {
     // Update Fullname.
     Axios.put("http://localhost:3001/mngsettings/fullname", {
@@ -38,6 +42,159 @@ function ManageSettings() {
     });
 
     window.location.reload();
+  };
+
+  // Function Verify Email.
+  const verifyEmail = () => {
+    let emailTemp = EmailAddressReg;
+    let emailVerTemp = EmailVerAddressReg;
+
+    // Format of the email.
+    if (emailTemp.includes("@") && emailTemp.includes(".")) {
+      console.log("Valid Email Address");
+    } else {
+      alert("New Email Must Contain '@' and '.'");
+      return;
+    }
+
+    // Email must the same as the confirm email.
+    if (emailTemp == emailVerTemp) {
+      updateEmail();
+    } else {
+      alert("Email addresses are not the same");
+      return;
+    }
+  };
+
+  // Function Update Email.
+  const updateEmail = () => {
+    // Update Fullname.
+    Axios.put("http://localhost:3001/mngsettings/email", {
+      EmailAddress: EmailAddressReg,
+    }).then((response) => {
+      console.log(response);
+    });
+
+    window.location.reload();
+  };
+
+  // Function Update Nickname.
+  const updateNickname = () => {
+    // Update NickName.
+    Axios.put("http://localhost:3001/mngsettings/nickname", {
+      NickName: NickNameReg,
+    }).then((response) => {
+      console.log(response);
+    });
+
+    window.location.reload();
+  };
+
+  // Function Update Anonymus Status.  // UPGRADEEEEEEEEEEEEEEEEEEEEEEEEEE
+  const updateStatus = () => {
+    // Update Anonymus Status.
+    console.log("AnonymusStatReg:" + AnonymusStatReg);
+
+    Axios.put("http://localhost:3001/mngsettings/status", {
+      AnonymusStat: AnonymusStatReg,
+    }).then((response) => {
+      console.log(response);
+    });
+
+    //window.location.reload();
+  };
+
+  // Check Password Function. // UPGRADEEEEEEEEEEEEEEEEEEEEEEEEEE
+  const checkPassword = () => {
+    const password = PasswordReg;
+
+    if (password.length > 5) {
+      console.log("Valid Password Length");
+    } else {
+      alert("Password Must be at least 6 character long");
+      return;
+    }
+
+    const numberCheck = /\d/g;
+
+    if (numberCheck.test(password)) {
+      console.log("Contains a number");
+    } else {
+      alert("Passwords Must have a number");
+      return;
+    }
+
+    const lowercase = /[a-z]/;
+
+    if (lowercase.test(password)) {
+      console.log("Contains a lowercase");
+    } else {
+      alert("Passwords Must have a lowercase letter");
+      return;
+    }
+
+    const upercase = /[A-Z]/;
+
+    if (upercase.test(password)) {
+      console.log("Contains a upercase");
+    } else {
+      alert("Passwords Must have a upercase letter");
+      return;
+    }
+
+    const symbol = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+
+    if (symbol.test(password)) {
+      console.log("Contains a symbol");
+    } else {
+      alert("Passwords Must have a symbol");
+      return;
+    }
+
+    const confpassword = PasswordConfReg;
+
+    if (confpassword === password) {
+      console.log("Passwords Matched");
+    } else {
+      alert("Passwords Did Not Matched");
+      return;
+    }
+  };
+
+  // Function Update Password.  // UPGRADEEEEEEEEEEEEEEEEEEEEEEEEEE SO THE OLD PASSWORD CAN BE RETRIEVE.
+  const encryptPassword = () => {
+    const bcrypt = require("bcrypt-nodejs");
+    const saltRounds = 10;
+    let passwordTemp = PasswordReg;
+
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      bcrypt.hash(passwordTemp, salt, null, function (err, hash) {
+        // Store hash in your password DB.
+        Axios.post("http://localhost:3001/mngsettings/password", {
+          Password: hash,
+        }).then((response) => {
+          console.log(response);
+        });
+
+        // Refresh.
+        //window.location.reload();
+      });
+    });
+  };
+
+  // Function Update Address.  // FINISHHHHHHHHHHHHHHHHHHH Missing Create Address or put it in signup.
+  const updateAddress = () => {
+    Axios.put("http://localhost:3001/mngsettings/address", {
+      Address: AddressReg,
+      Address2: Address2Reg,
+      City: CityReg,
+      State: StateReg,
+      ZipCode: ZipCodeReg,
+      Country: CountryReg,
+    }).then((response) => {
+      console.log(response);
+    });
+    //window.location.reload();
   };
 
   return (
@@ -108,7 +265,6 @@ function ManageSettings() {
                 }}
               />
             </InputGroup>
-
             {/* Buttons.*/}
             <div>
               <Button variant="primary" onClick={updateName}>
@@ -117,14 +273,12 @@ function ManageSettings() {
               <Button variant="secondary">Cancel</Button>{" "}
             </div>
             <br />
-
             {/* TextHeader.*/}
             <div className="mainheader">
               <Container>
                 <h2>Update Your Email Address</h2>
               </Container>
             </div>
-
             {/* Email.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -140,7 +294,6 @@ function ManageSettings() {
                 }}
               />
             </InputGroup>
-
             {/* Confirm Email.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -151,25 +304,25 @@ function ManageSettings() {
               <FormControl
                 aria-label="Small"
                 aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setEmailVerAddressReg(e.target.value);
+                }}
               />
             </InputGroup>
-
             {/* Buttons.*/}
             <div>
-              <Button variant="primary" href={"#"}>
+              <Button variant="primary" onClick={verifyEmail}>
                 Save Changes
               </Button>{" "}
               <Button variant="secondary">Cancel</Button>{" "}
             </div>
             <br />
-
             {/* TextHeader.*/}
             <div className="mainheader">
               <Container>
                 <h2>Change Your Password</h2>
               </Container>
             </div>
-
             {/* Current Passsword.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -186,7 +339,6 @@ function ManageSettings() {
                 }}
               />
             </InputGroup>
-
             {/* Passsword.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -203,7 +355,6 @@ function ManageSettings() {
                 }}
               />
             </InputGroup>
-
             {/* Confirm Passsword.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -215,25 +366,25 @@ function ManageSettings() {
                 type="password"
                 aria-label="Small"
                 aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setPasswordConfReg(e.target.value);
+                }}
               />
             </InputGroup>
-
             {/* Buttons.*/}
             <div>
-              <Button variant="primary" href={"#"}>
+              <Button variant="primary" onClick={encryptPassword}>
                 Save Changes
               </Button>{" "}
               <Button variant="secondary">Cancel</Button>{" "}
             </div>
             <br />
-
             {/* TextHeader.*/}
             <div className="mainheader">
               <Container>
                 <h2>Change Your Home Address</h2>
               </Container>
             </div>
-
             {/* Address.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -249,7 +400,6 @@ function ManageSettings() {
                 }}
               />
             </InputGroup>
-
             {/* Address Aditional.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -265,7 +415,6 @@ function ManageSettings() {
                 }}
               />
             </InputGroup>
-
             {/* City.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -281,7 +430,6 @@ function ManageSettings() {
                 }}
               />
             </InputGroup>
-
             {/* State.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -297,7 +445,6 @@ function ManageSettings() {
                 }}
               />
             </InputGroup>
-
             {/* Zip Code.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -313,7 +460,6 @@ function ManageSettings() {
                 }}
               />
             </InputGroup>
-
             {/* Country.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -329,44 +475,46 @@ function ManageSettings() {
                 }}
               />
             </InputGroup>
-
             {/* Buttons.*/}
             <div>
-              <Button variant="primary" href={"#"}>
+              <Button variant="primary" onClick={updateAddress}>
                 Save Changes
               </Button>{" "}
               <Button variant="secondary">Cancel</Button>{" "}
             </div>
             <br />
-
             {/* TextHeader.*/}
             <div className="mainheader">
               <Container>
                 <h2>Change Your Anonymus Status</h2>
               </Container>
             </div>
-
             {/* Anonymus.*/}
             <Form.Group controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Remain Anonymus" />
+              <Form.Check
+                type="checkbox"
+                value="Y"
+                label="Remain Anonymus"
+                onChange={(e) => {
+                  setAnonymusStatReg(e.target.value);
+                }}
+              />
             </Form.Group>
 
             {/* Buttons.*/}
             <div>
-              <Button variant="primary" href={"#"}>
+              <Button variant="primary" onClick={updateStatus}>
                 Save Changes
               </Button>{" "}
               <Button variant="secondary">Cancel</Button>{" "}
             </div>
             <br />
-
             {/* TextHeader.*/}
             <div className="mainheader">
               <Container>
                 <h2>Change Your Nickname</h2>
               </Container>
             </div>
-
             {/* Nickname.*/}
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -386,7 +534,7 @@ function ManageSettings() {
 
           {/* Buttons.*/}
           <div>
-            <Button variant="primary" href={"#"}>
+            <Button variant="primary" onClick={updateNickname}>
               Save Changes
             </Button>{" "}
             <Button variant="secondary">Cancel</Button>{" "}

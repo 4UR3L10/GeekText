@@ -3,6 +3,7 @@ const express = require("express");
 const signUpRoute = require("./routes/signup");
 const signInRoute = require("./routes/signin");
 const ManageSettingsRoute = require("./routes/mngsettings");
+const ShippingAddressRoute = require("./routes/shipaddress");
 const app = express();
 const cors = require("cors");
 
@@ -20,6 +21,9 @@ app.use("/signin", signInRoute);
 
 // Call ManageSettings Section.
 app.use("/mngsettings", ManageSettingsRoute);
+
+// Call Manage Shipping Address Section.
+app.use("/shipaddress", ShippingAddressRoute);
 
 // Run the Server PORT 3001.
 app.listen(3001, () => {
