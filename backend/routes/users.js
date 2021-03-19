@@ -266,4 +266,29 @@ router.route('/:id/saved-books')
             });
     })
 
+router.route('/:id/saved-books/:book_id')
+    .delete((req, res) => {
+        const schema = Joi.object({
+            id: userIdSchema,
+            book_id: bookIdSchema,
+        });
+    
+        const { params } = req;
+        const { error } = schema.validate(params);
+        if (error) return res.status(400).json(error.details[0].message);
+    
+        const queryString = `
+        DELETE FROM geektext.user_saved_book
+        WHERE user_id = ${params.id} AND book_id = '${params.book_id}';
+        `;
+    
+        mysqlx.getSession(credentials)
+            .then(session => session.sql(queryString).execute())
+            .then((result) => res.status(200).send(`Deleted successfully <br> Affected Items: ${result.getAffectedItemsCount()}`))
+            .catch((err) => {
+                console.log(err)
+                return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+            });
+    })
+
 module.exports = router
