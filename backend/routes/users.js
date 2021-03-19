@@ -3,7 +3,6 @@ const mysqlx = require('@mysql/xdevapi');
 const credentials = require('./credentials');
 const { queryResultToJson } = require('./util');
 const Joi = require('joi');
-const { response } = require('express');
 const router = express.Router();
 
 router.use(express.json());
@@ -179,11 +178,6 @@ router.put('/:id/cart/:book_id', function (req, res) {
         });
 });
 
-
-
-
-
-
 router.get('/:id/cart/:book_id', function (req, res) {
     const user_id = req.params.id
     const book_id = req.params.book_id
@@ -212,8 +206,5 @@ router.get('/:id/cart/:book_id', function (req, res) {
             res.status(500).send('Server Error')
         });
 });
-
-
-
 
 module.exports = router
