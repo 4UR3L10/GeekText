@@ -2,7 +2,11 @@ const express = require('express')
 const mysqlx = require('@mysql/xdevapi');
 const credentials = require('./credentials');
 const { queryResultToJson } = require('./util');
+const Joi = require('joi');
 const router = express.Router();
+
+router.use(express.json());
+
 
 router.get('/', function (req, res) {
     const queryString = `SELECT * FROM geektext.user`;
@@ -56,7 +60,7 @@ router.get('/:id/cart', function (req, res) {
         .then(session => session.sql(queryString).execute())
         .then(result => queryResultToJson(result))
         .then(result => {
-            if (result.length == 0) return res.status(404).send(`User with id ${user_id} is not found`)
+            if (result.length == 0) return res.status(404).send(`No user or no books are found`)
             return res.json(result)
         })
         .catch((err) => {
@@ -64,6 +68,48 @@ router.get('/:id/cart', function (req, res) {
             res.status(500).send('Server Error')
         });
 });
+
+// Add to cart
+router.post('/:id/cart', function (req, res) {
+    const schema = Joi.object({
+        user_id: Joi.number()
+            .integer()
+            .min(1)
+            .required(),
+        book_id: Joi.number()
+            .integer()
+            .min(1000000000000)
+            .max(9999999999999)
+            .required(),
+        cart_quantity: Joi.number()
+            .integer()
+            .min(1)
+            .required(),
+    });
+
+    const { body } = req;
+
+    const { error } = schema.validate(body);
+    if (error) return res.status(400).json(error.details);
+
+    const queryString = `
+    INSERT INTO geektext.shopping_cart 
+    (user_id, book_id, cart_quantity)
+    VALUES (${body.user_id}, ${body.book_id}, ${body.cart_quantity})
+    `;
+
+    mysqlx.getSession(credentials)
+        .then(session => session.sql(queryString).execute())
+        .then ((_) => res.send(req.body))
+        .catch((err) => {
+            console.log(err)
+            return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+        });
+
+    
+});
+
+
 
 router.get('/:id/cart/:book_id', function (req, res) {
     const user_id = req.params.id
