@@ -71,7 +71,7 @@ router.get('/:id/cart', function (req, res) {
     }
 
     const queryString = `
-    SELECT b.book_title, b.cover, a.author_name, b.price, sh.cart_quantity
+    SELECT sh.book_id, sh.user_id, b.book_title, b.cover, a.author_name, b.price, sh.cart_quantity 
     FROM geektext.shopping_cart sh, geektext.book b, geektext.author_wrote_book w, geektext.author a
     WHERE sh.user_id = ${user_id} AND sh.book_id = b.id AND w.book_id = b.id AND w.author_id = a.id
     `;
