@@ -207,4 +207,36 @@ router.get('/:id/cart/:book_id', function (req, res) {
         });
 });
 
+
+router.route('/:id/saved-books')
+    // Get saved books
+    .get((req, res) => {
+        const user_id = req.params.id;
+        const schema = Joi.object({
+            id: userIdSchema.required()
+        });
+
+        const { error } = schema.validate(req.params);
+        if (error) return res.status(400).json(error.message);
+
+        const queryString = `
+        SELECT sb.book_id, sb.user_id, b.book_title, b.cover, a.author_name, b.price
+        FROM geektext.user_saved_book sb, geektext.book b, geektext.author_wrote_book w, geektext.author a
+        WHERE sb.user_id = ${user_id} AND sb.book_id = b.id AND w.book_id = b.id AND w.author_id = a.id
+        `;
+
+        mysqlx.getSession(credentials)
+            .then(session => session.sql(queryString).execute())
+            .then(result => queryResultToJson(result))
+            .then(result => {
+                if (result.length == 0) return res.status(404).send(`No books are found`)
+                return res.json(result)
+            })
+            .catch((err) => {
+                console.log(err)
+                res.status(500).send('Server Error')
+            });
+
+    });
+
 module.exports = router
