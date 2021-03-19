@@ -7,6 +7,14 @@ const router = express.Router();
 
 router.use(express.json());
 
+const userIdSchema = Joi.number()
+    .integer()
+    .min(1);
+
+const bookIdSchema = Joi.number()
+    .integer()
+    .min(1000000000000)
+    .max(9999999999999);
 
 router.get('/', function (req, res) {
     const queryString = `SELECT * FROM geektext.user`;
@@ -72,14 +80,9 @@ router.get('/:id/cart', function (req, res) {
 // Add to cart
 router.post('/:id/cart', function (req, res) {
     const schema = Joi.object({
-        user_id: Joi.number()
-            .integer()
-            .min(1)
+        user_id: userIdSchema
             .required(),
-        book_id: Joi.number()
-            .integer()
-            .min(1000000000000)
-            .max(9999999999999)
+        book_id: bookIdSchema
             .required(),
         cart_quantity: Joi.number()
             .integer()
@@ -90,7 +93,7 @@ router.post('/:id/cart', function (req, res) {
     const { body } = req;
 
     const { error } = schema.validate(body);
-    if (error) return res.status(400).json(error.details);
+    if (error) return res.status(400).json(error.details[0].message);
 
     const queryString = `
     INSERT INTO geektext.shopping_cart 
@@ -100,14 +103,40 @@ router.post('/:id/cart', function (req, res) {
 
     mysqlx.getSession(credentials)
         .then(session => session.sql(queryString).execute())
-        .then ((_) => res.send(req.body))
+        .then((_) => res.send(req.body))
+        .catch((err) => {
+            console.log(err)
+            return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+        });
+});
+
+// Delete from cart
+router.delete('/:id/cart/:book_id', function (req, res) {
+    const schema = Joi.object({
+        id: userIdSchema,
+        book_id: bookIdSchema,
+    });
+
+    const { params } = req;
+    const { error } = schema.validate(params);
+    if (error) return res.status(400).json(error.details[0].message);
+
+    const queryString = `
+    DELETE FROM geektext.shopping_cart 
+    WHERE user_id = ${params.id} AND book_id = '${params.book_id}';
+    `;
+
+    mysqlx.getSession(credentials)
+        .then(session => session.sql(queryString).execute())
+        .then((_) => res.status(200).send('Deleted successfully'))
         .catch((err) => {
             console.log(err)
             return res.status(500).send(`Server Error <br> ${err.info.msg}`);
         });
 
-    
 });
+
+
 
 
 
