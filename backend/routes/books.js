@@ -20,15 +20,20 @@ const router = express.Router();
  */
 
 router.get('/', function (req, res) {
-  const { rating } = req.query;
+  const { rating, sortBy } = req.query;
 
-  const queryString = `
+  let queryString = `
   SELECT w.book_id, book_title, price, b.cover, genre, avg_rating, author_name, publisher_name, published_date
   FROM geektext.author_wrote_book w, geektext.book b, geektext.author a, geektext.book_published bp, geektext.publisher p
-  WHERE w.author_id = a.id AND w.book_id = b.id AND bp.book_id = b.id AND bp.publisher_id = p.id;
+  WHERE w.author_id = a.id AND w.book_id = b.id AND bp.book_id = b.id AND bp.publisher_id = p.id
   `;
 
-  
+  if (rating) {
+    if (Number.isNaN(Number.parseFloat(rating))) {
+      return res.status(400).send(`Not a numner: ${rating}`);
+    }
+    queryString += `AND avg_rating >= ${rating}`
+  } 
 
   mysqlx.getSession(credentials)
     .then(session => session.sql(queryString).execute())
