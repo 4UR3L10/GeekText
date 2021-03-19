@@ -65,6 +65,35 @@ router.get('/:id/cart', function (req, res) {
         });
 });
 
+router.get('/:id/cart/:book_id', function (req, res) {
+    const user_id = req.params.id
+    const book_id = req.params.book_id
+    if (!parseInt(user_id)) {
+        return res.status(400).send(`Invalid user id input: ${user_id}`)
+    } else if (!parseInt(book_id)) {
+        return res.status(400).send(`Invalid book id input: ${book_id}`)
+    }
+
+    const queryString = `
+    SELECT b.book_title, b.cover, a.author_name, b.price, sh.cart_quantity
+    FROM geektext.shopping_cart sh, geektext.book b, geektext.author_wrote_book w, geektext.author a
+    WHERE sh.user_id = ${user_id} AND sh.book_id = ${book_id} AND b.id = ${book_id}
+    AND w.book_id = ${book_id} AND w.author_id = a.id
+    `;
+
+    mysqlx.getSession(credentials)
+        .then(session => session.sql(queryString).execute())
+        .then(result => queryResultToJson(result))
+        .then(result => {
+            if (result.length == 0) return res.status(404).send(`User or book not found`)
+            return res.json(result)
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).send('Server Error')
+        });
+});
+
 
 
 
