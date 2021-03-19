@@ -14,16 +14,26 @@ router.get('/', function (req, res) {
 });
 
 router.get('/:id', function (req, res) {
-  const queryString = `SELECT * FROM geektext.author where id = ${req.params.id}`;
+  const author_id = req.params.id
+  if (!parseInt(author_id)) return res.status(400).send(`Invalid author id input: ${author_id}`);
+
+  const queryString = `SELECT * FROM geektext.author where id = ${author_id}`;
   mysqlx.getSession(credentials)
     .then(session => session.sql(queryString).execute())
-    .then(result => res.json(queryResultToJson(result)))
-    .catch((err) => console.log(err));
+    .then(result => queryResultToJson(result))
+    .then(result => {
+      if (result.length == 0) return res.status(404).send(`Author with id ${author_id} is not found`)
+      return res.json(result)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).send('Server Error')
+    });
 });
 
 router.get('/:id/books', function (req, res) {
   const author_id = req.params.id
-  if (!parseInt(author_id)) return res.status(400).send(`Invalid input: ${author_id}`)
+  if (!parseInt(author_id)) return res.status(400).send(`Invalid author id input: ${author_id}`);
   
 
   const queryString = `
@@ -36,7 +46,7 @@ router.get('/:id/books', function (req, res) {
     .then(session => session.sql(queryString).execute())
     .then(result => queryResultToJson(result))
     .then(result => {
-      if (result.length == 0) return res.status(404).send(`Book with the given id is not found`)
+      if (result.length == 0) return res.status(404).send(`Author with id ${author_id} is not found`)
       return res.json(result)
     })
     .catch((err) => {
