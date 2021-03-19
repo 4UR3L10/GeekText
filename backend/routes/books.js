@@ -20,9 +20,10 @@ const router = express.Router();
  */
 
 const sortOption = ['book_title', 'author_name', 'price', 'avg_rating', 'published_date'];
+const genreOptions = ['Manga', 'Fiction', 'Romance', 'Sci-Fi', 'Liturature', 'Science & Technology'];
 
 router.get('/', function (req, res) {
-  const { rating, sortBy } = req.query;
+  const { rating, genre, sortBy } = req.query;
 
   let queryString = `
   SELECT w.book_id, book_title, price, b.cover, genre, avg_rating, author_name, publisher_name, published_date
@@ -36,6 +37,13 @@ router.get('/', function (req, res) {
     }
     queryString += `AND avg_rating >= ${rating}\n`
   } 
+
+  if (genre) {
+    if (!genreOptions.includes(genre)) {
+      return res.status(400).send(`${genre} in not a genre option. Options are: ${genreOptions}`);
+    }
+    queryString += `AND genre = '${genre}'\n`
+  }
 
   if (sortBy) {
     if (!sortOption.includes(sortBy)) {
@@ -57,10 +65,10 @@ router.get('/', function (req, res) {
 
 
 router.get('/:id', (req, res) => {
-  // Validate input
+  
   const book_id = req.params.id
   if (!parseInt(book_id)) {
-    return res.status(400).send(`Invalid input: ${book_id}`)
+    return res.status(400).send(`Invalid book id input: ${book_id}`)
   }
 
   const queryString = `
@@ -75,7 +83,7 @@ router.get('/:id', (req, res) => {
     .then(result => {
       // If not found, send 404 error
       if (result.length == 0) {
-        return res.status(404).send(`Book with the given id is not found`)
+        return res.status(404).send(`Book with id ${book_id} is not found`)
       }
       return res.json(result)
     })
@@ -88,7 +96,6 @@ router.get('/:id', (req, res) => {
 
 
 router.get('/:id/authors', (req, res) => {
-  // Validate input
   const book_id = req.params.id
   if (!parseInt(book_id)) {
     return res.status(400).send(`Invalid input: ${book_id}`)
@@ -104,24 +111,21 @@ router.get('/:id/authors', (req, res) => {
     .then(session => session.sql(queryString).execute())
     .then(result => queryResultToJson(result))
     .then(result => {
-      // If not found, send 404 error
       if (result.length == 0) {
-        return res.status(404).send(`Book with the given id is not found`)
+        return res.status(404).send(`Book with id ${book_id} is not found`)
       }
       return res.json(result)
     })
     .catch((err) => {
       console.log(err)
-      // If you don't know what happened, send 500
       res.status(500).send('Server Error')
     });
 });
 
 router.get('/:id/reviews', (req, res) => {
-  // Validate input
   const book_id = req.params.id
   if (!parseInt(book_id)) {
-    return res.status(400).send(`Invalid input: ${book_id}`)
+    return res.status(400).send(`Invalid book id input: ${book_id}`)
   }
 
   const queryString = `
@@ -134,15 +138,13 @@ router.get('/:id/reviews', (req, res) => {
     .then(session => session.sql(queryString).execute())
     .then(result => queryResultToJson(result))
     .then(result => {
-      // If not found, send 404 error
       if (result.length == 0) {
-        return res.status(404).send(`Book with the given id is not found`)
+        return res.status(404).send(`Book with id ${book_id} is not found`)
       }
       return res.json(result)
     })
     .catch((err) => {
       console.log(err)
-      // If you don't know what happened, send 500
       res.status(500).send('Server Error')
     });
 });
