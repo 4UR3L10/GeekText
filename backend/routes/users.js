@@ -27,6 +27,13 @@ const shoppingCartSchema = Joi.object({
         .required(),
 });
 
+const savedLaterSchema = Joi.object({
+    user_id: userIdSchema
+        .required(),
+    book_id: bookIdSchema
+        .required()
+});
+
 router.get('/', function (req, res) {
     const queryString = `SELECT * FROM geektext.user`;
     mysqlx.getSession(credentials)
@@ -237,6 +244,26 @@ router.route('/:id/saved-books')
                 res.status(500).send('Server Error')
             });
 
-    });
+    })
+    // Add to saved books
+    .post((req, res) => {
+        const { body } = req;
+        const { error } = savedLaterSchema.validate(body);
+        if (error) return res.status(400).json(error.message);
+
+        const queryString = `
+        INSERT INTO geektext.user_saved_book
+        (user_id, book_id)
+        VALUES (${body.user_id}, ${body.book_id})
+        `;
+
+        mysqlx.getSession(credentials)
+            .then(session => session.sql(queryString).execute())
+            .then((_) => res.send(req.body))
+            .catch((err) => {
+                console.log(err)
+                return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+            });
+    })
 
 module.exports = router
