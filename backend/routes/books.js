@@ -19,7 +19,7 @@ const router = express.Router();
  * }
  */
 
-const sortOption = ['book_title', 'author_name', 'price', 'rating', 'published_date'];
+const sortOption = ['book_title', 'author_name', 'price', 'avg_rating', 'published_date'];
 
 router.get('/', function (req, res) {
   const { rating, sortBy } = req.query;
