@@ -39,7 +39,10 @@ router.get('/', function (req, res) {
     .then(session => session.sql(queryString).execute())
     .then(result => queryResultToJson(result))
     .then(result => res.json(result))
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send('Server Error');
+    });
 });
 
 
