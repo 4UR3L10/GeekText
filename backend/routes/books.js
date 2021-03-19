@@ -19,6 +19,8 @@ const router = express.Router();
  * }
  */
 
+const sortOption = ['book_title', 'author_name', 'price', 'rating', 'published_date'];
+
 router.get('/', function (req, res) {
   const { rating, sortBy } = req.query;
 
@@ -32,8 +34,16 @@ router.get('/', function (req, res) {
     if (Number.isNaN(Number.parseFloat(rating))) {
       return res.status(400).send(`Not a numner: ${rating}`);
     }
-    queryString += `AND avg_rating >= ${rating}`
+    queryString += `AND avg_rating >= ${rating}\n`
   } 
+
+  if (sortBy) {
+    if (!sortOption.includes(sortBy)) {
+      return res.status(400).send(`${sortBy} is not a sort option. Options are: ${sortOption}`);
+    }
+
+    queryString += `ORDER BY ${sortBy} ASC;`
+  }
 
   mysqlx.getSession(credentials)
     .then(session => session.sql(queryString).execute())
