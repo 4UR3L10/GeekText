@@ -3,6 +3,7 @@ const mysqlx = require('@mysql/xdevapi');
 const credentials = require('./credentials');
 const { queryResultToJson } = require('./util');
 const Joi = require('joi');
+const { response } = require('express');
 const router = express.Router();
 
 router.use(express.json());
@@ -15,6 +16,17 @@ const bookIdSchema = Joi.number()
     .integer()
     .min(1000000000000)
     .max(9999999999999);
+
+const shoppingCartSchema = Joi.object({
+    user_id: userIdSchema
+        .required(),
+    book_id: bookIdSchema
+        .required(),
+    cart_quantity: Joi.number()
+        .integer()
+        .min(1)
+        .required(),
+});
 
 router.get('/', function (req, res) {
     const queryString = `SELECT * FROM geektext.user`;
@@ -52,6 +64,7 @@ router.get('/:id', function (req, res) {
         });
 });
 
+// Get cart
 router.get('/:id/cart', function (req, res) {
     const user_id = req.params.id
     if (!parseInt(user_id)) {
@@ -79,20 +92,9 @@ router.get('/:id/cart', function (req, res) {
 
 // Add to cart
 router.post('/:id/cart', function (req, res) {
-    const schema = Joi.object({
-        user_id: userIdSchema
-            .required(),
-        book_id: bookIdSchema
-            .required(),
-        cart_quantity: Joi.number()
-            .integer()
-            .min(1)
-            .required(),
-    });
 
     const { body } = req;
-
-    const { error } = schema.validate(body);
+    const { error } = shoppingCartSchema.validate(body);
     if (error) return res.status(400).json(error.details[0].message);
 
     const queryString = `
@@ -128,13 +130,55 @@ router.delete('/:id/cart/:book_id', function (req, res) {
 
     mysqlx.getSession(credentials)
         .then(session => session.sql(queryString).execute())
-        .then((_) => res.status(200).send('Deleted successfully'))
+        .then((result) => res.status(200).send(`Deleted successfully <br> Affected Items: ${result.getAffectedItemsCount()}`))
         .catch((err) => {
             console.log(err)
             return res.status(500).send(`Server Error <br> ${err.info.msg}`);
         });
-
 });
+
+// Update cart
+router.put('/:id/cart/:book_id', function (req, res) {
+    let schema = Joi.object({
+        id: userIdSchema,
+        book_id: bookIdSchema,
+    });
+
+    const { params } = req;
+    let result = schema.validate(params);
+    if (result.error) return res.status(400).json(result.error.details[0].message);
+
+    const { body } = req;
+    result = shoppingCartSchema.validate(body);
+    if (result.error) return res.status(400).json(result.error.details[0].message);
+
+    const queryString = `
+    UPDATE geektext.shopping_cart 
+    SET cart_quantity = ${body.cart_quantity}
+    WHERE user_id = ${body.user_id} AND book_id = '${body.book_id}';
+    `;
+
+    let db;
+
+    mysqlx.getSession(credentials)
+        .then(session => {
+            db = session;
+            session.sql(queryString).execute();
+        })
+        .then((result) => {
+            return db.sql(`SELECT * 
+                FROM geektext.shopping_cart
+                WHERE user_id = ${body.user_id} AND book_id = '${body.book_id}';
+                 `).execute();
+        })
+        .then(result => queryResultToJson(result))
+        .then(result => res.json(result))
+        .catch((err) => {
+            console.log(err)
+            return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+        });
+});
+
 
 
 
