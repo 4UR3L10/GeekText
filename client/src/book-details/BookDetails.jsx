@@ -1,22 +1,31 @@
 import React, { useState, useEffect } from "react";
 import "./BookDetails.css"
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-//500 chars max for for book desc
+import Modal from 'react-bootstrap/Modal';
+import Spinner from 'react-bootstrap/Spinner';
+import Toast from 'react-bootstrap/Toast';
+import { useParams } from "react-router-dom";
 
 function BookDetails(props) {
+    const { bookId } = useParams();
+    const { userId } = props;
     const [book, setBook] = useState(null);
+    const [readMore, setReadMore] = useState(false);
+    const [hover, setHover] = useState(false);
+    const [showLargeImage, setShowLargeImage] = useState(false);
+    const [showCartNotif, setShowCartNotif] = useState(false);
+    const [cartError, setCartError] = useState(false);
 
     useEffect(() => {
         getBook();
     }, []);
 
     function getBook() {
-        fetch(`http://localhost:4000/api/books/${props.match.params.bookId}`)
+        fetch(`http://localhost:4000/api/books/${bookId}`)
             .then((response) => {
                 return response.json();
             })
@@ -26,172 +35,181 @@ function BookDetails(props) {
             .catch((err) => console.log(err));
     };
 
-    return (
+    function handleBookClick() {
+        setShowLargeImage(true);
+        setHover(false);
+    }
 
+    function handleAddShoppingCart() {
+        fetch(`http://localhost:4000/api/users/${userId}/cart`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user_id: userId,
+                book_id: bookId,
+                cart_quantity: 1,
+            })
+        })
+            .then(response => {
+                setCartError(!response.ok)
+                setShowCartNotif(true);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    }
+
+    function LoadingPage() {
+        return (
+            <div style={{ height: "200px" }}>
+                <Spinner style={{
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    marginTop: "200px",
+                    display: "block",
+                }} animation="border" />
+            </div>
+        );
+    }
+
+    function LargeBookImage() {
+        return (
+            <Modal show={showLargeImage} onHide={() => setShowLargeImage(false)}>
+                <Modal.Header closeButton />
+                <Modal.Body>
+                    <img src={book.cover} style={{
+                        display: "block",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                    }} />
+                </Modal.Body>
+            </Modal>
+        );
+    }
+
+    function BookImage(props) {
+        return (
+            <a href="javascript:void(0)" onClick={handleBookClick}>
+                <img src={book.cover}
+                    onMouseEnter={() => setHover(true)}
+                    onMouseLeave={() => setHover(false)}
+                    class="gt-bd-book-img"
+                    style={{
+                        display: "block", marginLeft: "auto", marginRight: "auto",
+                        maxHeight: "500px", maxWidth: "100%", padding: "5px",
+                        ...(hover) && { borderStyle: "solid", borderColor: "black", borderWidth: "2px" },
+                    }} />
+            </a>
+        );
+    }
+
+    function ShoppingCartNotificaiton() {
+        return (
+            <Toast style={{
+                position: 'absolute',
+                top: "80%",
+                right: "0%",
+                width: "270px"
+            }} 
+            onClose={() => setShowCartNotif(false)}
+            show={showCartNotif}
+            delay={3000} autohide>
+                <Toast.Body style={{textAlign: "center"}}>
+                    {cartError ? 
+                      "Book already in cart." 
+                    : "Successfully added book to cart."}
+                </Toast.Body>
+            </Toast>
+        );
+    }
+
+    return (
         <Container style={{ width: "100%" }}>
+
             <FakeNavBar />
-            {book  &&
+            {!book ? <LoadingPage /> :
                 <Container style={{ maxWidth: "1024px", margin: "auto" }} class="d-flex justify-content-center">
                     <Row>
                         <Col>
-                            <BookImage class="gt-bd-book-img" style={{ display: "block", marginLeft: "auto", marginRight: "auto" }} />
+                            <BookImage />
                         </Col>
                         <Col>
                             <h1 class="gt-bd-title">{book.book_title}</h1>
-                            <h6>by <a href="https://getbootstrap.com/docs/4.0/utilities/text/">Naima Coster</a></h6>
-                            <h6 style={{ color: "gray" }}> Grand Central Publishing, 2021-03-02, {book.genre}</h6>
+                            <h6>by <a href="https://getbootstrap.com/docs/4.0/utilities/text/">{book.author_name}</a></h6>
+                            <h6 style={{ color: "gray" }}> {book.publisher_name}, {book.published_date.substring(0, 10)}, {book.genre}</h6>
                             <h6><u>Rating:</u> {book.avg_rating}</h6>
                             <hr class="gt-bd-hr" />
-                            <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
-                                <b>Price</b>
-                            </h6>
-                            <span class="gt-bd-price-span" style={{ fontSize: "2rem", marginBottom: "2rem" }}>
-                                <sup>$</sup>
-                            {book.price}
-                        </span>
-                            <p>
-                                Bacon ipsum dolor amet doner picanha tri-tip biltong leberkas salami meatball tongue filet mignon landjaeger tail. Kielbasa salami tenderloin picanha spare ribs, beef ribs strip steak jerky cow. Pork chop chicken ham hock beef ribs turkey jerky. Shoulder
-                                beef capicola doner, tongue tail sausage short ribs andouille. Rump frankfurter landjaeger t-bone, kielbasa doner ham hock shankle venison. Cupim capicola kielbasa t-bone, ball tip chicken andouille venison pork chop doner bacon beef ribs kevin shankle.
-                                Short loin leberkas tenderloin ground round shank, brisket strip steak ham hock ham.
-                        </p>
+                            <Row>
+                                <Col xs={2}>
+                                    <div>
+                                        <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
+                                            <b>Price</b>
+                                        </h6>
+                                        <span class="gt-bd-price-span" style={{ fontSize: "2rem", marginBottom: "2rem" }}>
+                                            <sup>$</sup>
+                                            {book.price}
+                                        </span>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <div>
+                                        <Button onClick={handleAddShoppingCart}
+                                        style={{
+                                            position: "absolute", 
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                            msTransform: "translateY(-50%)"
+                                            }}>
+                                            Add to Cart
+                                        </Button>
+                                    </div>
+                                    <ShoppingCartNotificaiton />
+                                </Col>
+                                <Col xs={5}/>
 
+                            </Row>
+
+                            <div dangerouslySetInnerHTML={{
+                                __html: (!readMore) ? book.description.substring(0, 520) + "..." : book.description
+                            }} />
+                            <a onClick={() => setReadMore(!readMore)} role="button" href="javascript:void(0)">
+                                {readMore ? "Read Less" : "Read More"}
+                            </a>
                         </Col>
                     </Row>
                     <Row>
                         <div style={{ marginTop: "2.5rem", marginBottom: "2.5rem" }}>
                             <h2 class="gt-bd-title" style={{ fontSize: "1.5rem", marginBottom: "1rem", fontStyle: "italic" }}>
                                 About the Author
-                        </h2>
+                            </h2>
                             <div style={{ marginTop: "0rem", borderStyle: "solid", borderColor: "lightgray" }}>
-                                <p style={{ margin: "1.5rem" }}>
-                                    Bacon ipsum dolor amet doner picanha tri-tip biltong leberkas salami meatball tongue filet mignon landjaeger tail. Kielbasa salami tenderloin picanha spare ribs, beef ribs strip steak jerky cow. Pork chop chicken ham hock beef ribs turkey jerky. Shoulder
-                                    beef capicola doner, tongue tail sausage short ribs andouille. Rump frankfurter landjaeger t-bone, kielbasa doner ham hock shankle venison. Cupim capicola kielbasa t-bone, ball tip chicken andouille venison pork chop doner bacon beef ribs kevin shankle.
-                                    Short loin leberkas tenderloin ground round shank, brisket strip steak ham hock ham.
-                            </p>
+                                <p style={{ margin: "1.5rem" }} dangerouslySetInnerHTML={{
+                                    __html: book.author_bio
+                                }} />
                             </div>
                         </div>
                     </Row>
+                    <LargeBookImage />
                 </Container>
             }
+
         </Container>
+
     );
 
-    function BookImage(props) {
-        return (
-            <img src={book.cover}
-                {...props}></img>
-        );
-    }
+
 }
 
 
-
-function BookDetails_(props) {
-    const [book, setBook] = useState(null);
-
-    useEffect(() => {
-        getBook();
-    }, []);
-
-    function getBook() {
-        fetch(`http://localhost:4000/api/books/${props.match.params.bookId}`)
-            .then((response) => {
-                return response.json();
-            })
-            .then((response) => {
-                setBook(response);
-            })
-            .catch((err) => console.log(err));
-    };
-
-    return (
-        <Container style={{ width: "100%" }}>
-            <FakeNavBar />
-            <Container style={{ maxWidth: "1024px", margin: "auto" }} class="d-flex justify-content-center">
-                <Row>
-                    <Col>
-                        <BookImage style={{ display: "block", marginLeft: "auto", marginRight: "auto" }} />
-                    </Col>
-                    <Col>
-                        <h1 class="gt-bd-title">What's Mine and Yours</h1>
-                        <h6>by <a href="https://getbootstrap.com/docs/4.0/utilities/text/">Naima Coster</a></h6>
-                        <h6 style={{ color: "gray" }}> Grand Central Publishing, 2021-03-02, Romance </h6>
-                        <h6><u>Rating:</u> 5</h6>
-                        <hr class="gt-bd-hr" />
-                        <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
-                            <b>Price</b>
-                        </h6>
-                        <span class="gt-bd-price-span" style={{ fontSize: "2rem", marginBottom: "2rem" }}>
-                            <sup>$</sup>
-                            23.99
-                        </span>
-                        <p>
-                            Bacon ipsum dolor amet doner picanha tri-tip biltong leberkas salami meatball tongue filet mignon landjaeger tail. Kielbasa salami tenderloin picanha spare ribs, beef ribs strip steak jerky cow. Pork chop chicken ham hock beef ribs turkey jerky. Shoulder
-                            beef capicola doner, tongue tail sausage short ribs andouille. Rump frankfurter landjaeger t-bone, kielbasa doner ham hock shankle venison. Cupim capicola kielbasa t-bone, ball tip chicken andouille venison pork chop doner bacon beef ribs kevin shankle.
-                            Short loin leberkas tenderloin ground round shank, brisket strip steak ham hock ham.
-                        </p>
-
-                    </Col>
-                </Row>
-                <Row>
-                    <div style={{ marginTop: "2.5rem" }}>
-                        <h2 class="gt-bd-title" style={{ fontSize: "1.5rem", marginBottom: "1rem", fontStyle: "italic" }}>
-                            About the Author
-                        </h2>
-                        <div style={{ marginTop: "0rem", borderStyle: "solid", borderColor: "lightgray" }}>
-                            <p style={{ margin: "1.5rem" }}>
-                                Bacon ipsum dolor amet doner picanha tri-tip biltong leberkas salami meatball tongue filet mignon landjaeger tail. Kielbasa salami tenderloin picanha spare ribs, beef ribs strip steak jerky cow. Pork chop chicken ham hock beef ribs turkey jerky. Shoulder
-                                beef capicola doner, tongue tail sausage short ribs andouille. Rump frankfurter landjaeger t-bone, kielbasa doner ham hock shankle venison. Cupim capicola kielbasa t-bone, ball tip chicken andouille venison pork chop doner bacon beef ribs kevin shankle.
-                                Short loin leberkas tenderloin ground round shank, brisket strip steak ham hock ham.
-                            </p>
-                        </div>
-                    </div>
-                </Row>
-            </Container>
-        </Container>
-    );
-
-    function BookImage(props) {
-        return (
-            <img src="https://prodimage.images-bn.com/pimages/9781538702345_p0_v3_s550x406.jpg"
-                {...props}></img>
-        );
-    }
-}
 
 function FakeNavBar() {
     return (
         <div style={{ backgroundColor: "white", height: "50px", width: "100%", marginBottom: "1.3rem" }}>
 
-        </div>
-    );
-}
-
-function BookDetailsOld(props) {
-    return (
-        <div class="gt-bd-page-container">
-            <div style={{ display: "flex" }} class="gt-bd-book-details-container">
-                <div class="gt-bd-book-image-container">
-                    <div style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}>
-                        <img src="https://prodimage.images-bn.com/pimages/9781538702345_p0_v3_s550x406.jpg" />
-
-                    </div>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }} class="gt-bd-book-image-container">
-                    <h1 style={{ margin: "0" }} class="gt-bd-title">What's Mine and Yours</h1>
-                    {/* {props.match.params.bookId} */}
-                    <div>
-                        by Naima Coster
-            </div>
-                    <div>
-                        Rating: 4
-            </div>
-                </div>
-            </div>
         </div>
     );
 }

@@ -1,10 +1,7 @@
 ## Getting Started
 
-To start the backend, run:
+To start the backend, run: `npm start` or `nodemon` if you have it installed.
 
-```
-nodemon
-```
 
 
 ## Adding to the REST API
