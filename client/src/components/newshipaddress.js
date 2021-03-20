@@ -237,7 +237,9 @@ function NewShippingAddress() {
             <Button variant="primary" onClick={insertShipAddress}>
               Save
             </Button>{" "}
-            <Button variant="secondary">Cancel</Button>{" "}
+            <Button variant="secondary" href="/mngshipaddress">
+              Cancel
+            </Button>{" "}
           </div>
         </div>
       </div>

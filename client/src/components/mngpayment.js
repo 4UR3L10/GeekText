@@ -69,10 +69,12 @@ function ManagePayment() {
 
         {/* Buttons.*/}
         <div>
-          <Button variant="primary" onClick={"#"}>
+          <Button variant="primary" href="/newpayment">
             Add New Payment Method
           </Button>{" "}
-          <Button variant="secondary">Cancel</Button>{" "}
+          <Button variant="secondary" href="/">
+            Cancel
+          </Button>{" "}
         </div>
       </div>
     </div>

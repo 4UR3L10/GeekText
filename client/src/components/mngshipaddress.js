@@ -67,10 +67,12 @@ function ManageShippingAddress() {
 
         {/* Buttons.*/}
         <div>
-          <Button variant="primary" onClick={"#"}>
+          <Button variant="primary" href="/newshipaddress">
             Add New Address
           </Button>{" "}
-          <Button variant="secondary">Cancel</Button>{" "}
+          <Button variant="secondary" href="/">
+            Cancel
+          </Button>{" "}
         </div>
       </div>
     </div>

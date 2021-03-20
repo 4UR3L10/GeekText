@@ -23,14 +23,38 @@ function NewPayment() {
   const [CrdtHldrNameReg, setCrdtHldrNameReg] = useState("");
   const [ExpMonthReg, setExpMonthReg] = useState("");
   const [ExpYearReg, setExpYearReg] = useState("");
-  const [FirstNameReg, setFirstNameReg] = useState("");
-  const [LastNameReg, setLastNameReg] = useState("");
-  const [AddressReg, setAddressReg] = useState("");
-  const [Address2Reg, setAddress2Reg] = useState("");
-  const [CityReg, setCityReg] = useState("");
-  const [StateReg, setStateReg] = useState("");
-  const [ZipCodeReg, setZipCodeReg] = useState("");
-  const [CountryReg, setCountryReg] = useState("");
+
+  const [BillFirstNameReg, setBillFirstNameReg] = useState("");
+  const [BillLastNameReg, setBillLastNameReg] = useState("");
+  const [BillAddressReg, setBillAddressReg] = useState("");
+  const [BillAddress2Reg, setBillAddress2Reg] = useState("");
+  const [BillCityReg, setBillCityReg] = useState("");
+  const [BillStateReg, setBillStateReg] = useState("");
+  const [BillZipCodeReg, setBillZipCodeReg] = useState("");
+  const [BillCountryReg, setBillCountryReg] = useState("");
+
+  // Function Insert  Shipping Address.
+  const insertPaymentMethod = () => {
+    Axios.post("http://localhost:3001/payment/newpayment", {
+      CardType: CardTypeReg,
+      CardNumber: CardNumberReg,
+      CrdtHldrName: CrdtHldrNameReg,
+      ExpMonth: ExpMonthReg,
+      ExpYear: ExpYearReg,
+
+      BillFirstName: BillFirstNameReg,
+      BillLastName: BillLastNameReg,
+      BillAddress: BillAddressReg,
+      BillAddress2: BillAddress2Reg,
+      BillCity: BillCityReg,
+      BillState: BillStateReg,
+      BillZipCode: BillZipCodeReg,
+      BillCountry: BillCountryReg,
+    }).then((response) => {
+      console.log(response);
+    });
+    //window.location.reload();
+  };
 
   // Missing Function to Insert The Payment and Billing.
   return (
@@ -190,7 +214,7 @@ function NewPayment() {
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setCountryReg(e.target.value);
+                setBillCountryReg(e.target.value);
               }}
             />
           </InputGroup>
@@ -206,7 +230,7 @@ function NewPayment() {
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setFirstNameReg(e.target.value);
+                setBillFirstNameReg(e.target.value);
               }}
             />
           </InputGroup>
@@ -222,7 +246,7 @@ function NewPayment() {
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setLastNameReg(e.target.value);
+                setBillLastNameReg(e.target.value);
               }}
             />
           </InputGroup>
@@ -238,7 +262,7 @@ function NewPayment() {
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setAddressReg(e.target.value);
+                setBillAddressReg(e.target.value);
               }}
             />
           </InputGroup>
@@ -254,7 +278,7 @@ function NewPayment() {
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setAddress2Reg(e.target.value);
+                setBillAddress2Reg(e.target.value);
               }}
             />
           </InputGroup>
@@ -268,7 +292,7 @@ function NewPayment() {
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setCityReg(e.target.value);
+                setBillCityReg(e.target.value);
               }}
             />
           </InputGroup>
@@ -282,7 +306,7 @@ function NewPayment() {
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setStateReg(e.target.value);
+                setBillStateReg(e.target.value);
               }}
             />
           </InputGroup>
@@ -298,7 +322,7 @@ function NewPayment() {
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setZipCodeReg(e.target.value);
+                setBillZipCodeReg(e.target.value);
               }}
             />
           </InputGroup>
@@ -306,10 +330,12 @@ function NewPayment() {
 
         {/* Buttons.*/}
         <div>
-          <Button variant="primary" onClick={"#"}>
+          <Button variant="primary" onClick={insertPaymentMethod}>
             Save
           </Button>{" "}
-          <Button variant="secondary">Cancel</Button>{" "}
+          <Button variant="secondary" href="/mngpayment">
+            Cancel
+          </Button>{" "}
         </div>
         <br />
       </div>
