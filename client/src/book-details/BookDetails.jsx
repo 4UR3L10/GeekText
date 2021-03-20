@@ -6,9 +6,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
-import Spinner from 'react-bootstrap/Spinner';
 import Toast from 'react-bootstrap/Toast';
 import { useParams } from "react-router-dom";
+import LoadingPage from './components/LoadingPage';
 
 function BookDetails(props) {
     const { bookId } = useParams();
@@ -63,18 +63,6 @@ function BookDetails(props) {
 
     }
 
-    function LoadingPage() {
-        return (
-            <div style={{ height: "200px" }}>
-                <Spinner style={{
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    marginTop: "200px",
-                    display: "block",
-                }} animation="border" />
-            </div>
-        );
-    }
 
     function LargeBookImage() {
         return (
@@ -114,14 +102,14 @@ function BookDetails(props) {
                 top: "80%",
                 right: "0%",
                 width: "270px"
-            }} 
-            onClose={() => setShowCartNotif(false)}
-            show={showCartNotif}
-            delay={3000} autohide>
-                <Toast.Body style={{textAlign: "center"}}>
-                    {cartError ? 
-                      "Book already in cart." 
-                    : "Successfully added book to cart."}
+            }}
+                onClose={() => setShowCartNotif(false)}
+                show={showCartNotif}
+                delay={3000} autohide>
+                <Toast.Body style={{ textAlign: "center" }}>
+                    {cartError ?
+                        "Book already in cart."
+                        : "Successfully added book to cart."}
                 </Toast.Body>
             </Toast>
         );
@@ -158,18 +146,18 @@ function BookDetails(props) {
                                 <Col>
                                     <div>
                                         <Button onClick={handleAddShoppingCart}
-                                        style={{
-                                            position: "absolute", 
-                                            top: "50%",
-                                            transform: "translateY(-50%)",
-                                            msTransform: "translateY(-50%)"
+                                            style={{
+                                                position: "absolute",
+                                                top: "50%",
+                                                transform: "translateY(-50%)",
+                                                msTransform: "translateY(-50%)"
                                             }}>
                                             Add to Cart
                                         </Button>
                                     </div>
                                     <ShoppingCartNotificaiton />
                                 </Col>
-                                <Col xs={5}/>
+                                <Col xs={5} />
 
                             </Row>
 
