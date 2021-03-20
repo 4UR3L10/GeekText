@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import Spinner from 'react-bootstrap/Spinner';
+import Toast from 'react-bootstrap/Toast';
 import { useParams } from "react-router-dom";
 
 function BookDetails(props) {
@@ -16,6 +17,8 @@ function BookDetails(props) {
     const [readMore, setReadMore] = useState(false);
     const [hover, setHover] = useState(false);
     const [showLargeImage, setShowLargeImage] = useState(false);
+    const [showCartNotif, setShowCartNotif] = useState(false);
+    const [cartError, setCartError] = useState(false);
 
     useEffect(() => {
         getBook();
@@ -40,35 +43,35 @@ function BookDetails(props) {
     function handleAddShoppingCart() {
         fetch(`http://localhost:4000/api/users/${userId}/cart`, {
             method: 'POST',
-            mode: 'cors',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 user_id: userId,
                 book_id: bookId,
                 cart_quantity: 1,
             })
         })
-        .then(response => {
-            console.log(response)
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-        
+            .then(response => {
+                setCartError(!response.ok)
+                setShowCartNotif(true);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
     }
 
     function LoadingPage() {
         return (
-            <div style={{height: "200px"}}>
+            <div style={{ height: "200px" }}>
                 <Spinner style={{
-                    marginLeft: "auto", 
-                    marginRight: "auto", 
-                    marginTop: "200px", 
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    marginTop: "200px",
                     display: "block",
-                    }} animation="border"/>
+                }} animation="border" />
             </div>
         );
     }
@@ -104,8 +107,29 @@ function BookDetails(props) {
         );
     }
 
+    function ShoppingCartNotificaiton() {
+        return (
+            <Toast style={{
+                position: 'absolute',
+                top: "80%",
+                right: "0%",
+                width: "270px"
+            }} 
+            onClose={() => setShowCartNotif(false)}
+            show={showCartNotif}
+            delay={3000} autohide>
+                <Toast.Body style={{textAlign: "center"}}>
+                    {cartError ? 
+                      "Book already in cart." 
+                    : "Successfully added book to cart."}
+                </Toast.Body>
+            </Toast>
+        );
+    }
+
     return (
         <Container style={{ width: "100%" }}>
+
             <FakeNavBar />
             {!book ? <LoadingPage /> :
                 <Container style={{ maxWidth: "1024px", margin: "auto" }} class="d-flex justify-content-center">
@@ -120,7 +144,7 @@ function BookDetails(props) {
                             <h6><u>Rating:</u> {book.avg_rating}</h6>
                             <hr class="gt-bd-hr" />
                             <Row>
-                                <Col>
+                                <Col xs={2}>
                                     <div>
                                         <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
                                             <b>Price</b>
@@ -132,13 +156,20 @@ function BookDetails(props) {
                                     </div>
                                 </Col>
                                 <Col>
-                                    <div style={{textAlign: "center"}}>
-                                        <Button onClick={handleAddShoppingCart}>
-                                            Add to Shopping Cart
+                                    <div>
+                                        <Button onClick={handleAddShoppingCart}
+                                        style={{
+                                            position: "absolute", 
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                            msTransform: "translateY(-50%)"
+                                            }}>
+                                            Add to Cart
                                         </Button>
                                     </div>
-
+                                    <ShoppingCartNotificaiton />
                                 </Col>
+                                <Col xs={5}/>
 
                             </Row>
 
