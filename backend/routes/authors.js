@@ -37,7 +37,7 @@ router.get('/:id/books', function (req, res) {
   
 
   const queryString = `
-  SELECT w.book_id, book_title, description, price, b.cover, genre, avg_rating, author_name, author_bio, publisher_name, published_date
+  SELECT w.book_id, book_title, price, b.cover, genre, avg_rating, author_name, publisher_name, published_date
   FROM geektext.author_wrote_book w, geektext.book b, geektext.author a, geektext.book_published bp, geektext.publisher p
   WHERE a.id = ${author_id} AND w.author_id = a.id AND w.book_id = b.id AND bp.book_id = b.id AND bp.publisher_id = p.id;
   `;
