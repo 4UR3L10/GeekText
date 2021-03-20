@@ -4,12 +4,14 @@ const signUpRoute = require("./routes/signup");
 const signInRoute = require("./routes/signin");
 const ManageSettingsRoute = require("./routes/mngsettings");
 const ShippingAddressRoute = require("./routes/shipaddress");
+const PaymentRoute = require("./routes/payment");
 const app = express();
 const cors = require("cors");
 
 // Json form send data , you need to use URL enoded request bodies.
 app.use(express.json());
 app.use(cors());
+
 // HTML form send data , you need to use URL enoded request bodies.
 app.use(express.urlencoded({ extended: false }));
 
@@ -24,6 +26,9 @@ app.use("/mngsettings", ManageSettingsRoute);
 
 // Call Manage Shipping Address Section.
 app.use("/shipaddress", ShippingAddressRoute);
+
+// Call Manage Payment Section.
+app.use("/payment", PaymentRoute);
 
 // Run the Server PORT 3001.
 app.listen(3001, () => {
