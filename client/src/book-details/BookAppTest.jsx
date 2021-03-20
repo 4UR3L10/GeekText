@@ -12,7 +12,9 @@ function BookAppTest() {
     <Router>
       <div>
         <Switch>
-          <Route path="/books/:bookId" component={BookDetails}/>
+          <Route path="/books/:bookId" >
+            <BookDetails userId="2"/>
+          </Route>
         </Switch>
       </div>
     </Router>

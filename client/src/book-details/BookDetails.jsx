@@ -6,8 +6,12 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
+import Spinner from 'react-bootstrap/Spinner';
+import { useParams } from "react-router-dom";
 
 function BookDetails(props) {
+    const { bookId } = useParams();
+    const { userId } = props;
     const [book, setBook] = useState(null);
     const [readMore, setReadMore] = useState(false);
     const [hover, setHover] = useState(false);
@@ -18,7 +22,7 @@ function BookDetails(props) {
     }, []);
 
     function getBook() {
-        fetch(`http://localhost:4000/api/books/${props.match.params.bookId}`)
+        fetch(`http://localhost:4000/api/books/${bookId}`)
             .then((response) => {
                 return response.json();
             })
@@ -33,15 +37,52 @@ function BookDetails(props) {
         setHover(false);
     }
 
+    function handleAddShoppingCart() {
+        fetch(`http://localhost:4000/api/users/${userId}/cart`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                user_id: userId,
+                book_id: bookId,
+                cart_quantity: 1,
+            })
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        
+    }
+
+    function LoadingPage() {
+        return (
+            <div style={{height: "200px"}}>
+                <Spinner style={{
+                    marginLeft: "auto", 
+                    marginRight: "auto", 
+                    marginTop: "200px", 
+                    display: "block",
+                    }} animation="border"/>
+            </div>
+        );
+    }
+
     function LargeBookImage() {
         return (
             <Modal show={showLargeImage} onHide={() => setShowLargeImage(false)}>
-                <Modal.Header closeButton/>
+                <Modal.Header closeButton />
                 <Modal.Body>
                     <img src={book.cover} style={{
-                        display: "block", 
-                        marginLeft: "auto", 
-                        marginRight: "auto",}}/>
+                        display: "block",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                    }} />
                 </Modal.Body>
             </Modal>
         );
@@ -66,7 +107,7 @@ function BookDetails(props) {
     return (
         <Container style={{ width: "100%" }}>
             <FakeNavBar />
-            {book &&
+            {!book ? <LoadingPage /> :
                 <Container style={{ maxWidth: "1024px", margin: "auto" }} class="d-flex justify-content-center">
                     <Row>
                         <Col>
@@ -78,13 +119,29 @@ function BookDetails(props) {
                             <h6 style={{ color: "gray" }}> {book.publisher_name}, {book.published_date.substring(0, 10)}, {book.genre}</h6>
                             <h6><u>Rating:</u> {book.avg_rating}</h6>
                             <hr class="gt-bd-hr" />
-                            <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
-                                <b>Price</b>
-                            </h6>
-                            <span class="gt-bd-price-span" style={{ fontSize: "2rem", marginBottom: "2rem" }}>
-                                <sup>$</sup>
-                                {book.price}
-                            </span>
+                            <Row>
+                                <Col>
+                                    <div>
+                                        <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
+                                            <b>Price</b>
+                                        </h6>
+                                        <span class="gt-bd-price-span" style={{ fontSize: "2rem", marginBottom: "2rem" }}>
+                                            <sup>$</sup>
+                                            {book.price}
+                                        </span>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <div style={{textAlign: "center"}}>
+                                        <Button onClick={handleAddShoppingCart}>
+                                            Add to Shopping Cart
+                                        </Button>
+                                    </div>
+
+                                </Col>
+
+                            </Row>
+
                             <div dangerouslySetInnerHTML={{
                                 __html: (!readMore) ? book.description.substring(0, 520) + "..." : book.description
                             }} />
@@ -105,12 +162,12 @@ function BookDetails(props) {
                             </div>
                         </div>
                     </Row>
-                    <LargeBookImage/>
+                    <LargeBookImage />
                 </Container>
             }
-            
+
         </Container>
-        
+
     );
 
 
