@@ -53,7 +53,7 @@ function NewPayment() {
     }).then((response) => {
       console.log(response);
     });
-    //window.location.reload();
+    window.location.reload();
   };
 
   // Missing Function to Insert The Payment and Billing.

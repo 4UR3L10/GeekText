@@ -8,9 +8,14 @@ const PaymentRoute = require("./routes/payment");
 const app = express();
 const cors = require("cors");
 
+const cookieParser = require("cookie-parser");
+
 // Json form send data , you need to use URL enoded request bodies.
 app.use(express.json());
 app.use(cors());
+
+// Testing Token Cookies.
+app.use(cookieParser());
 
 // HTML form send data , you need to use URL enoded request bodies.
 app.use(express.urlencoded({ extended: false }));

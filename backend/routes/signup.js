@@ -61,12 +61,4 @@ router.post("/test", (req, res) => {
   }
 });
 
-// testoken.
-router.use("/user", (req, res) => {
-  res.send({
-    token: "test123",
-  });
-});
-// testoken.
-
 module.exports = router;

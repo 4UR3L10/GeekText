@@ -15,19 +15,39 @@ import Jumbotron from "react-bootstrap/Jumbotron"; // Jumbotron ReactBootsrap.
 import Container from "react-bootstrap/Container"; // Container ReactBootsrap.
 import Alert from "react-bootstrap/Alert"; // Alert ReactBootsrap.
 
+import jwt_decode from "jwt-decode";
+const bcrypt = require("bcrypt-nodejs");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+
 function SignIn() {
   const [EmailAddressReg, setEmailAddressReg] = useState("");
   const [PasswordReg, setPasswordReg] = useState("");
 
   // CHANGE THE FUNCTIONNNNNNNNNNNNNNNNN FOR THE ONE TO RETRIEVE AND COMPARE NOT INSERT [SIGNIN]
   const register = () => {
-    console.log("log test");
-    Axios.get("http://localhost:3001/signin/user", {
+    Axios.post("http://localhost:3001/signin/user", {
       EmailAddress: EmailAddressReg,
       Password: PasswordReg,
     }).then((response) => {
       console.log(response);
     });
+
+    const token = jwt.sign({ EmailAddressReg }, "mysupersecretpassword", {
+      expiresIn: "7d",
+    });
+
+    console.log("The token is " + token);
+
+    window.localStorage.setItem("Token", token);
+    window.localStorage.setItem("Email", EmailAddressReg);
+
+    var decoded = jwt_decode(token);
+    console.log(decoded);
+
+    console.log("BEST: " + decoded.EmailAddressReg);
+
+    //window.location.href = "http://localhost:3000/";
   };
 
   const refresh = () => {

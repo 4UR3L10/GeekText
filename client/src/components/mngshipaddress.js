@@ -62,6 +62,10 @@ function ManageShippingAddress() {
         </Container>
       </div>
 
+      <div>
+        <Button onClick="getShipAddress">Generate List</Button>
+      </div>
+
       <div className="signup">
         {/* SignUp.*/}
 

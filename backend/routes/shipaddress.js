@@ -32,4 +32,17 @@ router.post("/newshipaddress", (req, res) => {
   }
 });
 
+// [Address] Get Information.
+router.get("/getshipaddress", (req, res) => {
+  try {
+    db.promise().query(
+      `SELECT * FROM shipping_address` // CHANGE TO DYNAMIC USERRRRRR
+    );
+    console.log("Data: " + res.data);
+    res.status(200).send({ msg: "Done" });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 module.exports = router;
