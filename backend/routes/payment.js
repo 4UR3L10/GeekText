@@ -23,6 +23,7 @@ router.post("/newpayment", (req, res) => {
   const BillState = req.body.BillState;
   const BillZipCode = req.body.BillZipCode;
   const BillCountry = req.body.BillCountry;
+  const IdEmail = req.body.IdEmail;
 
   console.log("CardType: " + CardType);
   console.log("CardNumber: " + CardNumber);
@@ -55,23 +56,34 @@ router.post("/newpayment", (req, res) => {
   ) {
     console.log("First Try");
     try {
-      db.promise().query(
-        `INSERT INTO credit_card VALUES('${CardNumber}','1','${CardType}','${CrdtHldrName}','${ExpMonth}','${ExpYear}','N','N')` // CHANGE TO DYNAMIC USERRRRRR
-      );
-      console.log("User Credit Card Inserted");
-      res.status(201).send({ msg: "Credit Card Inserted" });
-    } catch (err) {
-      console.log(err);
-    }
+      db.query(
+        `SELECT UserID FROM user WHERE EmailAddress = '${IdEmail}'`,
+        (error, results) => {
+          if (results == "") {
+            console.log("No results");
+          } else {
+            console.log("results: " + results[0].UserID);
 
-    console.log("Second Try");
+            db.promise().query(
+              `INSERT INTO credit_card VALUES('${CardNumber}','${results[0].UserID}','${CardType}','${CrdtHldrName}','${ExpMonth}','${ExpYear}','N','N')`
+            );
+            console.log("User Credit Card Inserted");
+            res.status(201).send({ msg: "Credit Card Inserted" });
 
-    try {
-      db.promise().query(
-        `INSERT INTO billing_address VALUES('${0}','${CardNumber}','${BillFirstName}','${BillLastName}','${BillAddress}','${BillAddress2}','${BillCity}','${BillState}','${BillZipCode}','${BillCountry}','+17861234567')` // CHANGE TO DYNAMIC USERRRRRR
+            console.log("Second Try");
+
+            try {
+              db.promise().query(
+                `INSERT INTO billing_address VALUES('${0}','${CardNumber}','${BillFirstName}','${BillLastName}','${BillAddress}','${BillAddress2}','${BillCity}','${BillState}','${BillZipCode}','${BillCountry}','+17861234567')` // CHANGE TO DYNAMIC USERRRRRR
+              );
+              console.log("User Billing Address Inserted");
+              res.status(201).send({ msg: "Billing Address Inserted" });
+            } catch (err) {
+              console.log(err);
+            }
+          }
+        }
       );
-      console.log("User Billing Address Inserted");
-      res.status(201).send({ msg: "Billing Address Inserted" });
     } catch (err) {
       console.log(err);
     }

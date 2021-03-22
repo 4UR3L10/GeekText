@@ -32,12 +32,14 @@ function ManageSettings() {
   const [Address2Reg, setAddress2Reg] = useState("");
   const [AddressReg, setAddressReg] = useState("");
   const [CountryReg, setCountryReg] = useState("");
+  var decoded = jwt_decode(localStorage.getItem("Token"));
 
   // Function Update Name.
   const updateName = () => {
     // Update Fullname.
     Axios.put("http://localhost:3001/mngsettings/fullname", {
       UserFullName: UserFullNameReg,
+      IdEmail: decoded.EmailAddressReg,
     }).then((response) => {
       console.log(response);
     });
@@ -72,6 +74,7 @@ function ManageSettings() {
     // Update Fullname.
     Axios.put("http://localhost:3001/mngsettings/email", {
       EmailAddress: EmailAddressReg,
+      IdEmail: decoded.EmailAddressReg,
     }).then((response) => {
       console.log(response);
     });
@@ -84,6 +87,7 @@ function ManageSettings() {
     // Update NickName.
     Axios.put("http://localhost:3001/mngsettings/nickname", {
       NickName: NickNameReg,
+      IdEmail: decoded.EmailAddressReg,
     }).then((response) => {
       console.log(response);
     });
@@ -98,6 +102,7 @@ function ManageSettings() {
 
     Axios.put("http://localhost:3001/mngsettings/status", {
       AnonymusStat: AnonymusStatReg,
+      IdEmail: decoded.EmailAddressReg,
     }).then((response) => {
       console.log(response);
     });
@@ -171,8 +176,9 @@ function ManageSettings() {
     bcrypt.genSalt(saltRounds, function (err, salt) {
       bcrypt.hash(passwordTemp, salt, null, function (err, hash) {
         // Store hash in your password DB.
-        Axios.post("http://localhost:3001/mngsettings/password", {
+        Axios.put("http://localhost:3001/mngsettings/password", {
           Password: hash,
+          IdEmail: decoded.EmailAddressReg,
         }).then((response) => {
           console.log(response);
         });
@@ -192,6 +198,7 @@ function ManageSettings() {
       State: StateReg,
       ZipCode: ZipCodeReg,
       Country: CountryReg,
+      IdEmail: decoded.EmailAddressReg,
     }).then((response) => {
       console.log(response);
     });
@@ -206,8 +213,8 @@ function ManageSettings() {
 
   if (localStorage.getItem("Token") != null) {
     // Logged In.
-    var decoded = jwt_decode(localStorage.getItem("Token"));
-    console.log("decoded: " + decoded.EmailAddressReg);
+    // var decoded = jwt_decode(localStorage.getItem("Token")); /*CHANGE TO GLOBALLLLLLLLLLLLLLLLLLL*/
+    //console.log("decoded: " + decoded.EmailAddressReg);
     return (
       <div className="ManageSettings">
         {/* Testing.*/}

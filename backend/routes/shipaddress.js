@@ -18,14 +18,28 @@ router.post("/newshipaddress", (req, res) => {
   const State = req.body.State;
   const ZipCode = req.body.ZipCode;
   const Country = req.body.Country;
+  const IdEmail = req.body.IdEmail;
 
   if (FirstName && LastName && Address && City && State && ZipCode && Country) {
     try {
-      db.promise().query(
-        `INSERT INTO shipping_address VALUES('${0}','1','${FirstName}','${LastName}','${Address}','${Address2}','${City}','${State}','${ZipCode}','${Country}','N')` // CHANGE TO DYNAMIC USERRRRRR
+      db.query(
+        `SELECT UserID FROM user WHERE EmailAddress = '${IdEmail}'`,
+        (error, results) => {
+          if (results == "") {
+            console.log("No results");
+          } else {
+            console.log("results: " + results[0].UserID);
+
+            db.promise().query(
+              `INSERT INTO shipping_address VALUES('${0}','${
+                results[0].UserID
+              }','${FirstName}','${LastName}','${Address}','${Address2}','${City}','${State}','${ZipCode}','${Country}','N')` // CHANGE TO DYNAMIC USERRRRRR
+            );
+            console.log("User Shipping Address Inserted");
+            res.status(201).send({ msg: "Shipping Address Inserted" });
+          }
+        }
       );
-      console.log("User Shipping Address Inserted");
-      res.status(201).send({ msg: "Shipping Address Inserted" });
     } catch (err) {
       console.log(err);
     }

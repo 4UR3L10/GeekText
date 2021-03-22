@@ -11,11 +11,12 @@ router.get("/", (req, res) => {
 // [FullName] Update User Information.
 router.put("/fullname", (req, res) => {
   const UserFullName = req.body.UserFullName;
+  const IdEmail = req.body.IdEmail;
 
   if (UserFullName) {
     try {
       db.promise().query(
-        `UPDATE user SET UserFullName = '${UserFullName}' WHERE UserID = '1'` // CHANGE TO DYNAMIC USERRRRRR
+        `UPDATE user SET UserFullName = '${UserFullName}' WHERE EmailAddress = '${IdEmail}'`
       );
 
       console.log("User Fullname Updated");
@@ -29,11 +30,12 @@ router.put("/fullname", (req, res) => {
 // [Email] Update User Information.
 router.put("/email", (req, res) => {
   const EmailAddress = req.body.EmailAddress;
+  const IdEmail = req.body.IdEmail;
 
   if (EmailAddress) {
     try {
       db.promise().query(
-        `UPDATE user SET EmailAddress = '${EmailAddress}' WHERE UserID = '1'` // CHANGE TO DYNAMIC USERRRRRR
+        `UPDATE user SET EmailAddress = '${EmailAddress}' WHERE EmailAddress = '${IdEmail}'`
       );
 
       console.log("User EmailAddress Updated");
@@ -47,11 +49,12 @@ router.put("/email", (req, res) => {
 // [NickName] Update User Information.
 router.put("/nickname", (req, res) => {
   const NickName = req.body.NickName;
+  const IdEmail = req.body.IdEmail;
 
   if (NickName) {
     try {
       db.promise().query(
-        `UPDATE user SET NickName = '${NickName}' WHERE UserID = '1'` // CHANGE TO DYNAMIC USERRRRRR
+        `UPDATE user SET NickName = '${NickName}' WHERE EmailAddress = '${IdEmail}'`
       );
 
       console.log("User NickName Updated");
@@ -65,11 +68,12 @@ router.put("/nickname", (req, res) => {
 // [Anonymus Status] Update User Information.
 router.put("/status", (req, res) => {
   const AnonymusStat = req.body.AnonymusStat;
+  const IdEmail = req.body.IdEmail;
 
   //if (AnonymusStat) {
   try {
     db.promise().query(
-      `UPDATE user SET AnonymusStat = '${AnonymusStat}' WHERE UserID = '1'` // CHANGE TO DYNAMIC USERRRRRR
+      `UPDATE user SET AnonymusStat = '${AnonymusStat}'  WHERE EmailAddress = '${IdEmail}'` // CHANGE TO DYNAMIC USERRRRRR
     );
 
     console.log("User AnonymusStat Updated");
@@ -83,11 +87,12 @@ router.put("/status", (req, res) => {
 // [Password] Insert User Information..
 router.put("/password", (req, res) => {
   const Password = req.body.Password;
+  const IdEmail = req.body.IdEmail;
 
   if (Password) {
     try {
       db.promise().query(
-        `UPDATE user SET Password = '${Password}' WHERE UserID = '1'` // CHANGE TO DYNAMIC USERRRRRR
+        `UPDATE user SET Password = '${Password}' WHERE EmailAddress = '${IdEmail}'` // CHANGE TO DYNAMIC USERRRRRR
       );
       console.log("User Password Updated");
       res.status(201).send({ msg: "Created User" });
@@ -105,14 +110,26 @@ router.put("/address", (req, res) => {
   const State = req.body.State;
   const ZipCode = req.body.ZipCode;
   const Country = req.body.Country;
+  const IdEmail = req.body.IdEmail;
 
   if (Address && City && State && ZipCode && Country) {
     try {
-      db.promise().query(
-        `UPDATE home_address SET Address = '${Address}',Address2 = '${Address2}',City = '${City}',State = '${State}',ZipCode = '${ZipCode}',Country = '${Country}', HmAddrssVld = 'N' WHERE UserID = '1'` // CHANGE TO DYNAMIC USERRRRRR
+      db.query(
+        `SELECT UserID FROM user WHERE EmailAddress = '${IdEmail}'`,
+        (error, results) => {
+          if (results == "") {
+            console.log("No results");
+          } else {
+            console.log("results: " + results[0].UserID);
+
+            db.promise().query(
+              `UPDATE home_address SET Address = '${Address}',Address2 = '${Address2}',City = '${City}',State = '${State}',ZipCode = '${ZipCode}',Country = '${Country}', HmAddrssVld = 'N' WHERE UserID = '${results[0].UserID}'`
+            );
+            console.log("User home_address Updated");
+            res.status(201).send({ msg: "Updated User home_address" });
+          }
+        }
       );
-      console.log("User home_address Updated");
-      res.status(201).send({ msg: "Updated User home_address" });
     } catch (err) {
       console.log(err);
     }

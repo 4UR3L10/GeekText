@@ -51,6 +51,7 @@ function NewPayment() {
       BillState: BillStateReg,
       BillZipCode: BillZipCodeReg,
       BillCountry: BillCountryReg,
+      IdEmail: decoded.EmailAddressReg,
     }).then((response) => {
       console.log(response);
     });

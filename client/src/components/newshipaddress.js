@@ -45,6 +45,7 @@ function NewShippingAddress() {
       State: StateReg,
       ZipCode: ZipCodeReg,
       Country: CountryReg,
+      IdEmail: decoded.EmailAddressReg,
     }).then((response) => {
       console.log(response);
     });
