@@ -69,8 +69,9 @@ function ManageShippingAddress() {
         </div>
 
         <div>
-          <Button onClick="getShipAddress">Generate List</Button>
+          <Button href="/lstshipaddress">Generate List</Button>
         </div>
+        <br />
 
         <div className="signup">
           {/* SignUp.*/}
