@@ -127,7 +127,9 @@ function BookDetails(props) {
                         </Col>
                         <Col>
                             <h1 class="gt-bd-title">{book.book_title}</h1>
-                            <h6>by <a href="https://getbootstrap.com/docs/4.0/utilities/text/">{book.author_name}</a></h6>
+                            <h6>by <a href={`http://localhost:3000/author/${book.author_id}`} >
+                                {book.author_name}
+                                </a> </h6>
                             <h6 style={{ color: "gray" }}> {book.publisher_name}, {book.published_date.substring(0, 10)}, {book.genre}</h6>
                             <h6><u>Rating:</u> {book.avg_rating}</h6>
                             <hr class="gt-bd-hr" />
