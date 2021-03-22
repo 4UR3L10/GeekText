@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import "./mngsettings.css";
 import Axios from "axios";
+import jwt_decode from "jwt-decode";
 
 // Boostrap.
 import "bootstrap/dist/css/bootstrap.min.css"; // Necessary For ReactBootsrap.
@@ -197,353 +198,408 @@ function ManageSettings() {
     //window.location.reload();
   };
 
-  return (
-    <div className="ManageSettings">
-      {/* Testing.*/}
+  // Function Remove the Token or Sign Out.
+  const signout = () => {
+    window.localStorage.removeItem("Token");
+    window.location.href = "http://localhost:3000/";
+  };
 
-      {/* NavBar.*/}
-      <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
-        <Navbar.Brand href="/">GeekText</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link href="/signin">Sign In</Nav.Link>
-            <Nav.Link href="/signup">Sign Up</Nav.Link>
-            <NavDropdown title="Manage" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/mngaccount">Account</NavDropdown.Item>
-              <NavDropdown.Item href="/mngsettings">Settings</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="/mngshipaddress">
-                Shipping Address
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/newshipaddress">
-                Shipping Address New
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
-              <NavDropdown.Item href="/newpayment">
-                Payment New
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-          <Nav>
-            <Nav.Link href="#deets">Contact Us</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-              About
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-      <br />
+  if (localStorage.getItem("Token") != null) {
+    // Logged In.
+    var decoded = jwt_decode(localStorage.getItem("Token"));
+    console.log("decoded: " + decoded.EmailAddressReg);
+    return (
+      <div className="ManageSettings">
+        {/* Testing.*/}
 
-      {/* TextHeader.*/}
-      <div className="mainheader">
-        <Container>
-          <h1>Account Settings</h1>
-          <br />
-          <br />
-          <h2>Update Your Name</h2>
-        </Container>
-      </div>
+        {/* NavBar.*/}
+        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
+          <Navbar.Brand href="/">GeekText</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <NavDropdown title="Manage" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/mngaccount">Account</NavDropdown.Item>
+                <NavDropdown.Item href="/mngsettings">
+                  Settings
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/mngshipaddress">
+                  Shipping Address
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+            <Nav>
+              <Nav.Link onClick={signout}>Sign Out</Nav.Link>
+              <Nav.Link eventKey={2} href="#memes">
+                About
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <br />
 
-      <div className="SettingsForm">
-        {/* SignUp.*/}
-        <div>
-          <label>
-            {/* Fullname.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Fullname
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setUserFullNameReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* Buttons.*/}
-            <div>
-              <Button variant="primary" onClick={updateName}>
-                Save Changes
-              </Button>{" "}
-              <Button variant="secondary">Cancel</Button>{" "}
-            </div>
+        {/* TextHeader.*/}
+        <div className="mainheader">
+          <Container>
+            <h1>Account Settings</h1>
             <br />
-            {/* TextHeader.*/}
-            <div className="mainheader">
-              <Container>
-                <h2>Update Your Email Address</h2>
-              </Container>
-            </div>
-            {/* Email.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Email
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setEmailAddressReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* Confirm Email.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Confirm Email
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setEmailVerAddressReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* Buttons.*/}
-            <div>
-              <Button variant="primary" onClick={verifyEmail}>
-                Save Changes
-              </Button>{" "}
-              <Button variant="secondary">Cancel</Button>{" "}
-            </div>
             <br />
-            {/* TextHeader.*/}
-            <div className="mainheader">
-              <Container>
-                <h2>Change Your Password</h2>
-              </Container>
-            </div>
-            {/* Current Passsword.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Current Passsword
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                type="password"
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setCurrentPasswordReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* Passsword.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  New Passsword
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                type="password"
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setPasswordReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* Confirm Passsword.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Confirm Passsword
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                type="password"
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setPasswordConfReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* Buttons.*/}
-            <div>
-              <Button variant="primary" onClick={encryptPassword}>
-                Save Changes
-              </Button>{" "}
-              <Button variant="secondary">Cancel</Button>{" "}
-            </div>
-            <br />
-            {/* TextHeader.*/}
-            <div className="mainheader">
-              <Container>
-                <h2>Change Your Home Address</h2>
-              </Container>
-            </div>
-            {/* Address.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Address
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setAddressReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* Address Aditional.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Address Aditional
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setAddress2Reg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* City.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  City
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setCityReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* State.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  State
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setStateReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* Zip Code.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Zip Code
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setZipCodeReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* Country.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Country
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setCountryReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-            {/* Buttons.*/}
-            <div>
-              <Button variant="primary" onClick={updateAddress}>
-                Save Changes
-              </Button>{" "}
-              <Button variant="secondary">Cancel</Button>{" "}
-            </div>
-            <br />
-            {/* TextHeader.*/}
-            <div className="mainheader">
-              <Container>
-                <h2>Change Your Anonymus Status</h2>
-              </Container>
-            </div>
-            {/* Anonymus.*/}
-            <Form.Group controlId="formBasicCheckbox">
-              <Form.Check
-                type="checkbox"
-                value="Y"
-                label="Remain Anonymus"
-                onChange={(e) => {
-                  setAnonymusStatReg(e.target.value);
-                }}
-              />
-            </Form.Group>
+            <h2>Update Your Name</h2>
+          </Container>
+        </div>
 
-            {/* Buttons.*/}
-            <div>
-              <Button variant="primary" onClick={updateStatus}>
-                Save Changes
-              </Button>{" "}
-              <Button variant="secondary">Cancel</Button>{" "}
-            </div>
-            <br />
-            {/* TextHeader.*/}
-            <div className="mainheader">
-              <Container>
-                <h2>Change Your Nickname</h2>
-              </Container>
-            </div>
-            {/* Nickname.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Nickname
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setNickNameReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-          </label>
-
-          {/* Buttons.*/}
+        <div className="SettingsForm">
+          {/* SignUp.*/}
           <div>
-            <Button variant="primary" onClick={updateNickname}>
-              Save Changes
-            </Button>{" "}
-            <Button variant="secondary">Cancel</Button>{" "}
+            <label>
+              {/* Fullname.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Fullname
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setUserFullNameReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* Buttons.*/}
+              <div>
+                <Button variant="primary" onClick={updateName}>
+                  Save Changes
+                </Button>{" "}
+                <Button variant="secondary" href="/mngaccount">
+                  Cancel
+                </Button>{" "}
+              </div>
+              <br />
+              {/* TextHeader.*/}
+              <div className="mainheader">
+                <Container>
+                  <h2>Update Your Email Address</h2>
+                </Container>
+              </div>
+              {/* Email.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Email
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setEmailAddressReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* Confirm Email.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Confirm Email
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setEmailVerAddressReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* Buttons.*/}
+              <div>
+                <Button variant="primary" onClick={verifyEmail}>
+                  Save Changes
+                </Button>{" "}
+                <Button variant="secondary" href="/mngaccount">
+                  Cancel
+                </Button>{" "}
+              </div>
+              <br />
+              {/* TextHeader.*/}
+              <div className="mainheader">
+                <Container>
+                  <h2>Change Your Password</h2>
+                </Container>
+              </div>
+              {/* Current Passsword.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Current Passsword
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="password"
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setCurrentPasswordReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* Passsword.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    New Passsword
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="password"
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setPasswordReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* Confirm Passsword.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Confirm Passsword
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="password"
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setPasswordConfReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* Buttons.*/}
+              <div>
+                <Button variant="primary" onClick={encryptPassword}>
+                  Save Changes
+                </Button>{" "}
+                <Button variant="secondary" href="/mngaccount">
+                  Cancel
+                </Button>{" "}
+              </div>
+              <br />
+              {/* TextHeader.*/}
+              <div className="mainheader">
+                <Container>
+                  <h2>Change Your Home Address</h2>
+                </Container>
+              </div>
+              {/* Address.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Address
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setAddressReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* Address Aditional.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Address Aditional
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setAddress2Reg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* City.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    City
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setCityReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* State.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    State
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setStateReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* Zip Code.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Zip Code
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setZipCodeReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* Country.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Country
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setCountryReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+              {/* Buttons.*/}
+              <div>
+                <Button variant="primary" onClick={updateAddress}>
+                  Save Changes
+                </Button>{" "}
+                <Button variant="secondary" href="/mngaccount">
+                  Cancel
+                </Button>{" "}
+              </div>
+              <br />
+              {/* TextHeader.*/}
+              <div className="mainheader">
+                <Container>
+                  <h2>Change Your Anonymus Status</h2>
+                </Container>
+              </div>
+              {/* Anonymus.*/}
+              <Form.Group controlId="formBasicCheckbox">
+                <Form.Check
+                  type="checkbox"
+                  value="Y"
+                  label="Remain Anonymus"
+                  onChange={(e) => {
+                    setAnonymusStatReg(e.target.value);
+                  }}
+                />
+              </Form.Group>
+
+              {/* Buttons.*/}
+              <div>
+                <Button variant="primary" onClick={updateStatus}>
+                  Save Changes
+                </Button>{" "}
+                <Button variant="secondary" href="/mngaccount">
+                  Cancel
+                </Button>{" "}
+              </div>
+              <br />
+              {/* TextHeader.*/}
+              <div className="mainheader">
+                <Container>
+                  <h2>Change Your Nickname</h2>
+                </Container>
+              </div>
+              {/* Nickname.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Nickname
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setNickNameReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+            </label>
+
+            {/* Buttons.*/}
+            <div>
+              <Button variant="primary" onClick={updateNickname}>
+                Save Changes
+              </Button>{" "}
+              <Button variant="secondary" href="/mngaccount">
+                Cancel
+              </Button>{" "}
+            </div>
+            <br />
           </div>
-          <br />
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+  // Not Logged In.
+  else {
+    return (
+      <div className="App">
+        {/* Testing.*/}
+
+        {/* NavBar.*/}
+        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
+          <Navbar.Brand href="/">GeekText</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link href="/signin">Sign In</Nav.Link>
+              <Nav.Link href="/signup">Sign Up</Nav.Link>
+            </Nav>
+            <Nav>
+              <Nav.Link eventKey={2} href="#memes">
+                About
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <br />
+
+        {/* TextHeader.*/}
+        <div className="mainheader">
+          <Container>
+            <h1>Create an Account or Sign In</h1>
+            <p>
+              <Alert.Link href="/signup">SignUp </Alert.Link> to create a
+              GeekText account. If you already have an account, please.{" "}
+              <Alert.Link href="/signin">Sign In</Alert.Link>.
+            </p>
+          </Container>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default ManageSettings;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import Axios from "axios";
+import jwt_decode from "jwt-decode";
 
 // Boostrap.
 import "bootstrap/dist/css/bootstrap.min.css"; // Necessary For ReactBootsrap.
@@ -34,75 +35,130 @@ function App() {
     window.location.reload();
   };
 
-  return (
-    <div className="App">
-      {/* Testing.*/}
+  // Function Remove the Token or Sign Out.
+  const signout = () => {
+    window.localStorage.removeItem("Token");
+    window.location.href = "http://localhost:3000/";
+  };
 
-      {/* NavBar.*/}
-      <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
-        <Navbar.Brand href="/">GeekText</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link href="/signin">Sign In</Nav.Link>
-            <Nav.Link href="/signup">Sign Up</Nav.Link>
-            <NavDropdown title="Manage" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/mngaccount">Account</NavDropdown.Item>
-              <NavDropdown.Item href="/mngsettings">Settings</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="/mngshipaddress">
-                Shipping Address
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/newshipaddress">
-                Shipping Address New
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
-              <NavDropdown.Item href="/newpayment">
-                Payment New
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-          <Nav>
-            <Nav.Link href="#deets">Contact Us</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-              About
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-      <br />
+  if (localStorage.getItem("Token") != null) {
+    // Logged In.
+    var decoded = jwt_decode(localStorage.getItem("Token"));
+    console.log("decoded: " + decoded.EmailAddressReg);
+    return (
+      <div className="App">
+        {/* Testing.*/}
 
-      {/* TextHeader.*/}
-      <div className="mainheader">
-        <Container>
-          <h1>!WELCOME TO GEEKTEXT!</h1>
-          <p>
-            Fill in the fields below to create a GeekText account. If you
-            already have an account, please.{" "}
-            <Alert.Link href="/signin">Sign In</Alert.Link>.
-          </p>
-        </Container>
-      </div>
+        {/* NavBar.*/}
+        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
+          <Navbar.Brand href="/">GeekText</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <NavDropdown title="Manage" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/mngaccount">Account</NavDropdown.Item>
+                <NavDropdown.Item href="/mngsettings">
+                  Settings
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/mngshipaddress">
+                  Shipping Address
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+            <Nav>
+              <Nav.Link onClick={signout}>Sign Out</Nav.Link>
+              <Nav.Link eventKey={2} href="#memes">
+                About
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <br />
 
-      {/*Image Tanjiro*/}
-      <div class="c">
-        <div class="i">
-          <img class="img" src="https://i.imgur.com/jLEfHF1.png" />
+        {/* TextHeader.*/}
+        <div className="mainheader">
+          <Container>
+            <h1>!WELCOME TO GEEKTEXT!</h1>
+          </Container>
         </div>
-        <div class="s1"></div>
-        <div class="s2"></div>
-        <div class="s3"></div>
-      </div>
 
-      <div id="wrapper">
-        <div id="bulbasaur" class="pokemon"></div>
-        <div id="charmander" class="pokemon"></div>
-        <div id="squirtle" class="pokemon"></div>
-        <div id="pikachu" class="pokemon"></div>
+        {/*Image Tanjiro*/}
+        <div class="c">
+          <div class="i">
+            <img class="img" src="https://i.imgur.com/jLEfHF1.png" />
+          </div>
+          <div class="s1"></div>
+          <div class="s2"></div>
+          <div class="s3"></div>
+        </div>
+
+        <div id="wrapper">
+          <div id="bulbasaur" class="pokemon"></div>
+          <div id="charmander" class="pokemon"></div>
+          <div id="squirtle" class="pokemon"></div>
+          <div id="pikachu" class="pokemon"></div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+  // Not Logged In.
+  else {
+    return (
+      <div className="App">
+        {/* Testing.*/}
+
+        {/* NavBar.*/}
+        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
+          <Navbar.Brand href="/">GeekText</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link href="/signin">Sign In</Nav.Link>
+              <Nav.Link href="/signup">Sign Up</Nav.Link>
+            </Nav>
+            <Nav>
+              <Nav.Link eventKey={2} href="#memes">
+                About
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <br />
+
+        {/* TextHeader.*/}
+        <div className="mainheader">
+          <Container>
+            <h1>!WELCOME TO GEEKTEXT!</h1>
+            <p>
+              Fill in the fields below to create a GeekText account. If you
+              already have an account, please.{" "}
+              <Alert.Link href="/signin">Sign In</Alert.Link>.
+            </p>
+          </Container>
+        </div>
+
+        {/*Image Tanjiro*/}
+        <div class="c">
+          <div class="i">
+            <img class="img" src="https://i.imgur.com/jLEfHF1.png" />
+          </div>
+          <div class="s1"></div>
+          <div class="s2"></div>
+          <div class="s3"></div>
+        </div>
+
+        <div id="wrapper">
+          <div id="bulbasaur" class="pokemon"></div>
+          <div id="charmander" class="pokemon"></div>
+          <div id="squirtle" class="pokemon"></div>
+          <div id="pikachu" class="pokemon"></div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;

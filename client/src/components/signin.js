@@ -24,137 +24,191 @@ function SignIn() {
   const [EmailAddressReg, setEmailAddressReg] = useState("");
   const [PasswordReg, setPasswordReg] = useState("");
 
-  // CHANGE THE FUNCTIONNNNNNNNNNNNNNNNN FOR THE ONE TO RETRIEVE AND COMPARE NOT INSERT [SIGNIN]
-  const register = () => {
+  const token = jwt.sign({ EmailAddressReg }, "mysupersecretpassword", {
+    expiresIn: "7d",
+  });
+
+  // Login User Arrow Function.
+  const login = () => {
+    try {
+      signInUser();
+      StoreToken();
+      DecodeToken();
+      window.location.href = "http://localhost:3000/mngaccount";
+    } catch (e) {
+      // PopUp.
+      alert(e);
+    }
+  };
+
+  const signInUser = () => {
     Axios.post("http://localhost:3001/signin/user", {
       EmailAddress: EmailAddressReg,
       Password: PasswordReg,
     }).then((response) => {
       console.log(response);
     });
+  };
 
-    const token = jwt.sign({ EmailAddressReg }, "mysupersecretpassword", {
-      expiresIn: "7d",
-    });
-
+  const StoreToken = () => {
     console.log("The token is " + token);
 
     window.localStorage.setItem("Token", token);
-    window.localStorage.setItem("Email", EmailAddressReg);
+    //window.localStorage.setItem("Email", EmailAddressReg);
+  };
 
-    var decoded = jwt_decode(token);
+  const DecodeToken = () => {
+    var decoded = jwt_decode(localStorage.getItem("Token"));
+
     console.log(decoded);
 
     console.log("BEST: " + decoded.EmailAddressReg);
-
-    //window.location.href = "http://localhost:3000/";
   };
 
   const refresh = () => {
     window.location.reload();
   };
 
-  return (
-    <div className="Signin">
-      {/* Testing.*/}
+  // Function Remove the Token or Sign Out.
+  const signout = () => {
+    window.localStorage.removeItem("Token");
+    window.location.href = "http://localhost:3000/";
+  };
 
-      {/* NavBar.*/}
-      <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
-        <Navbar.Brand href="/">GeekText</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link href="/signin">Sign In</Nav.Link>
-            <Nav.Link href="/signup">Sign Up</Nav.Link>
-            <NavDropdown title="Manage" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/mngaccount">Account</NavDropdown.Item>
-              <NavDropdown.Item href="/mngsettings">Settings</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="/mngshipaddress">
-                Shipping Address
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/newshipaddress">
-                Shipping Address New
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
-              <NavDropdown.Item href="/newpayment">
-                Payment New
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-          <Nav>
-            <Nav.Link href="#deets">Contact Us</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-              About
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-      <br />
+  if (localStorage.getItem("Token") != null) {
+    // Logged In.
+    var decoded = jwt_decode(localStorage.getItem("Token"));
+    console.log("decoded: " + decoded.EmailAddressReg);
 
-      {/* TextHeader.*/}
-      <div className="Mainheader">
-        <Container>
-          <h1>Sign in or Create an Account</h1>
-          <p>
-            Don't have an account?{" "}
-            <Alert.Link href="/signup">Create an Account</Alert.Link>.
-          </p>
-        </Container>
+    return (
+      <div className="App">
+        {/* Testing.*/}
+
+        {/* NavBar.*/}
+        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
+          <Navbar.Brand href="/">GeekText</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <NavDropdown title="Manage" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/mngaccount">Account</NavDropdown.Item>
+                <NavDropdown.Item href="/mngsettings">
+                  Settings
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/mngshipaddress">
+                  Shipping Address
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+            <Nav>
+              <Nav.Link onClick={signout}>Sign Out</Nav.Link>
+              <Nav.Link eventKey={2} href="#memes">
+                About
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <br />
+
+        {/* TextHeader.*/}
+        <div className="Mainheader">
+          <Container>
+            <h1>Welcome {decoded.EmailAddressReg}</h1>
+          </Container>
+        </div>
       </div>
+    );
+  }
+  // Not Logged In.
+  else {
+    return (
+      <div className="Signin">
+        {/* Testing.*/}
 
-      <div className="Form">
-        {/* Sign In.*/}
-        <div>
-          <label>
-            {/* Email.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Email
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setEmailAddressReg(e.target.value);
-                }}
-              />
-            </InputGroup>
+        {/* NavBar.*/}
+        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
+          <Navbar.Brand href="/">GeekText</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link href="/signin">Sign In</Nav.Link>
+              <Nav.Link href="/signup">Sign Up</Nav.Link>
+            </Nav>
+            <Nav>
+              <Nav.Link eventKey={2} href="#memes">
+                About
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <br />
 
-            {/* Passsword.*/}
-            <InputGroup size="sm" className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Passsword
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                type="password"
-                aria-label="Small"
-                aria-describedby="inputGroup-sizing-sm"
-                onChange={(e) => {
-                  setPasswordReg(e.target.value);
-                }}
-              />
-            </InputGroup>
-          </label>
+        {/* TextHeader.*/}
+        <div className="Mainheader">
+          <Container>
+            <h1>Sign in or Create an Account</h1>
+            <p>
+              Don't have an account?{" "}
+              <Alert.Link href="/signup">Create an Account</Alert.Link>.
+            </p>
+          </Container>
+        </div>
 
-          {/* Buttons.*/}
+        <div className="Form">
+          {/* Sign In.*/}
           <div>
-            <Button variant="primary" onClick={register}>
-              Sign In
-            </Button>{" "}
-            <Button variant="secondary" href="/">
-              Cancel
-            </Button>{" "}
+            <label>
+              {/* Email.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Email
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setEmailAddressReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+
+              {/* Passsword.*/}
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    Passsword
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="password"
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                  onChange={(e) => {
+                    setPasswordReg(e.target.value);
+                  }}
+                />
+              </InputGroup>
+            </label>
+
+            {/* Buttons.*/}
+            <div>
+              <Button variant="primary" onClick={login}>
+                Sign In
+              </Button>{" "}
+              <Button variant="secondary" href="/">
+                Cancel
+              </Button>{" "}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default SignIn;

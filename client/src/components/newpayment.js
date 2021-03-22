@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import "./newpayment.css";
 import Axios from "axios";
+import jwt_decode from "jwt-decode";
 
 // Boostrap.
 import "bootstrap/dist/css/bootstrap.min.css"; // Necessary For ReactBootsrap.
@@ -56,291 +57,338 @@ function NewPayment() {
     window.location.reload();
   };
 
-  // Missing Function to Insert The Payment and Billing.
-  return (
-    <div className="NewPayment">
-      {/* Testing.*/}
+  // Function Remove the Token or Sign Out.
+  const signout = () => {
+    window.localStorage.removeItem("Token");
+    window.location.href = "http://localhost:3000/";
+  };
 
-      {/* NavBar.*/}
-      <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
-        <Navbar.Brand href="/">GeekText</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link href="/signin">Sign In</Nav.Link>
-            <Nav.Link href="/signup">Sign Up</Nav.Link>
-            <NavDropdown title="Manage" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/mngaccount">Account</NavDropdown.Item>
-              <NavDropdown.Item href="/mngsettings">Settings</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="/mngshipaddress">
-                Shipping Address
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/newshipaddress">
-                Shipping Address New
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
-              <NavDropdown.Item href="/newpayment">
-                Payment New
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-          <Nav>
-            <Nav.Link href="#deets">Contact Us</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-              About
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-      <br />
+  if (localStorage.getItem("Token") != null) {
+    // Logged In.
+    var decoded = jwt_decode(localStorage.getItem("Token"));
+    console.log("decoded: " + decoded.EmailAddressReg);
+    // Missing Function to Insert The Payment and Billing.
+    return (
+      <div className="NewPayment">
+        {/* Testing.*/}
 
-      {/* TextHeader.*/}
-      <div className="paymentheader">
-        <Container>
-          <h1>Add a New Payment method</h1>
-          <p>
-            The payment method you select will be used as your default for
-            future payments. By setting up a default payment you will be able to
-            automatically purchase NOOK content. Any gift cards in your account
-            will be applied first. Gift cards do not apply to subscriptions or
-            purchases/extensions of current Textbook rentals.
-          </p>
-        </Container>
-      </div>
+        {/* NavBar.*/}
+        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
+          <Navbar.Brand href="/">GeekText</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <NavDropdown title="Manage" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/mngaccount">Account</NavDropdown.Item>
+                <NavDropdown.Item href="/mngsettings">
+                  Settings
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/mngshipaddress">
+                  Shipping Address
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+            <Nav>
+              <Nav.Link onClick={signout}>Sign Out</Nav.Link>
+              <Nav.Link eventKey={2} href="#memes">
+                About
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <br />
 
-      <label>
-        {/* CardType.*/}
-        <InputGroup size="sm" className="mb-3">
-          <InputGroup.Prepend>
-            <InputGroup.Text id="inputGroup-sizing-sm">
-              Card Type
-            </InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
-            aria-label="Small"
-            aria-describedby="inputGroup-sizing-sm"
-            onChange={(e) => {
-              setCardTypeReg(e.target.value);
-            }}
-          />
-        </InputGroup>
-
-        {/* CardNumber.*/}
-        <InputGroup size="sm" className="mb-3">
-          <InputGroup.Prepend>
-            <InputGroup.Text id="inputGroup-sizing-sm">
-              Card Number
-            </InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
-            aria-label="Small"
-            aria-describedby="inputGroup-sizing-sm"
-            onChange={(e) => {
-              setCardNumberReg(e.target.value);
-            }}
-          />
-        </InputGroup>
-
-        {/* CrdtHldrName.*/}
-        <InputGroup size="sm" className="mb-3">
-          <InputGroup.Prepend>
-            <InputGroup.Text id="inputGroup-sizing-sm">
-              Cardholder Name
-            </InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
-            aria-label="Small"
-            aria-describedby="inputGroup-sizing-sm"
-            onChange={(e) => {
-              setCrdtHldrNameReg(e.target.value);
-            }}
-          />
-        </InputGroup>
-
-        {/* ExpMonth.*/}
-        <InputGroup size="sm" className="mb-3">
-          <InputGroup.Prepend>
-            <InputGroup.Text id="inputGroup-sizing-sm">
-              Exp Month
-            </InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
-            aria-label="Small"
-            aria-describedby="inputGroup-sizing-sm"
-            onChange={(e) => {
-              setExpMonthReg(e.target.value);
-            }}
-          />
-        </InputGroup>
-
-        {/* ExpYear.*/}
-        <InputGroup size="sm" className="mb-3">
-          <InputGroup.Prepend>
-            <InputGroup.Text id="inputGroup-sizing-sm">
-              Exp Year
-            </InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
-            aria-label="Small"
-            aria-describedby="inputGroup-sizing-sm"
-            onChange={(e) => {
-              setExpYearReg(e.target.value);
-            }}
-          />
-        </InputGroup>
-      </label>
-
-      {/* BillHeader.*/}
-      <div className="billingheader">
-        <Container>
-          <h1>Add a New Billing Address</h1>
-        </Container>
-      </div>
-
-      <div className="Billing">
-        {/* Billing.*/}
+        {/* TextHeader.*/}
+        <div className="paymentheader">
+          <Container>
+            <h1>Add a New Payment method</h1>
+            <p>
+              The payment method you select will be used as your default for
+              future payments. By setting up a default payment you will be able
+              to automatically purchase NOOK content. Any gift cards in your
+              account will be applied first. Gift cards do not apply to
+              subscriptions or purchases/extensions of current Textbook rentals.
+            </p>
+          </Container>
+        </div>
 
         <label>
-          {/* Country.*/}
+          {/* CardType.*/}
           <InputGroup size="sm" className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="inputGroup-sizing-sm">
-                Country
+                Card Type
               </InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setBillCountryReg(e.target.value);
+                setCardTypeReg(e.target.value);
               }}
             />
           </InputGroup>
 
-          {/* FirstName.*/}
+          {/* CardNumber.*/}
           <InputGroup size="sm" className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="inputGroup-sizing-sm">
-                FirstName
+                Card Number
               </InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setBillFirstNameReg(e.target.value);
+                setCardNumberReg(e.target.value);
               }}
             />
           </InputGroup>
 
-          {/* LastName.*/}
+          {/* CrdtHldrName.*/}
           <InputGroup size="sm" className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="inputGroup-sizing-sm">
-                LastName
+                Cardholder Name
               </InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setBillLastNameReg(e.target.value);
+                setCrdtHldrNameReg(e.target.value);
               }}
             />
           </InputGroup>
 
-          {/* Address.*/}
+          {/* ExpMonth.*/}
           <InputGroup size="sm" className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="inputGroup-sizing-sm">
-                Address
+                Exp Month
               </InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setBillAddressReg(e.target.value);
+                setExpMonthReg(e.target.value);
               }}
             />
           </InputGroup>
 
-          {/* Address Aditional.*/}
+          {/* ExpYear.*/}
           <InputGroup size="sm" className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="inputGroup-sizing-sm">
-                Address Aditional
+                Exp Year
               </InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               aria-label="Small"
               aria-describedby="inputGroup-sizing-sm"
               onChange={(e) => {
-                setBillAddress2Reg(e.target.value);
-              }}
-            />
-          </InputGroup>
-
-          {/* City.*/}
-          <InputGroup size="sm" className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="inputGroup-sizing-sm">City</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              aria-label="Small"
-              aria-describedby="inputGroup-sizing-sm"
-              onChange={(e) => {
-                setBillCityReg(e.target.value);
-              }}
-            />
-          </InputGroup>
-
-          {/* State.*/}
-          <InputGroup size="sm" className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="inputGroup-sizing-sm">State</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              aria-label="Small"
-              aria-describedby="inputGroup-sizing-sm"
-              onChange={(e) => {
-                setBillStateReg(e.target.value);
-              }}
-            />
-          </InputGroup>
-
-          {/* Zip Code.*/}
-          <InputGroup size="sm" className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                Zip Code
-              </InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              aria-label="Small"
-              aria-describedby="inputGroup-sizing-sm"
-              onChange={(e) => {
-                setBillZipCodeReg(e.target.value);
+                setExpYearReg(e.target.value);
               }}
             />
           </InputGroup>
         </label>
 
-        {/* Buttons.*/}
-        <div>
-          <Button variant="primary" onClick={insertPaymentMethod}>
-            Save
-          </Button>{" "}
-          <Button variant="secondary" href="/mngpayment">
-            Cancel
-          </Button>{" "}
+        {/* BillHeader.*/}
+        <div className="billingheader">
+          <Container>
+            <h1>Add a New Billing Address</h1>
+          </Container>
         </div>
-        <br />
+
+        <div className="Billing">
+          {/* Billing.*/}
+
+          <label>
+            {/* Country.*/}
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  Country
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setBillCountryReg(e.target.value);
+                }}
+              />
+            </InputGroup>
+
+            {/* FirstName.*/}
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  FirstName
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setBillFirstNameReg(e.target.value);
+                }}
+              />
+            </InputGroup>
+
+            {/* LastName.*/}
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  LastName
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setBillLastNameReg(e.target.value);
+                }}
+              />
+            </InputGroup>
+
+            {/* Address.*/}
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  Address
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setBillAddressReg(e.target.value);
+                }}
+              />
+            </InputGroup>
+
+            {/* Address Aditional.*/}
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  Address Aditional
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setBillAddress2Reg(e.target.value);
+                }}
+              />
+            </InputGroup>
+
+            {/* City.*/}
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  City
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setBillCityReg(e.target.value);
+                }}
+              />
+            </InputGroup>
+
+            {/* State.*/}
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  State
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setBillStateReg(e.target.value);
+                }}
+              />
+            </InputGroup>
+
+            {/* Zip Code.*/}
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  Zip Code
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                onChange={(e) => {
+                  setBillZipCodeReg(e.target.value);
+                }}
+              />
+            </InputGroup>
+          </label>
+
+          {/* Buttons.*/}
+          <div>
+            <Button variant="primary" onClick={insertPaymentMethod}>
+              Save
+            </Button>{" "}
+            <Button variant="secondary" href="/mngpayment">
+              Cancel
+            </Button>{" "}
+          </div>
+          <br />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+  // Not Logged In.
+  else {
+    return (
+      <div className="App">
+        {/* Testing.*/}
+
+        {/* NavBar.*/}
+        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
+          <Navbar.Brand href="/">GeekText</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link href="/signin">Sign In</Nav.Link>
+              <Nav.Link href="/signup">Sign Up</Nav.Link>
+            </Nav>
+            <Nav>
+              <Nav.Link eventKey={2} href="#memes">
+                About
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <br />
+
+        {/* TextHeader.*/}
+        <div className="mainheader">
+          <Container>
+            <h1>Create an Account or Sign In</h1>
+            <p>
+              <Alert.Link href="/signup">SignUp </Alert.Link> to create a
+              GeekText account. If you already have an account, please.{" "}
+              <Alert.Link href="/signin">Sign In</Alert.Link>.
+            </p>
+          </Container>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default NewPayment;

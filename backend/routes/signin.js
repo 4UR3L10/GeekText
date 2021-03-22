@@ -16,21 +16,21 @@ router.post("/user", (req, res) => {
   const EmailAddress = req.body.EmailAddress;
   const Password = req.body.Password;
 
-  console.log("EmailAddress: " + EmailAddress);
-  console.log("req.body.EmailAddress: " + req.body.EmailAddress);
-  console.log("Password: " + Password);
-
   if (Password && EmailAddress) {
-    console.log("After IF Backedn");
-    try {
-      db.promise().query(
-        `SELECT EmailAddress, Password FROM user WHERE EmailAddress = '${EmailAddress}' AND Password = '${Password}'`
-      );
+    db.query(
+      `SELECT EmailAddress, Password FROM user WHERE EmailAddress = '${EmailAddress}' AND Password = '${Password}'`,
+      (error, results) => {
+        console.log("testing the valueP: " + results);
 
-      console.log("INFO RETRIEVED");
-    } catch (err) {
-      console.log(err);
-    }
+        if (results == "") {
+          console.log("No results");
+        } else {
+          console.log("results: " + results[0].Password);
+        }
+      }
+    );
+
+    console.log("finished posting");
   }
 });
 
