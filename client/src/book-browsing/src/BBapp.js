@@ -1,13 +1,13 @@
-import logo from "./logo.svg";
+import React, { Component } from "react";
+import Books from "./components/Books";
 import "./App.css";
+import searchBook from "./utils";
+
+//import logo from "./logo.svg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "react-bootstrap/Navbar"; // NavBar ReactBootsrap.
 import Nav from "react-bootstrap/Nav"; // Nav ReactBootsrap.
 import NavDropdown from "react-bootstrap/NavDropdown"; // NavDropDown ReactBootsrap.
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Books from "./book-browsing/src/components/Books";
-import BookDetails from "./book-details/BookDetails";
-import searchBook from "./book-browsing/src/utils";
 
 function App() {
   return (
@@ -27,14 +27,17 @@ function App() {
           </NavDropdown>
 
           <NavDropdown title="Book Browsing By Genre" id="basic-nav-dropdown">
-            <NavDropdown.Item href="/genre/Liturature">
-              Liturature
+            <NavDropdown.Item
+              onClick={(e) => searchBook(e, "Literacture")}
+              href="#"
+            >
+              Literature
             </NavDropdown.Item>
-            <NavDropdown.Item href="/genre/Manga">Manga</NavDropdown.Item>
-            <NavDropdown.Item href="/genre/Romance">Romance</NavDropdown.Item>
-            <NavDropdown.Item href="/genre/Fiction">Fiction</NavDropdown.Item>
-            <NavDropdown.Item href="/genre/Science">Science</NavDropdown.Item>
-            <NavDropdown.Item href="/genre/Sci-Fi">Sci-Fi</NavDropdown.Item>
+            <NavDropdown.Item href="#">Manga</NavDropdown.Item>
+            <NavDropdown.Item href="#">Romance</NavDropdown.Item>
+            <NavDropdown.Item href="#">Fiction</NavDropdown.Item>
+            <NavDropdown.Item href="#">Science</NavDropdown.Item>
+            <NavDropdown.Item href="#">Sci-Fi</NavDropdown.Item>
           </NavDropdown>
         </Nav>
         <Nav>
@@ -53,24 +56,9 @@ function App() {
           <Nav.Link href="#">WishList</Nav.Link>
         </Nav>
       </Navbar>
-      {/* <br /> */}
-      {/* exporting book component  */}
 
-      <Router>
-        <div>
-          <Switch>
-            <Route strict path="/books/:bookId">
-              <BookDetails userId="2" />
-            </Route>
-            <Route strict path="/genre/:genre">
-              <Books />
-            </Route>
-            <Route path="/">
-              <Books />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
+      {/* exporting book component  */}
+      <Books />
     </div>
   );
 }

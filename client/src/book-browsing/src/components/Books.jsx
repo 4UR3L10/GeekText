@@ -3,27 +3,36 @@ import SearchBar from './searchBar';
 import request from 'superagent';
 import BookList from './BookList';
 import "../App.css"
+import { withRouter } from "react-router-dom";
+
 
 
 //searchField will be updated to whatever is typed in through handleSearch
 class Books extends Component{
     constructor(props){
         super(props);
+        this.genre = this.props.match.params.genre;
         this.state = {
             books: [],
             searchField: '',
             sort: ''
+           
         }
     }
 
+    componentDidMount() {
+        const genre = this.props.match.params.genre;
+        this.searchBook();
+    }
 
     //in get, put in the URL in which we pull the books from, currently using info from google api
     //search term will be what is changed (key term) to pull info
   
-    searchBook = (e) => {
-        e.preventDefault();
+    searchBook = () => {
+        console.log(this.genre)
+        // e.preventDefault();
         request
-            .get("http://localhost:4000/api/books/")
+            .get(this.genre ? `http://localhost:4000/api/books?genre=${this.genre}` : `http://localhost:4000/api/books` )
             .query({ q : this.state.searchField })
             .then((data) => {
                 console.log(data);
@@ -93,4 +102,4 @@ class Books extends Component{
     }
 }
 
-export default Books;
+export default withRouter (Books);
