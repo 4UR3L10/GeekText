@@ -32,9 +32,22 @@ const ListShippingAddress = () => {
     setEmployees(response.data);
   };
 
-  const removeData = (id) => {
-    axios.delete(`${URL}/${id}`).then((res) => {
-      const del = employees.filter((employee) => id !== employee.id);
+  // Get all shipping addresses for a user.
+  const getDataShip = async () => {
+    const response = await axios.get(
+      "http://localhost:3001/shipaddress/getshipaddress"
+    );
+    setEmployees(response.data);
+    console.log("hello");
+
+    console.log(response.data);
+  };
+
+  const removeData = (ShipAddressID) => {
+    axios.delete(`${URL}/${ShipAddressID}`).then((res) => {
+      const del = employees.filter(
+        (employee) => ShipAddressID !== employee.ShipAddressID
+      );
       setEmployees(del);
     });
   };
@@ -42,9 +55,16 @@ const ListShippingAddress = () => {
   const renderHeader = () => {
     let headerElement = [
       "ShipAddressID",
+      "UserID",
       "FirstName",
+      "LastName",
       "Address",
+      "Address2",
+      "City",
+      "State",
       "ZipCode",
+      "Country",
+      "DefaultAddress",
       "Delete OP",
     ];
 
@@ -56,40 +76,73 @@ const ListShippingAddress = () => {
   const renderBody = () => {
     return (
       employees &&
-      employees.map(({ id, name, email, phone }) => {
-        return (
-          <tr key={id}>
-            <td>{id}</td>
-            <td>{name}</td>
-            <td>{email}</td>
-            <td>{phone}</td>
-            <td className="opration">
-              <button className="button" onClick={() => removeData(id)}>
-                Delete
-              </button>
-            </td>
-          </tr>
-        );
-      })
+      employees.map(
+        ({
+          ShipAddressID,
+          UserID,
+          FirstName,
+          LastName,
+          Address,
+          Address2,
+          City,
+          State,
+          ZipCode,
+          Country,
+          DefaultAddress,
+        }) => {
+          return (
+            <tr key={ShipAddressID}>
+              <td>{ShipAddressID}</td>
+              <td>{UserID}</td>
+              <td>{FirstName}</td>
+              <td>{LastName}</td>
+              <td>{Address}</td>
+              <td>{Address2}</td>
+              <td>{City}</td>
+              <td>{State}</td>
+              <td>{ZipCode}</td>
+              <td>{Country}</td>
+              <td>{DefaultAddress}</td>
+
+              <td className="opration">
+                <button
+                  className="button"
+                  onClick={() => removeData(ShipAddressID)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          );
+        }
+      )
     );
   };
 
   return (
     <>
       <h1 id="title">Shipping Addresses</h1>
-      <table id="employee">
-        <thead>
-          <tr>{renderHeader()}</tr>
-        </thead>
-        <tbody>{renderBody()}</tbody>
-      </table>
-
+      {
+        <table id="employee">
+          <thead>
+            <tr>{renderHeader()}</tr>
+          </thead>
+          <tbody>{renderBody()}</tbody>
+        </table>
+      }
       <br />
       <div>
         <Button variant="secondary" href="/mngshipaddress">
           Cancel
         </Button>{" "}
       </div>
+      <br />
+      <div>
+        <Button variant="primary" onClick={getDataShip}>
+          Test
+        </Button>{" "}
+      </div>
+      <br />
     </>
   );
 };

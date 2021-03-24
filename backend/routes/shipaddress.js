@@ -49,11 +49,16 @@ router.post("/newshipaddress", (req, res) => {
 // [Address] Get Information.
 router.get("/getshipaddress", (req, res) => {
   try {
-    db.promise().query(
-      `SELECT * FROM shipping_address` // CHANGE TO DYNAMIC USERRRRRR
-    );
-    console.log("Data: " + res.data);
-    res.status(200).send({ msg: "Done" });
+    db.query(`SELECT * FROM shipping_address`, (error, results) => {
+      console.log("testing the valueP: " + results);
+
+      if (results == "") {
+        console.log("No results");
+      } else {
+        console.log("results: " + results[0].ShipAddressID);
+        res.status(200).send({ results });
+      } // CHANGE TO DYNAMIC USERRRRRR
+    });
   } catch (err) {
     console.log(err);
   }
