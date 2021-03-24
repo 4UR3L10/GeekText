@@ -31,8 +31,8 @@ const genreOptions = [
   "Fiction",
   "Romance",
   "Sci-Fi",
-  "Liturature",
-  "Science & Technology",
+  "Literature",
+  "Science",
 ];
 
 router.get("/", function (req, res) {
