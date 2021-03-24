@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import SearchBar from './searchBar';
 import request from 'superagent';
 import BookList from './BookList';
+import "../App.css"
+
 
 //searchField will be updated to whatever is typed in through handleSearch
 class Books extends Component{

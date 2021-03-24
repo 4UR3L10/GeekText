@@ -4,6 +4,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "react-bootstrap/Navbar"; // NavBar ReactBootsrap.
 import Nav from "react-bootstrap/Nav"; // Nav ReactBootsrap.
 import NavDropdown from "react-bootstrap/NavDropdown"; // NavDropDown ReactBootsrap.
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Books from "./book-browsing/src/components/Books";
+import BookDetails from "./book-details/BookDetails";
 
 function App() {
   return (
@@ -11,12 +14,17 @@ function App() {
       {/* NavBar.*/}
       <Navbar bg="primary" variant="dark">
         <Navbar.Brand href="#home">GeekText</Navbar.Brand>
+
         <Nav className="mr-auto">
-          <NavDropdown title="Book Browsing" id="basic-nav-dropdown">
-            <NavDropdown.Item href="#action/3.1">By Genre</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.1">Book Rating</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.1">Top Sellers</NavDropdown.Item>
+          <Nav.Link href="#">Top Sellers</Nav.Link>
+          <NavDropdown title="Rating" id="basic-nav-dropdown">
+            <NavDropdown.Item href="#action/3.1">1 star</NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.1">2 star</NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.1">3 star</NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.1">4 star</NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.1">5 star</NavDropdown.Item>
           </NavDropdown>
+
           <NavDropdown title="Book Browsing By Genre" id="basic-nav-dropdown">
             <NavDropdown.Item href="#">Literature</NavDropdown.Item>
             <NavDropdown.Item href="#">Manga</NavDropdown.Item>
@@ -42,9 +50,21 @@ function App() {
           <Nav.Link href="#">WishList</Nav.Link>
         </Nav>
       </Navbar>
-      <br />
+      {/* <br /> */}
+      {/* exporting book component  */}
 
-      {/* Other Stuff.*/}
+      <Router>
+        <div>
+          <Switch>
+            <Route path="/books/:bookId">
+              <BookDetails userId="2" />
+            </Route>
+            <Route path="/">
+              <Books />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
     </div>
   );
 }
