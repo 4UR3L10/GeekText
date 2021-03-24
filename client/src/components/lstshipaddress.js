@@ -23,7 +23,7 @@ const ListShippingAddress = () => {
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
-    getData();
+    getDataShip();
   }, []);
 
   // Arrow function to get the data.
@@ -37,10 +37,7 @@ const ListShippingAddress = () => {
     const response = await axios.get(
       "http://localhost:3001/shipaddress/getshipaddress"
     );
-    setEmployees(response.data);
-    console.log("hello");
-
-    console.log(response.data);
+    setEmployees(response.data.results);
   };
 
   const removeData = (ShipAddressID) => {
