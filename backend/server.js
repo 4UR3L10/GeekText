@@ -8,6 +8,7 @@ app.use(cors());
 
 app.use('/api/books', route.books);
 app.use('/api/authors', route.authors);
+app.use('/api/wishlists', route.wishlists); 
 app.use('/api/users', route.users);
 
 app.get('/api', (req, res) => {
