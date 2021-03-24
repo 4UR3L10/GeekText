@@ -18,6 +18,7 @@ const BookList = (props) => {
                         rating = {book.avg_rating}
                         price = {book.price}
                         genre = {book.genre}
+                        id = {book.book_id}
                         />
                 })
             }

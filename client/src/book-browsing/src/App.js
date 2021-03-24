@@ -52,7 +52,7 @@ function App() {
             <Nav.Link href="#">WishList</Nav.Link>
           </Nav>
         </Navbar>
-        <br />
+        {/* <br /> */}
         {/* exporting book component  */}
         <Books/>
       </div>
