@@ -6,6 +6,7 @@ import {
   Link
 } from "react-router-dom";
 import BookDetails from "./BookDetails"
+import AuthorPage from "./AuthorPage"
 
 function BookAppTest() {
   return (
@@ -14,6 +15,9 @@ function BookAppTest() {
         <Switch>
           <Route path="/books/:bookId" >
             <BookDetails userId="2"/>
+          </Route>
+          <Route path="/author/:authorId">
+            <AuthorPage />
           </Route>
         </Switch>
       </div>
