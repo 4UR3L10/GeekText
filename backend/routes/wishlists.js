@@ -3,6 +3,7 @@ const mysqlx = require('@mysql/xdevapi');
 const credentials = require('./credentials');
 const { queryResultToJson } = require('./util');
 const router = express.Router();
+router.use(express.json());
 
 
 
@@ -101,6 +102,77 @@ router.get('/list/:list/books', function (req, res) {
       console.log(err)
       res.status(500).send('Server Error')
     });
+});
+
+
+
+router.post('/list/:list', function (req, res) {
+  const { body } = req;
+  const queryString = `
+  INSERT INTO geektext.wishlist_book
+  (wishlist_id, book_id)
+  VALUES (${body.wishlist_id}, ${body.book_id})
+  `;
+
+  mysqlx.getSession(credentials) 
+      .then(session => session.sql(queryString).execute())
+      .then((_) => res.send(req.body))
+      .catch((err) => {
+          console.log(err)
+          return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+      });
+});
+
+
+router.put('/user/:list', function (req, res) {
+
+  const { body } = req;
+
+  const queryString = `
+    UPDATE geektext.wishlist
+    SET wishlist_name = ${body.wishlist_name}
+    WHERE user_id = ${body.user_id} AND id = '${body.id}';
+    `;
+
+    let db;
+
+    mysqlx.getSession(credentials)
+        .then(session => {
+            db = session;
+            session.sql(queryString).execute();
+        })
+        .then((result) => {
+            return db.sql(`SELECT * 
+                FROM geektext.wishlist
+                WHERE user_id = ${body.user_id} AND id = '${body.id}';
+                 `).execute();
+        })
+        .then(result => queryResultToJson(result))
+        .then(result => res.json(result))
+        .catch((err) => {
+            console.log(err)
+            return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+        });
+});
+
+
+router.delete('/list/:list/:book', function (req, res) {
+
+  const list_id = req.params.list;
+  const book_id = req.params.book;
+
+  const queryString = `
+  DELETE FROM geektext.wishlist_book
+  WHERE wishlist_id = ${list_id} AND book_id = '${book_id}';
+  `;
+
+  mysqlx.getSession(credentials)
+      .then(session => session.sql(queryString).execute())
+      .then((result) => res.status(200).send(`Deleted successfully <br> Affected Items: ${result.getAffectedItemsCount()}`))
+      .catch((err) => {
+          console.log(err)
+          return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+      });
 });
 
 module.exports = router
