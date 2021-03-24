@@ -105,7 +105,7 @@ router.get('/list/:list/books', function (req, res) {
 });
 
 
-
+//adds a new book to a wishlist
 router.post('/list/:list', function (req, res) {
   const { body } = req;
   const queryString = `
@@ -123,6 +123,44 @@ router.post('/list/:list', function (req, res) {
       });
 });
 
+//adds a new wishlist
+router.post('/user/:userid', function (req, res) {
+  const userid = req.params.userid
+  const { body } = req;
+
+  const checkString = `SELECT count(*) FROM geektext.wishlist
+  Where user_id = ${userid}`;
+
+  const queryString = `
+  INSERT INTO geektext.wishlist
+  (user_id, wishlist_name)
+  VALUES (${userid}, "${body.wishlist_name}")
+  `;
+
+  let db;
+
+  mysqlx.getSession(credentials) 
+      .then(session => {
+        db = session
+        return session.sql(checkString).execute()
+      })
+      .then((result) => result.fetchAll())
+      .then((result) => {
+        if(result[0][0] >= 3)
+        {
+          return res.status(400).send(`Too many wishlists`)
+        }
+        return db.sql(queryString).execute()
+      })
+      .then((_) => {
+        res.send(req.body)
+      })
+      .catch((err) => {
+          console.log(err)
+          return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+      });
+});
+
 
 router.put('/user/:list', function (req, res) {
 
@@ -130,7 +168,7 @@ router.put('/user/:list', function (req, res) {
 
   const queryString = `
     UPDATE geektext.wishlist
-    SET wishlist_name = ${body.wishlist_name}
+    SET wishlist_name = "${body.wishlist_name}"
     WHERE user_id = ${body.user_id} AND id = '${body.id}';
     `;
 
@@ -174,5 +212,8 @@ router.delete('/list/:list/:book', function (req, res) {
           return res.status(500).send(`Server Error <br> ${err.info.msg}`);
       });
 });
+
+
+
 
 module.exports = router
