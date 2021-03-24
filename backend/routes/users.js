@@ -1,20 +1,14 @@
 const express = require('express')
 const mysqlx = require('@mysql/xdevapi');
 const credentials = require('./credentials');
-const { queryResultToJson } = require('./util');
+const { 
+    queryResultToJson, 
+    userIdSchema, 
+    bookIdSchema } = require('./util');
 const Joi = require('joi');
 const router = express.Router();
 
 router.use(express.json());
-
-const userIdSchema = Joi.number()
-    .integer()
-    .min(1);
-
-const bookIdSchema = Joi.number()
-    .integer()
-    .min(1000000000000)
-    .max(9999999999999);
 
 const shoppingCartSchema = Joi.object({
     user_id: userIdSchema
