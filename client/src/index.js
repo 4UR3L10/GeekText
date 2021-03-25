@@ -13,7 +13,7 @@ import mngpayment from "./components/mngpayment";
 import mngshipaddress from "./components/mngshipaddress";
 import mngaccount from "./components/mngaccount";
 import mngsettings from "./components/mngsettings";
-import lstshipaddress from "./components/lstshipaddress";
+import updateshipaddress from "./components/updateshipaddress";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -26,7 +26,7 @@ ReactDOM.render(
       <Route exact path="/mngshipaddress" component={mngshipaddress} />
       <Route exact path="/mngaccount" component={mngaccount} />
       <Route exact path="/mngsettings" component={mngsettings} />
-      <Route exact path="/lstshipaddress" component={lstshipaddress} />
+      <Route exact path="/updateshipaddress" component={updateshipaddress} />
       <App />
     </Switch>
   </BrowserRouter>,
