@@ -12,7 +12,7 @@ const BookCard = (props) => {
                <h3>Average Rating: {props.rating}</h3> 
                <div>
                     <h3>Price: ${props.price} USD</h3> 
-                    <a href = {`books/${props.id}`}className ="details-button"> More Details</a>
+                    <a href = {`/books/${props.id}`}className ="details-button"> More Details</a>
                     
                </div>
                
