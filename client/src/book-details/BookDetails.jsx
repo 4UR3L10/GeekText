@@ -10,6 +10,13 @@ import Toast from 'react-bootstrap/Toast';
 import { useParams } from "react-router-dom";
 import LoadingPage from './components/LoadingPage';
 
+const textBodyStyle = { 
+    margin: "1.5rem", 
+    fontWeight: "500",
+    textAlign: "left",
+    fontSize: "1em"
+}
+
 function BookDetails(props) {
     const { bookId } = useParams();
     const { userId } = props;
@@ -177,12 +184,7 @@ function BookDetails(props) {
                                 About the Author
                             </h2>
                             <div style={{ marginTop: "0rem", borderStyle: "solid", borderColor: "lightgray" }}>
-                                <p style={{ 
-                                    margin: "1.5rem", 
-                                    fontWeight: "500",
-                                    textAlign: "left",
-                                    fontSize: "1em"
-                                }} 
+                                <p style={textBodyStyle} 
                                 dangerouslySetInnerHTML={{
                                     __html: book.author_bio
                                 }} />

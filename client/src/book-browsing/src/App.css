@@ -1,3 +1,4 @@
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -39,6 +40,7 @@ header h1 {
 
 /*BookList Styles*/
 
+
 .List {
   display: grid;
   margin: 20px 0 50px 0;
@@ -68,6 +70,7 @@ header h1 {
   font-weight: 500;
 }
 
+/*
 .desc h3,
 p {
   text-align: left;
@@ -81,6 +84,7 @@ p {
   font-size: 0.7em;
   font-weight: 500;
 }
+*/
 
 .details-button {
   font-size: 0.7em;
@@ -88,7 +92,7 @@ p {
   float: right;
 }
 /* ---------------------APP CSS --------------------- */
-
+/*
 .App {
   text-align: center;
 }
@@ -127,3 +131,4 @@ p {
     transform: rotate(360deg);
   }
 }
+*/
