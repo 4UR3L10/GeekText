@@ -24,10 +24,23 @@ router.use(express.json());
  * }
  */
 
-const sortOption = ['book_title', 'author_name', 'price', 'avg_rating', 'published_date'];
-const genreOptions = ['Manga', 'Fiction', 'Romance', 'Sci-Fi', 'Liturature', 'Science & Technology'];
+const sortOption = [
+  "book_title",
+  "author_name",
+  "price",
+  "avg_rating",
+  "published_date",
+];
+const genreOptions = [
+  "Manga",
+  "Fiction",
+  "Romance",
+  "Sci-Fi",
+  "Literature",
+  "Science",
+];
 
-router.get('/', function (req, res) {
+router.get("/", function (req, res) {
   const { rating, genre, sortBy } = req.query;
 
   let queryString = `
@@ -45,26 +58,31 @@ router.get('/', function (req, res) {
 
   if (genre) {
     if (!genreOptions.includes(genre)) {
-      return res.status(400).send(`${genre} in not a genre option. Options are: ${genreOptions}`);
+      return res
+        .status(400)
+        .send(`${genre} in not a genre option. Options are: ${genreOptions}`);
     }
-    queryString += `AND genre = '${genre}'\n`
+    queryString += `AND genre = '${genre}'\n`;
   }
 
   if (sortBy) {
     if (!sortOption.includes(sortBy)) {
-      return res.status(400).send(`${sortBy} is not a sort option. Options are: ${sortOption}`);
+      return res
+        .status(400)
+        .send(`${sortBy} is not a sort option. Options are: ${sortOption}`);
     }
 
-    queryString += `ORDER BY ${sortBy} ASC;`
+    queryString += `ORDER BY ${sortBy} ASC;`;
   }
 
-  mysqlx.getSession(credentials)
-    .then(session => session.sql(queryString).execute())
-    .then(result => queryResultToJson(result))
-    .then(result => res.json(result))
+  mysqlx
+    .getSession(credentials)
+    .then((session) => session.sql(queryString).execute())
+    .then((result) => queryResultToJson(result))
+    .then((result) => res.json(result))
     .catch((err) => {
       console.log(err);
-      res.status(500).send('Server Error');
+      res.status(500).send("Server Error");
     });
 });
 
@@ -73,7 +91,7 @@ router.get('/:id', (req, res) => {
 
   const book_id = req.params.id
   if (!parseInt(book_id)) {
-    return res.status(400).send(`Invalid book id input: ${book_id}`)
+    return res.status(400).send(`Invalid book id input: ${book_id}`);
   }
 
   const queryString = `
@@ -88,22 +106,21 @@ router.get('/:id', (req, res) => {
     .then(result => {
       // If not found, send 404 error
       if (result.length == 0) {
-        return res.status(404).send(`Book with id ${book_id} is not found`)
+        return res.status(404).send(`Book with id ${book_id} is not found`);
       }
-      return res.json(result)
+      return res.json(result);
     })
     .catch((err) => {
-      console.log(err)
+      console.log(err);
       // If you don't know what happened, send 500
-      res.status(500).send('Server Error')
+      res.status(500).send("Server Error");
     });
 });
 
-
-router.get('/:id/authors', (req, res) => {
-  const book_id = req.params.id
+router.get("/:id/authors", (req, res) => {
+  const book_id = req.params.id;
   if (!parseInt(book_id)) {
-    return res.status(400).send(`Invalid input: ${book_id}`)
+    return res.status(400).send(`Invalid input: ${book_id}`);
   }
 
   const queryString = `
@@ -117,20 +134,20 @@ router.get('/:id/authors', (req, res) => {
     .then(result => queryResultToJson(result))
     .then(result => {
       if (result.length == 0) {
-        return res.status(404).send(`Book with id ${book_id} is not found`)
+        return res.status(404).send(`Book with id ${book_id} is not found`);
       }
-      return res.json(result)
+      return res.json(result);
     })
     .catch((err) => {
-      console.log(err)
-      res.status(500).send('Server Error')
+      console.log(err);
+      res.status(500).send("Server Error");
     });
 });
 
-router.get('/:id/reviews', (req, res) => {
-  const book_id = req.params.id
+router.get("/:id/reviews", (req, res) => {
+  const book_id = req.params.id;
   if (!parseInt(book_id)) {
-    return res.status(400).send(`Invalid book id input: ${book_id}`)
+    return res.status(400).send(`Invalid book id input: ${book_id}`);
   }
 
   const queryString = `
@@ -144,13 +161,13 @@ router.get('/:id/reviews', (req, res) => {
     .then(result => queryResultToJson(result))
     .then(result => {
       if (result.length == 0) {
-        return res.status(404).send(`Book with id ${book_id} is not found`)
+        return res.status(404).send(`Book with id ${book_id} is not found`);
       }
-      return res.json(result)
+      return res.json(result);
     })
     .catch((err) => {
-      console.log(err)
-      res.status(500).send('Server Error')
+      console.log(err);
+      res.status(500).send("Server Error");
     });
 });
 
