@@ -173,11 +173,17 @@ function BookDetails(props) {
                     </Row>
                     <Row>
                         <div style={{ marginTop: "2.5rem", marginBottom: "2.5rem" }}>
-                            <h2 class="gt-bd-title" style={{ fontSize: "1.5rem", marginBottom: "1rem", fontStyle: "italic" }}>
+                            <h2 className="gt-bd-title" style={{ fontSize: "1.5rem", marginBottom: "1rem", fontStyle: "italic" }}>
                                 About the Author
                             </h2>
                             <div style={{ marginTop: "0rem", borderStyle: "solid", borderColor: "lightgray" }}>
-                                <p style={{ margin: "1.5rem" }} dangerouslySetInnerHTML={{
+                                <p style={{ 
+                                    margin: "1.5rem", 
+                                    fontWeight: "500",
+                                    textAlign: "left",
+                                    fontSize: "1em"
+                                }} 
+                                dangerouslySetInnerHTML={{
                                     __html: book.author_bio
                                 }} />
                             </div>
