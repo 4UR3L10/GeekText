@@ -120,13 +120,13 @@ function BookDetails(props) {
 
             <FakeNavBar />
             {!book ? <LoadingPage /> :
-                <Container style={{ maxWidth: "1024px", margin: "auto" }} class="d-flex justify-content-center">
+                <Container style={{ maxWidth: "1024px", margin: "auto" }}>
                     <Row>
                         <Col>
                             <BookImage />
                         </Col>
                         <Col>
-                            <h1 class="gt-bd-title">{book.book_title}</h1>
+                            <h1 className="gt-bd-title">{book.book_title}</h1>
                             <h6>by <a href={`http://localhost:3000/author/${book.author_id}`} >
                                 {book.author_name}
                                 </a> </h6>
