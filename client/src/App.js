@@ -1,5 +1,4 @@
 import logo from "./logo.svg";
-import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "react-bootstrap/Navbar"; // NavBar ReactBootsrap.
 import Nav from "react-bootstrap/Nav"; // Nav ReactBootsrap.
@@ -11,7 +10,7 @@ import searchBook from "./book-browsing/src/utils";
 
 function App() {
   return (
-    <div className="App">
+    <div>
       {/* NavBar.*/}
       <Navbar bg="primary" variant="dark">
         <Navbar.Brand href="#home">GeekText</Navbar.Brand>
