@@ -10,6 +10,7 @@ import Toast from 'react-bootstrap/Toast';
 import { useParams } from "react-router-dom";
 import LoadingPage from './components/LoadingPage';
 import Overlay from 'react-bootstrap/Overlay';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 const textBodyStyle = {
     margin: "1.5rem",
@@ -28,6 +29,11 @@ function BookDetails(props) {
     const [showCartNotif, setShowCartNotif] = useState(false);
     const cartTarget = useRef(null);
     const [cartError, setCartError] = useState(false);
+    const [showWishlistSelect, setShowWishlistSelect] = useState(false);
+    const [wishlists, setWishlists] = useState([]);
+    const [wishlistError, setWishlistError] = useState(false);
+    const [showWishlistNotif, setShowWishlistNotif] = useState(false);
+    const wishlistTarget = useRef(null);
 
     useEffect(() => {
         getBook();
@@ -43,6 +49,29 @@ function BookDetails(props) {
             })
             .catch((err) => console.log(err));
     };
+
+    function getWishlists() {
+        return fetch(`http://localhost:4000/api/wishlists/user/${userId}`)
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json);
+                setWishlists(json);
+            })
+    }
+
+    function addToWishlist(wishlist_id) {
+        return fetch(`http://localhost:4000/api/wishlists/list/${wishlist_id}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                wishlist_id: wishlist_id,
+                book_id: bookId,
+            })
+        })
+    }
 
     function handleBookClick() {
         setShowLargeImage(true);
@@ -71,6 +100,50 @@ function BookDetails(props) {
                 console.log(err);
             })
 
+    }
+
+    function handleWishlistModalClick() {
+        //show wishlist modal
+        getWishlists()
+            .then(() => {
+                setShowWishlistSelect(true);
+            })
+    }
+
+    function handleWishlistClick(index) {
+        addToWishlist(wishlists[index].id)
+            .then((response) => {
+                setShowWishlistSelect(false)
+                setWishlistError(!response.ok);
+                setShowWishlistNotif(true);
+                setTimeout(() => { setShowWishlistNotif(false) }, 3000)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    function WishlistSelect() {
+        return (
+            <Modal show={showWishlistSelect}
+                onHide={() => setShowWishlistSelect(false)}
+            >
+                <Modal.Header closeButton >
+                    <Modal.Title>Select a Wishlist</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {wishlists.length === 0 ? <>You have no wishlists</> :
+                        <ListGroup>
+                            {wishlists.map((list, index) =>
+                                <ListGroup.Item key={index} action
+                                    onClick={() => { handleWishlistClick(index) }}>
+                                    {list.wishlist_name}
+                                </ListGroup.Item>
+                            )}
+                        </ListGroup>
+                    }
+
+                </Modal.Body>
+            </Modal>
+        );
     }
 
 
@@ -128,6 +201,29 @@ function BookDetails(props) {
         );
     }
 
+    function WishlistNotificaiton() {
+        return (
+            <Overlay target={wishlistTarget.current} show={showWishlistNotif} placement="top">
+                {(props) => (
+                    <div
+                        {...props}
+                        style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.50)',
+                            padding: '10px 10px',
+                            color: 'black',
+                            borderRadius: 3,
+                            ...props.style,
+                        }}
+                    >
+                        {wishlistError ?
+                            "Book already in wishlist."
+                            : "Successfully added book to wishlist."}
+                    </div>
+                )}
+            </Overlay>
+        );
+    }
+
     return (
         <Container style={{ width: "100%" }}>
 
@@ -158,17 +254,18 @@ function BookDetails(props) {
                                         </span>
                                     </div>
                                 </Col>
-                                <Col  xs={4} style={{paddingLeft: '0'}} md="auto">
+                                <Col xs={4} style={{ paddingLeft: '0' }} md="auto">
                                     <Button ref={cartTarget} onClick={handleAddShoppingCart}>
                                         Add to Cart
                                     </Button>
                                     <ShoppingCartNotificaiton />
                                 </Col>
-                                <Col  xs={4} style={{paddingLeft: '0'}} md="auto">
-                                    <Button variant="outline-primary">
+                                <Col xs={4} style={{ paddingLeft: '0' }} md="auto">
+                                    <Button ref={wishlistTarget} variant="outline-primary"
+                                        onClick={handleWishlistModalClick}>
                                         Add to Wishlist
                                     </Button>
-                                    <ShoppingCartNotificaiton />
+                                    <WishlistNotificaiton />
                                 </Col>
                                 <Col xs={1} />
 
@@ -196,6 +293,7 @@ function BookDetails(props) {
                         </div>
                     </Row>
                     <LargeBookImage />
+                    <WishlistSelect />
                 </Container>
             }
 
