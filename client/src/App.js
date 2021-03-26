@@ -19,7 +19,7 @@ function App() {
         <Nav className="mr-auto">
           <Nav.Link href="#">Top Sellers</Nav.Link>
           <NavDropdown title="Rating" id="basic-nav-dropdown">
-            <NavDropdown.Item href="#action/3.1">1 star</NavDropdown.Item>
+            <NavDropdown.Item href="/rating/1">1 star</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.1">2 star</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.1">3 star</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.1">4 star</NavDropdown.Item>
@@ -27,8 +27,8 @@ function App() {
           </NavDropdown>
 
           <NavDropdown title="Book Browsing By Genre" id="basic-nav-dropdown">
-            <NavDropdown.Item href="/genre/Liturature">
-              Liturature
+            <NavDropdown.Item href="/genre/Literature">
+              Literature
             </NavDropdown.Item>
             <NavDropdown.Item href="/genre/Manga">Manga</NavDropdown.Item>
             <NavDropdown.Item href="/genre/Romance">Romance</NavDropdown.Item>
@@ -53,9 +53,8 @@ function App() {
           <Nav.Link href="#">WishList</Nav.Link>
         </Nav>
       </Navbar>
-      {/* <br /> */}
-      {/* exporting book component  */}
 
+      {/* ---------routing for drop down--------- */}
       <Router>
         <div>
           <Switch>
@@ -63,6 +62,9 @@ function App() {
               <BookDetails userId="2" />
             </Route>
             <Route strict path="/genre/:genre">
+              <Books />
+            </Route>
+            <Route strict path="/rating/:avg_rating">
               <Books />
             </Route>
             <Route path="/">
