@@ -146,15 +146,15 @@ function BookDetails(props) {
                             <h6 style={{ color: "gray" }}> {book.publisher_name}, {book.published_date.substring(0, 10)}, {book.genre}</h6>
                             <h6><u>Rating:</u> {book.avg_rating}</h6>
                             <hr class="gt-bd-hr" />
+                            <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
+                                <b>Price</b>
+                            </h6>
                             <Row>
                                 <Col>
                                     <div>
-                                        <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
-                                            <b>Price</b>
-                                        </h6>
-                                        <span class="gt-bd-price-span" style={{ fontSize: "2rem", marginBottom: "2rem" }}>
+                                        <span className="gt-bd-price-span" style={{ fontSize: "2rem", marginBottom: "2rem" }}>
                                             <sup>$</sup>
-                                            {book.price}
+                                            {book.price.toFixed(2)}
                                         </span>
                                     </div>
                                 </Col>
