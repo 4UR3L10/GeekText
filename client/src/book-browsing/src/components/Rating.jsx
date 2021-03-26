@@ -11,7 +11,7 @@ import { withRouter } from "react-router-dom";
 class Rating extends Component{
     constructor(props){
         super(props);
-        this.genre = this.props.match.params.genre;
+        this.rating = this.props.match.params.avg_rating;
         this.state = {
             books: [],
             searchField: '',
@@ -21,7 +21,6 @@ class Rating extends Component{
     }
 
     componentDidMount() {
-        const genre = this.props.match.params.genre;
         this.searchBook();
     }
 
@@ -29,14 +28,13 @@ class Rating extends Component{
     //search term will be what is changed (key term) to pull info
   
     searchBook = () => {
-        console.log(this.genre)
+        console.log(this.avg_rating)
         // e.preventDefault();
         request
-            .get(this.genre ? `http://localhost:4000/api/books?genre=${this.genre}` : `http://localhost:4000/api/books` )
+            .get(this.rating ? `http://localhost:4000/api/books?rating=${this.rating}` : `http://localhost:4000/api/books` )
             .query({ q : this.state.searchField })
             .then((data) => {
                 console.log(data);
-                //this is the problem because it is just
                 this.setState({books: [...data.body]})
         })
     }
