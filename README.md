@@ -15,5 +15,11 @@ CEN4010 - Group XIV
 
 | Language | Commands      |
 | -------- | ------------- |
-| React    | "npm start"   |
-| Node     | "npm run dev" |
+| FrontEnd | "npm start"   |
+| BackEnd  | "npm start"   |
+
+## Troubleshoot
+If FrontEnd or BackEnd is not working run in the appopiate directory
+/client 
+/backend
+```npm install```
