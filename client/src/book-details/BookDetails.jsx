@@ -141,7 +141,7 @@ function BookDetails(props) {
                             <h6><u>Rating:</u> {book.avg_rating}</h6>
                             <hr class="gt-bd-hr" />
                             <Row>
-                                <Col xs={2}>
+                                <Col>
                                     <div>
                                         <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
                                             <b>Price</b>
