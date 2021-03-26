@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Books from "./book-browsing/src/components/Books";
 import BookDetails from "./book-details/BookDetails";
 import searchBook from "./book-browsing/src/utils";
+import Rating from "./book-browsing/src/components/Rating";
 
 function App() {
   return (
@@ -18,11 +19,11 @@ function App() {
         <Nav className="mr-auto">
           <Nav.Link href="#">Top Sellers</Nav.Link>
           <NavDropdown title="Rating" id="basic-nav-dropdown">
-            <NavDropdown.Item href="/rating/1">1 star</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.1">2 star</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.1">3 star</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.1">4 star</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.1">5 star</NavDropdown.Item>
+            <NavDropdown.Item href="/rating/1">1+ stars</NavDropdown.Item>
+            <NavDropdown.Item href="/rating/2">2+ stars</NavDropdown.Item>
+            <NavDropdown.Item href="/rating/3">3+ stars</NavDropdown.Item>
+            <NavDropdown.Item href="/rating/4">4+ stars</NavDropdown.Item>
+            <NavDropdown.Item href="/rating/5">5 stars</NavDropdown.Item>
           </NavDropdown>
 
           <NavDropdown title="Book Browsing By Genre" id="basic-nav-dropdown">
@@ -64,7 +65,7 @@ function App() {
               <Books />
             </Route>
             <Route strict path="/rating/:avg_rating">
-              <Books />
+              <Rating />
             </Route>
             <Route path="/">
               <Books />

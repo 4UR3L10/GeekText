@@ -21,7 +21,6 @@ class Books extends Component{
     }
 
     componentDidMount() {
-        const genre = this.props.match.params.genre;
         this.searchBook();
     }
 
@@ -36,7 +35,6 @@ class Books extends Component{
             .query({ q : this.state.searchField })
             .then((data) => {
                 console.log(data);
-                //this is the problem because it is just
                 this.setState({books: [...data.body]})
         })
     }
