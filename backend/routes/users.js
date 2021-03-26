@@ -80,10 +80,7 @@ router.get('/:id/cart', function (req, res) {
     mysqlx.getSession(credentials)
         .then(session => session.sql(queryString).execute())
         .then(result => queryResultToJson(result))
-        .then(result => {
-            if (result.length == 0) return res.status(404).send(`No user or no books are found`)
-            return res.json(result)
-        })
+        .then(result => res.json(result))
         .catch((err) => {
             console.log(err)
             res.status(500).send('Server Error')
