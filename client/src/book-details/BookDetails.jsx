@@ -10,6 +10,13 @@ import Toast from 'react-bootstrap/Toast';
 import { useParams } from "react-router-dom";
 import LoadingPage from './components/LoadingPage';
 
+const textBodyStyle = { 
+    margin: "1.5rem", 
+    fontWeight: "500",
+    textAlign: "left",
+    fontSize: "1em"
+}
+
 function BookDetails(props) {
     const { bookId } = useParams();
     const { userId } = props;
@@ -120,13 +127,13 @@ function BookDetails(props) {
 
             <FakeNavBar />
             {!book ? <LoadingPage /> :
-                <Container style={{ maxWidth: "1024px", margin: "auto" }} class="d-flex justify-content-center">
+                <Container style={{ maxWidth: "1024px", margin: "auto" }}>
                     <Row>
                         <Col>
                             <BookImage />
                         </Col>
                         <Col>
-                            <h1 class="gt-bd-title">{book.book_title}</h1>
+                            <h1 className="gt-bd-title">{book.book_title}</h1>
                             <h6>by <a href={`http://localhost:3000/author/${book.author_id}`} >
                                 {book.author_name}
                                 </a> </h6>
@@ -173,11 +180,12 @@ function BookDetails(props) {
                     </Row>
                     <Row>
                         <div style={{ marginTop: "2.5rem", marginBottom: "2.5rem" }}>
-                            <h2 class="gt-bd-title" style={{ fontSize: "1.5rem", marginBottom: "1rem", fontStyle: "italic" }}>
+                            <h2 className="gt-bd-title" style={{ fontSize: "1.5rem", marginBottom: "1rem", fontStyle: "italic" }}>
                                 About the Author
                             </h2>
                             <div style={{ marginTop: "0rem", borderStyle: "solid", borderColor: "lightgray" }}>
-                                <p style={{ margin: "1.5rem" }} dangerouslySetInnerHTML={{
+                                <p style={textBodyStyle} 
+                                dangerouslySetInnerHTML={{
                                     __html: book.author_bio
                                 }} />
                             </div>
