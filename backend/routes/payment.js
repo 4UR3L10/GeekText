@@ -68,7 +68,7 @@ router.post("/newpayment", (req, res) => {
               `INSERT INTO credit_card VALUES('${CardNumber}','${results[0].UserID}','${CardType}','${CrdtHldrName}','${ExpMonth}','${ExpYear}','N','N')`
             );
             console.log("User Credit Card Inserted");
-            res.status(201).send({ msg: "Credit Card Inserted" });
+            /*res.status(201).send({ msg: "Credit Card Inserted" });*/
 
             console.log("Second Try");
 
@@ -162,37 +162,22 @@ router.post("/updatepayment", (req, res) => {
   const BillZipCode = req.body.BillZipCode;
   const BillCountry = req.body.BillCountry;
   const IdEmail = req.body.IdEmail;
+  const CardNumberOld = req.body.CardNumberOld;
+
+  console.log("Result CardNumberOld: " + CardNumberOld);
 
   if (CardNumber) {
     try {
       db.query(
-        `SELECT UserID FROM user WHERE EmailAddress = '${IdEmail}'`,
-        (error, results) => {
-          if (results == "") {
-            console.log("No results");
-          } else {
-            console.log("results: " + results[0].UserID);
-
-            db.promise().query(
-              `INSERT INTO credit_card VALUES('${CardNumber}','${results[0].UserID}','${CardType}','${CrdtHldrName}','${ExpMonth}','${ExpYear}','N','N')`
-            );
-            console.log("User Credit Card Inserted");
-            res.status(201).send({ msg: "Credit Card Inserted" });
-
-            console.log("Second Try");
-
-            try {
-              db.promise().query(
-                `INSERT INTO billing_address VALUES('${0}','${CardNumber}','${BillFirstName}','${BillLastName}','${BillAddress}','${BillAddress2}','${BillCity}','${BillState}','${BillZipCode}','${BillCountry}','+17861234567')` // CHANGE TO DYNAMIC USERRRRRR
-              );
-              console.log("User Billing Address Inserted");
-              res.status(201).send({ msg: "Billing Address Inserted" });
-            } catch (err) {
-              console.log(err);
-            }
-          }
-        }
+        `UPDATE credit_card SET CardNumber = '${CardNumber}', CardType = '${CardType}', CrdtHldrName = '${CrdtHldrName}', ExpMonth = '${ExpMonth}', ExpYear = '${ExpYear}' WHERE CardNumber = '${CardNumberOld}'`
       );
+
+      console.log("User Credit Card Info Updated");
+
+      db.query(
+        `UPDATE billing_address SET BillFirstName = '${BillFirstName}', BillLastName = '${BillLastName}', BillAddress = '${BillAddress}', BillAddress2 = '${BillAddress2}', BillCity = '${BillCity}', BillState = '${BillState}', BillZipCode = '${BillZipCode}', BillCountry = '${BillCountry}' WHERE  CardNumber = '${CardNumber}'`
+      );
+      console.log("User Billing Address Info Updated");
     } catch (err) {
       console.log(err);
     }
@@ -202,4 +187,3 @@ router.post("/updatepayment", (req, res) => {
 });
 
 module.exports = router;
-/*db.query(`DELETE FROM billing_address WHERE CardNumber = '${CardNumber}'`);*/

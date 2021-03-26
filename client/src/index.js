@@ -14,6 +14,7 @@ import mngshipaddress from "./components/mngshipaddress";
 import mngaccount from "./components/mngaccount";
 import mngsettings from "./components/mngsettings";
 import updateshipaddress from "./components/updateshipaddress";
+import updatepayment from "./components/updatepayment";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -27,6 +28,7 @@ ReactDOM.render(
       <Route exact path="/mngaccount" component={mngaccount} />
       <Route exact path="/mngsettings" component={mngsettings} />
       <Route exact path="/updateshipaddress" component={updateshipaddress} />
+      <Route exact path="/updatepayment" component={updatepayment} />
       <App />
     </Switch>
   </BrowserRouter>,

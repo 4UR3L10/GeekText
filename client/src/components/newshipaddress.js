@@ -49,7 +49,7 @@ function NewShippingAddress() {
     }).then((response) => {
       console.log(response);
     });
-    window.location.reload();
+    window.location.href = "/mngshipaddress";
   };
 
   if (localStorage.getItem("Token") != null) {

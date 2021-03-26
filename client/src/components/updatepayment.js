@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
-import "./newpayment.css";
+import "./updatepayment.css";
 import Axios from "axios";
 import jwt_decode from "jwt-decode";
 
@@ -34,18 +34,12 @@ function NewPayment() {
   const [BillZipCodeReg, setBillZipCodeReg] = useState("");
   const [BillCountryReg, setBillCountryReg] = useState("");
 
-  // Function Insert Shipping Address.
-  const insertPaymentMethod = () => {
-    try {
-      checkCreditCardValidation();
-    } catch (e) {
-      // PopUp.
-      alert(e);
-      window.location.reload();
-      return;
-    }
+  // Function Insert  Shipping Address.
+  const updatepayment = () => {
+    const CardNumberOld = localStorage.getItem("CardNumber");
+    window.localStorage.removeItem("CardNumber");
 
-    Axios.post("http://localhost:3001/payment/newpayment", {
+    Axios.post("http://localhost:3001/payment/updatepayment", {
       CardType: CardTypeReg,
       CardNumber: CardNumberReg,
       CrdtHldrName: CrdtHldrNameReg,
@@ -61,47 +55,11 @@ function NewPayment() {
       BillZipCode: BillZipCodeReg,
       BillCountry: BillCountryReg,
       IdEmail: decoded.EmailAddressReg,
+      CardNumberOld: CardNumberOld,
     }).then((response) => {
       console.log(response);
     });
-
     window.location.href = "/mngpayment";
-  };
-
-  // Check CreditCard Arrow Function.
-  const checkCreditCardValidation = () => {
-    /* Initialization.*/
-    /* Date Class Import statement. */
-    var today = new Date();
-    const CreditCardNumberTmp = CardNumberReg;
-    const ExpMonthTmp = ExpMonthReg;
-    const ExpYearTmp = ExpYearReg;
-    const lowercase = /[a-z]/;
-    const upercase = /[A-Z]/;
-
-    /* Credit Card Number can be only Numbers */
-    if (
-      lowercase.test(CreditCardNumberTmp) ||
-      upercase.test(CreditCardNumberTmp)
-    ) {
-      throw "CreditCardNumber Must be numbers";
-    }
-
-    /* Getting month. */
-    var mm = today.getMonth() + 1;
-
-    /* Getting Full Year. */
-    var yyyy = today.getFullYear();
-
-    /* Checking the year. */
-    if (ExpYearTmp < yyyy) {
-      throw "Credit Card has expired check your year.";
-    }
-
-    /* Checking for the month */
-    if (ExpYearTmp == yyyy && ExpMonthTmp < mm) {
-      throw "Credit Card has expired check your month.";
-    }
   };
 
   // Function Remove the Token or Sign Out.
@@ -149,8 +107,8 @@ function NewPayment() {
         <br />
 
         {/* TextHeader.*/}
-        <div className="mainheader">
-          <h1>Add a New Credit Card Information</h1>
+        <div className="paymentheader">
+          <h1>Update Credit Card Info</h1>
           <Container>
             <p>
               The payment method you select will be used as your default for
@@ -247,7 +205,7 @@ function NewPayment() {
         {/* BillHeader.*/}
         <div className="billingheader">
           <Container>
-            <h1>Add a New Billing Address</h1>
+            <h1>Update Billing Address</h1>
           </Container>
         </div>
 
@@ -386,8 +344,8 @@ function NewPayment() {
 
           {/* Buttons.*/}
           <div>
-            <Button variant="primary" onClick={insertPaymentMethod}>
-              Save
+            <Button variant="primary" onClick={updatepayment}>
+              Update
             </Button>{" "}
             <Button variant="secondary" href="/mngpayment">
               Cancel

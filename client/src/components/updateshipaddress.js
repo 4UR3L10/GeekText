@@ -52,7 +52,7 @@ function NewShippingAddress() {
     }).then((response) => {
       console.log(response);
     });
-    window.location.href = "/lstshipaddress";
+    window.location.href = "/mngshipaddress";
   };
 
   if (localStorage.getItem("Token") != null) {
@@ -247,7 +247,7 @@ function NewShippingAddress() {
               <Button variant="primary" onClick={updateShipAddress}>
                 Update
               </Button>{" "}
-              <Button variant="secondary" href="/lstshipaddress">
+              <Button variant="secondary" href="/mngshipaddress">
                 Cancel
               </Button>{" "}
             </div>

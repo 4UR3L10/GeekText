@@ -250,11 +250,13 @@ function ManageSettings() {
 
         {/* TextHeader.*/}
         <div className="mainheader">
+          <h1>Account Settings</h1>
           <Container>
-            <h1>Account Settings</h1>
             <br />
-            <br />
-            <h2>Update Your Name</h2>
+            <div>
+              <br />
+              <h2>Update Your Name</h2>
+            </div>
           </Container>
         </div>
 

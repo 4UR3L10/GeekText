@@ -17,3 +17,10 @@ CEN4010 - Group XIV
 | -------- | --------------- |
 | React    | "npm start"     |
 | Node     | "node index.js" |
+
+## Other Info
+
+npm i react-router-dom
+npm install --save bcrypt-nodejs
+npm i cookie-parser jsonwebtoken
+npm install jwt-decode
