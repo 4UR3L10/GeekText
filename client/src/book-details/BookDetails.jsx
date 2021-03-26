@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./BookDetails.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
@@ -9,9 +9,10 @@ import Modal from 'react-bootstrap/Modal';
 import Toast from 'react-bootstrap/Toast';
 import { useParams } from "react-router-dom";
 import LoadingPage from './components/LoadingPage';
+import Overlay from 'react-bootstrap/Overlay';
 
-const textBodyStyle = { 
-    margin: "1.5rem", 
+const textBodyStyle = {
+    margin: "1.5rem",
     fontWeight: "500",
     textAlign: "left",
     fontSize: "1em"
@@ -25,6 +26,7 @@ function BookDetails(props) {
     const [hover, setHover] = useState(false);
     const [showLargeImage, setShowLargeImage] = useState(false);
     const [showCartNotif, setShowCartNotif] = useState(false);
+    const cartTarget = useRef(null);
     const [cartError, setCartError] = useState(false);
 
     useEffect(() => {
@@ -63,6 +65,7 @@ function BookDetails(props) {
             .then(response => {
                 setCartError(!response.ok)
                 setShowCartNotif(true);
+                setTimeout(() => { setShowCartNotif(false) }, 3000)
             })
             .catch((err) => {
                 console.log(err);
@@ -104,21 +107,24 @@ function BookDetails(props) {
 
     function ShoppingCartNotificaiton() {
         return (
-            <Toast style={{
-                position: 'absolute',
-                top: "80%",
-                right: "0%",
-                width: "270px"
-            }}
-                onClose={() => setShowCartNotif(false)}
-                show={showCartNotif}
-                delay={3000} autohide>
-                <Toast.Body style={{ textAlign: "center" }}>
-                    {cartError ?
-                        "Book already in cart."
-                        : "Successfully added book to cart."}
-                </Toast.Body>
-            </Toast>
+            <Overlay target={cartTarget.current} show={showCartNotif} placement="top">
+                {(props) => (
+                    <div
+                        {...props}
+                        style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.50)',
+                            padding: '10px 10px',
+                            color: 'black',
+                            borderRadius: 3,
+                            ...props.style,
+                        }}
+                    >
+                        {cartError ?
+                            "Book already in cart."
+                            : "Successfully added book to cart."}
+                    </div>
+                )}
+            </Overlay>
         );
     }
 
@@ -136,7 +142,7 @@ function BookDetails(props) {
                             <h1 className="gt-bd-title">{book.book_title}</h1>
                             <h6>by <a href={`http://localhost:3000/author/${book.author_id}`} >
                                 {book.author_name}
-                                </a> </h6>
+                            </a> </h6>
                             <h6 style={{ color: "gray" }}> {book.publisher_name}, {book.published_date.substring(0, 10)}, {book.genre}</h6>
                             <h6><u>Rating:</u> {book.avg_rating}</h6>
                             <hr class="gt-bd-hr" />
@@ -152,19 +158,20 @@ function BookDetails(props) {
                                         </span>
                                     </div>
                                 </Col>
-                                <Col>
-                                    <div>
-                                        <Button onClick={handleAddShoppingCart}
-                                            style={{
-                                                position: "absolute",
-                                                top: "50%",
-                                                transform: "translateY(-50%)",
-                                                msTransform: "translateY(-50%)"
-                                            }}>
-                                            Add to Cart
-                                        </Button>
-                                    </div>
+                                <Col style={{ textAlign: "center" }}>
+
+                                    <Button ref={cartTarget} onClick={handleAddShoppingCart}
+                                        style={{
+                                            // position: "absolute",
+                                            // top: "50%",
+                                            // transform: "translateY(-50%)",
+                                            // msTransform: "translateY(-50%)"
+                                        }}>
+                                        Add to Cart
+                                    </Button>
                                     <ShoppingCartNotificaiton />
+
+
                                 </Col>
                                 <Col xs={5} />
 
@@ -184,10 +191,10 @@ function BookDetails(props) {
                                 About the Author
                             </h2>
                             <div style={{ marginTop: "0rem", borderStyle: "solid", borderColor: "lightgray" }}>
-                                <p style={textBodyStyle} 
-                                dangerouslySetInnerHTML={{
-                                    __html: book.author_bio
-                                }} />
+                                <p style={textBodyStyle}
+                                    dangerouslySetInnerHTML={{
+                                        __html: book.author_bio
+                                    }} />
                             </div>
                         </div>
                     </Row>
