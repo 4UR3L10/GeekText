@@ -150,7 +150,7 @@ function BookDetails(props) {
                                 <b>Price</b>
                             </h6>
                             <Row>
-                                <Col>
+                                <Col xs={3} md="auto">
                                     <div>
                                         <span className="gt-bd-price-span" style={{ fontSize: "2rem", marginBottom: "2rem" }}>
                                             <sup>$</sup>
@@ -158,22 +158,19 @@ function BookDetails(props) {
                                         </span>
                                     </div>
                                 </Col>
-                                <Col style={{ textAlign: "center" }}>
-
-                                    <Button ref={cartTarget} onClick={handleAddShoppingCart}
-                                        style={{
-                                            // position: "absolute",
-                                            // top: "50%",
-                                            // transform: "translateY(-50%)",
-                                            // msTransform: "translateY(-50%)"
-                                        }}>
+                                <Col  xs={4} style={{paddingLeft: '0'}} md="auto">
+                                    <Button ref={cartTarget} onClick={handleAddShoppingCart}>
                                         Add to Cart
                                     </Button>
                                     <ShoppingCartNotificaiton />
-
-
                                 </Col>
-                                <Col xs={5} />
+                                <Col  xs={4} style={{paddingLeft: '0'}} md="auto">
+                                    <Button variant="outline-primary">
+                                        Add to Wishlist
+                                    </Button>
+                                    <ShoppingCartNotificaiton />
+                                </Col>
+                                <Col xs={1} />
 
                             </Row>
 
