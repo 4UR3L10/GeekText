@@ -130,8 +130,8 @@ function App() {
 
         {/* TextHeader.*/}
         <div className="mainheader">
+          <h1>!WELCOME TO GEEKTEXT!</h1>
           <Container>
-            <h1>!WELCOME TO GEEKTEXT!</h1>
             <p>
               Fill in the fields below to create a GeekText account. If you
               already have an account, please.{" "}
@@ -141,20 +141,20 @@ function App() {
         </div>
 
         {/*Image Tanjiro*/}
-        <div class="c">
-          <div class="i">
-            <img class="img" src="https://i.imgur.com/jLEfHF1.png" />
+        <div className="c">
+          <div className="i">
+            <img className="img" src="https://i.imgur.com/jLEfHF1.png" />
           </div>
-          <div class="s1"></div>
-          <div class="s2"></div>
-          <div class="s3"></div>
+          <div className="s1"></div>
+          <div className="s2"></div>
+          <div className="s3"></div>
         </div>
 
         <div id="wrapper">
-          <div id="bulbasaur" class="pokemon"></div>
-          <div id="charmander" class="pokemon"></div>
-          <div id="squirtle" class="pokemon"></div>
-          <div id="pikachu" class="pokemon"></div>
+          <div id="bulbasaur" className="pokemon"></div>
+          <div id="charmander" className="pokemon"></div>
+          <div id="squirtle" className="pokemon"></div>
+          <div id="pikachu" className="pokemon"></div>
         </div>
       </div>
     );

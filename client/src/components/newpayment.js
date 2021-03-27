@@ -78,11 +78,13 @@ function NewPayment() {
     const ExpYearTmp = ExpYearReg;
     const lowercase = /[a-z]/;
     const upercase = /[A-Z]/;
+    const symbol = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 
     /* Credit Card Number can be only Numbers */
     if (
       lowercase.test(CreditCardNumberTmp) ||
-      upercase.test(CreditCardNumberTmp)
+      upercase.test(CreditCardNumberTmp) ||
+      symbol.test(CreditCardNumberTmp)
     ) {
       throw "CreditCardNumber Must be numbers";
     }

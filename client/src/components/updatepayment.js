@@ -36,6 +36,15 @@ function NewPayment() {
 
   // Function Insert  Shipping Address.
   const updatepayment = () => {
+    try {
+      checkCreditCardValidation();
+    } catch (e) {
+      // PopUp.
+      alert(e);
+      window.location.reload();
+      return;
+    }
+
     const CardNumberOld = localStorage.getItem("CardNumber");
     window.localStorage.removeItem("CardNumber");
 
@@ -60,6 +69,44 @@ function NewPayment() {
       console.log(response);
     });
     window.location.href = "/mngpayment";
+  };
+
+  // Check CreditCard Arrow Function.
+  const checkCreditCardValidation = () => {
+    /* Initialization.*/
+    /* Date Class Import statement. */
+    var today = new Date();
+    const CreditCardNumberTmp = CardNumberReg;
+    const ExpMonthTmp = ExpMonthReg;
+    const ExpYearTmp = ExpYearReg;
+    const lowercase = /[a-z]/;
+    const upercase = /[A-Z]/;
+    const symbol = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+
+    /* Credit Card Number can be only Numbers */
+    if (
+      lowercase.test(CreditCardNumberTmp) ||
+      upercase.test(CreditCardNumberTmp) ||
+      symbol.test(CreditCardNumberTmp)
+    ) {
+      throw "CreditCardNumber Must be numbers";
+    }
+
+    /* Getting month. */
+    var mm = today.getMonth() + 1;
+
+    /* Getting Full Year. */
+    var yyyy = today.getFullYear();
+
+    /* Checking the year. */
+    if (ExpYearTmp < yyyy) {
+      throw "Credit Card has expired check your year.";
+    }
+
+    /* Checking for the month */
+    if (ExpYearTmp == yyyy && ExpMonthTmp < mm) {
+      throw "Credit Card has expired check your month.";
+    }
   };
 
   // Function Remove the Token or Sign Out.

@@ -24,6 +24,7 @@ router.post("/user", (req, res) => {
 
         if (results == "") {
           console.log("No results");
+          res.status(404).send({ msg: "Wrong Credentials" });
         } else {
           console.log("results: " + results[0].Password);
         }

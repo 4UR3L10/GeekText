@@ -211,8 +211,8 @@ function SignUp() {
 
         {/* TextHeader.*/}
         <div className="mainheader">
+          <h1>Create an Account</h1>
           <Container>
-            <h1>Create an Account</h1>
             <p>
               Fill in the fields below to create a GeekText account. If you
               already have an account, please.{" "}

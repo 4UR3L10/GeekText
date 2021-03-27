@@ -45,9 +45,15 @@ function SignIn() {
     Axios.post("http://localhost:3001/signin/user", {
       EmailAddress: EmailAddressReg,
       Password: PasswordReg,
-    }).then((response) => {
-      console.log(response);
-    });
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        // what now?
+        console.log(err);
+        alert("Wrong Username or Password");
+      });
   };
 
   const StoreToken = () => {
@@ -148,8 +154,8 @@ function SignIn() {
 
         {/* TextHeader.*/}
         <div className="Mainheader">
+          <h1>Sign in or Create an Account</h1>
           <Container>
-            <h1>Sign in or Create an Account</h1>
             <p>
               Don't have an account?{" "}
               <Alert.Link href="/signup">Create an Account</Alert.Link>.

@@ -99,25 +99,52 @@ function ManageSettings() {
   const updateStatus = () => {
     // Update Anonymus Status.
     console.log("AnonymusStatReg:" + AnonymusStatReg);
+    var trnsltValue = "";
+
+    if (AnonymusStatReg == "on") {
+      trnsltValue = "Y";
+    } else {
+      trnsltValue = "N";
+    }
 
     Axios.put("http://localhost:3001/mngsettings/status", {
-      AnonymusStat: AnonymusStatReg,
+      AnonymusStat: trnsltValue,
       IdEmail: decoded.EmailAddressReg,
     }).then((response) => {
       console.log(response);
     });
 
-    //window.location.reload();
+    window.location.reload();
   };
 
   // Check Password Function. // UPGRADEEEEEEEEEEEEEEEEEEEEEEEEEE
   const checkPassword = () => {
+    /*TESTINGGGGGGGGGGGGGGGGGGGGGGGGGGG*/
+    const bcrypt = require("bcrypt-nodejs");
+    var myPlaintextPassword = "1234567aA@";
+    var hash = "$2a$10$cytsQUK/vqHgXHfrmeNKWOVqz01tyXpZS/SRtm15PaJTxut.Xemb.";
+    console.log("Testing LoggedIn Password: " + hash);
+    console.log(
+      "Hardcoded Decrypt Testing LoggedIn Password: " + myPlaintextPassword
+    );
+
+    // Load hash from your password DB.
+    bcrypt.compare(myPlaintextPassword, hash, function (err, result) {
+      if (result == true) {
+        console.log("THEY ARE THE SAMEEEEEEEEEEEEEEEEEEE");
+      } else {
+        console.log("Not the same");
+      }
+    });
+    /*TESTINGGGGGGGGGGGGGGGGGGGGGGGGGGG*/
+
     const password = PasswordReg;
 
     if (password.length > 5) {
       console.log("Valid Password Length");
     } else {
       alert("Password Must be at least 6 character long");
+      window.location.reload();
       return;
     }
 
@@ -127,6 +154,7 @@ function ManageSettings() {
       console.log("Contains a number");
     } else {
       alert("Passwords Must have a number");
+      window.location.reload();
       return;
     }
 
@@ -136,6 +164,7 @@ function ManageSettings() {
       console.log("Contains a lowercase");
     } else {
       alert("Passwords Must have a lowercase letter");
+      window.location.reload();
       return;
     }
 
@@ -145,6 +174,7 @@ function ManageSettings() {
       console.log("Contains a upercase");
     } else {
       alert("Passwords Must have a upercase letter");
+      window.location.reload();
       return;
     }
 
@@ -154,6 +184,7 @@ function ManageSettings() {
       console.log("Contains a symbol");
     } else {
       alert("Passwords Must have a symbol");
+      window.location.reload();
       return;
     }
 
@@ -163,6 +194,7 @@ function ManageSettings() {
       console.log("Passwords Matched");
     } else {
       alert("Passwords Did Not Matched");
+      window.location.reload();
       return;
     }
   };
@@ -172,6 +204,8 @@ function ManageSettings() {
     const bcrypt = require("bcrypt-nodejs");
     const saltRounds = 10;
     let passwordTemp = PasswordReg;
+
+    checkPassword();
 
     bcrypt.genSalt(saltRounds, function (err, salt) {
       bcrypt.hash(passwordTemp, salt, null, function (err, hash) {
@@ -184,7 +218,7 @@ function ManageSettings() {
         });
 
         // Refresh.
-        //window.location.reload();
+        window.location.reload();
       });
     });
   };
@@ -202,7 +236,7 @@ function ManageSettings() {
     }).then((response) => {
       console.log(response);
     });
-    //window.location.reload();
+    window.location.reload();
   };
 
   // Function Remove the Token or Sign Out.
@@ -341,7 +375,9 @@ function ManageSettings() {
                   <h2>Change Your Password</h2>
                 </Container>
               </div>
+
               {/* Current Passsword.*/}
+              {/*
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="inputGroup-sizing-sm">
@@ -357,6 +393,8 @@ function ManageSettings() {
                   }}
                 />
               </InputGroup>
+                */}
+
               {/* Passsword.*/}
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
@@ -515,7 +553,7 @@ function ManageSettings() {
               <Form.Group controlId="formBasicCheckbox">
                 <Form.Check
                   type="checkbox"
-                  value="Y"
+                  /*value="Y"*/
                   label="Remain Anonymus"
                   onChange={(e) => {
                     setAnonymusStatReg(e.target.value);
