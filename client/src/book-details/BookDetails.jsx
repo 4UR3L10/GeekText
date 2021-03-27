@@ -236,7 +236,7 @@ function BookDetails(props) {
                         </Col>
                         <Col>
                             <h1 className="gt-bd-title">{book.book_title}</h1>
-                            <h6>by <a href={`http://localhost:3000/author/${book.author_id}`} >
+                            <h6>by <a href={`/author/${book.author_id}`} >
                                 {book.author_name}
                             </a> </h6>
                             <h6 style={{ color: "gray" }}> {book.publisher_name}, {book.published_date.substring(0, 10)}, {book.genre}</h6>
