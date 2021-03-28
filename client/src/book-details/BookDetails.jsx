@@ -6,11 +6,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
-import Toast from 'react-bootstrap/Toast';
 import { useParams } from "react-router-dom";
 import LoadingPage from './components/LoadingPage';
 import Overlay from 'react-bootstrap/Overlay';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Rating from './components/Rating';
 
 const textBodyStyle = {
     margin: "1.5rem",
@@ -34,13 +34,17 @@ function BookDetails(props) {
     const [wishlistError, setWishlistError] = useState(false);
     const [showWishlistNotif, setShowWishlistNotif] = useState(false);
     const wishlistTarget = useRef(null);
+    const [comments, setComments] = useState([]);
 
     useEffect(() => {
-        getBook();
+        getBook()
+        .then(() => {
+            getComments()
+        })
     }, []);
 
     function getBook() {
-        fetch(`http://localhost:4000/api/books/${bookId}`)
+        return fetch(`http://localhost:4000/api/books/${bookId}`)
             .then((response) => {
                 return response.json();
             })
@@ -71,6 +75,18 @@ function BookDetails(props) {
                 book_id: bookId,
             })
         })
+    }
+
+    function getComments() {
+        fetch(`http://localhost:4000/api/books/${bookId}/reviews`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                console.log(response)
+                setComments(response);
+            })
+            .catch((err) => console.log(err));
     }
 
     function handleBookClick() {
@@ -224,6 +240,14 @@ function BookDetails(props) {
         );
     }
 
+    function Comment(props) {
+        return (
+            <ListGroup.Item>
+
+            </ListGroup.Item>
+        );
+    }
+
     return (
         <Container style={{ width: "100%" }}>
 
@@ -240,7 +264,7 @@ function BookDetails(props) {
                                 {book.author_name}
                             </a> </h6>
                             <h6 style={{ color: "gray" }}> {book.publisher_name}, {book.published_date.substring(0, 10)}, {book.genre}</h6>
-                            <h6><u>Rating:</u> {book.avg_rating}</h6>
+                            <Rating rating={book.avg_rating} />
                             <hr class="gt-bd-hr" />
                             <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
                                 <b>Price</b>

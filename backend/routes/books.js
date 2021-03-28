@@ -159,12 +159,7 @@ router.get("/:id/reviews", (req, res) => {
   mysqlx.getSession(credentials)
     .then(session => session.sql(queryString).execute())
     .then(result => queryResultToJson(result))
-    .then(result => {
-      if (result.length == 0) {
-        return res.status(404).send(`Book with id ${book_id} is not found`);
-      }
-      return res.json(result);
-    })
+    .then(result => res.json(result))
     .catch((err) => {
       console.log(err);
       res.status(500).send("Server Error");
