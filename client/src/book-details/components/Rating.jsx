@@ -21,7 +21,7 @@ function StarGradient(props) {
     return (
         <linearGradient {...props} id={`grad-${percentage}`}>
             <stop offset={`${percentage}%`} stop-color="#ffbd00" />
-            <stop offset={`${percentage}%`} stop-color="#ededed" />
+            <stop offset={`${percentage}%`} stop-color="#dedede" />
         </linearGradient>
     )
 }
