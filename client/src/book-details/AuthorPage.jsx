@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import ListGroup from "react-bootstrap/esm/ListGroup";
-
+import Rating from './components/Rating';
 
 
 function AuthorPage(props) {
@@ -76,9 +76,9 @@ function AuthorPage(props) {
                                 <h6>by <a href={`/author/${authorId}`} class="text-info">
                                     {books[props.idx].author_name}
                                 </a> </h6>
-                                <h6><u>Rating:</u> {books[props.idx].avg_rating}</h6>
 
                             </h5>
+                            <Rating rating={books[props.idx].avg_rating} />
                         </div>
 
                     </Col>
@@ -116,7 +116,7 @@ function AuthorPage(props) {
                     </h2>
                     <ListGroup variant="flush">
                         {books.map((book, idx) => (
-                            <BookListItem idx={idx} />
+                            <BookListItem key={idx} idx={idx} />
                         ))}
                     </ListGroup>
 

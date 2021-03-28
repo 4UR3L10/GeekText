@@ -264,7 +264,7 @@ function BookDetails(props) {
                                 {book.author_name}
                             </a> </h6>
                             <h6 style={{ color: "gray" }}> {book.publisher_name}, {book.published_date.substring(0, 10)}, {book.genre}</h6>
-                            <h6><u>Rating:</u> {book.avg_rating}</h6>
+                            <Rating rating={book.avg_rating} />
                             <hr class="gt-bd-hr" />
                             <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
                                 <b>Price</b>
