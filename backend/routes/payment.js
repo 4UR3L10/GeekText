@@ -125,7 +125,9 @@ router.post("/getpayment", (req, res) => {
 router.post("/deletepayment", (req, res) => {
   const CardNumber = req.body.CardNumber;
   try {
+    /*
     db.query(
+      
       `SELECT PurchaseID FROM purchase WHERE  CardNumber = '${CardNumber}'`,
       (error, results) => {
         if (results == "") {
@@ -135,12 +137,15 @@ router.post("/deletepayment", (req, res) => {
             `DELETE FROM purchase_details WHERE PurchaseID = '${results[0].PurchaseID}'`
           );
           db.query(`DELETE FROM purchase WHERE CardNumber = '${CardNumber}'`);
-          db.query(
-            `DELETE FROM credit_card WHERE CardNumber = '${CardNumber}'`
-          );
+          */
+    db.query(`DELETE FROM billing_address WHERE CardNumber = '${CardNumber}'`);
+    db.query(`DELETE FROM credit_card WHERE CardNumber = '${CardNumber}'`);
+    /*
         }
       }
+      
     );
+    */
   } catch (err) {
     console.log(err);
   }

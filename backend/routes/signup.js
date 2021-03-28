@@ -41,23 +41,24 @@ router.post("/user", (req, res) => {
       console.log(err);
     }
   }
-});
-
-// [SignUp] Testing Insert User with Email and Password.
-router.post("/test", (req, res) => {
-  //const { EmailAddress, Password } = req.body;
-  const EmailAddress = req.body.EmailAddress;
-  const Password = req.body.Password;
 
   if (Password && EmailAddress) {
-    try {
-      db.promise().query(
-        `INSERT INTO user VALUES('${0}','Testing Test','${Password}','${EmailAddress}','N','Fulana','N')`
-      );
-      res.status(201).send({ msg: "Created User" });
-    } catch (err) {
-      console.log(err);
-    }
+    db.query(
+      `SELECT UserID FROM user WHERE EmailAddress = '${EmailAddress}'`,
+      (error, results) => {
+        if (results == "") {
+          console.log("No results in SELECT NEW IDDDDDDDDDDDDDD");
+        } else {
+          console.log("values ofr userID from Inser " + results[0].UserID);
+
+          db.query(
+            `INSERT INTO home_address VALUES('${0}','${
+              results[0].UserID
+            }','','','','','','','N')`
+          );
+        }
+      }
+    );
   }
 });
 
