@@ -38,9 +38,9 @@ function BookDetails(props) {
 
     useEffect(() => {
         getBook()
-        .then(() => {
-            getComments()
-        })
+            .then(() => {
+                getComments()
+            })
     }, []);
 
     function getBook() {
@@ -316,6 +316,15 @@ function BookDetails(props) {
                             </div>
                         </div>
                     </Row>
+                    <div>
+                        <h2 className="gt-bd-title" style={{ fontSize: "1.5rem", textAlign: "center", marginBottom: "20px" }}>
+                            <Row>
+                                <Col><hr></hr></Col>
+                                <Col md="auto">Comments Review</Col>
+                                <Col><hr></hr></Col>
+                            </Row>
+                        </h2>
+                    </div>
                     <LargeBookImage />
                     <WishlistSelect />
                 </Container>
