@@ -6,6 +6,7 @@ import NavDropdown from "react-bootstrap/NavDropdown"; // NavDropDown ReactBoots
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import Books from "./book-browsing/src/components/Books";
 import BookDetails from "./book-details/BookDetails";
+import AuthorPage from "./book-details/AuthorPage";
 import searchBook from "./book-browsing/src/utils";
 import Rating from "./book-browsing/src/components/Rating";
 import signin from "./profile-management/signin";
@@ -77,6 +78,10 @@ function App() { // Function Remove the Token or Sign Out.
                             component={signin}/>
                         <Route exact path="/mngaccount"
                             component={mngaccount}/>
+
+                        <Route path="/author/:authorId">
+                            <AuthorPage />
+                        </Route>
                         <Route path="/">
                             <Books/>
                         </Route>
