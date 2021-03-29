@@ -83,7 +83,6 @@ function BookDetails(props) {
                 return response.json();
             })
             .then((response) => {
-                console.log(response)
                 setComments(response);
             })
             .catch((err) => console.log(err));
@@ -241,9 +240,22 @@ function BookDetails(props) {
     }
 
     function Comment(props) {
+        const { comment } = props;
         return (
-            <ListGroup.Item>
-
+            <ListGroup.Item style={{ marginTop: "10px" }}>
+                <Row>
+                    <Col>
+                        <h2 className="gt-bd-title" style={{ fontSize: "1.3rem" }}>
+                            {comment.is_anonymous ? 'Anonymous' : comment.nickname}
+                        </h2>
+                    </Col>
+                    <Col xs={9}>
+                        <Rating rating={comment.rating} style={{ marginBottom: "20px" }} />
+                        <div style={{ marginBottom: "10px" }}>
+                            {comment.comment}
+                        </div>
+                    </Col>
+                </Row>
             </ListGroup.Item>
         );
     }
@@ -324,6 +336,18 @@ function BookDetails(props) {
                                 <Col><hr></hr></Col>
                             </Row>
                         </h2>
+                        <div style={{ marginBottom: "20px" }}>
+                            {comments.length == 0 ?
+                                <h3 className="gt-bd-title" style={{ textAlign: "center", fontSize: "1.2rem" }}>
+                                    No Comments
+                            </h3> :
+                                <ListGroup variant="flush" >
+                                    {comments.map((comment, idx) =>
+                                        <Comment key={idx} comment={comment} />
+                                    )}
+                                </ListGroup>
+                            }
+                        </div>
                     </div>
                     <LargeBookImage />
                     <WishlistSelect />
