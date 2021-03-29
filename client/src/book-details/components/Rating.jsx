@@ -30,20 +30,22 @@ function Rating(props) {
     let { rating } = props;
     rating = isNaN(rating) ? 0 : rating
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="75" height="15">
-            <defs>
-                {starPaths.map((_, idx) => {
-                    return <StarGradient key={idx} starIdx={idx} rating={rating} />
-                })}
-            </defs>
-            {starPaths.map((path, idx) =>
-                <path key={idx}
-                    d={path}
-                    style={{ fill: `url(#grad-${starPercetage(idx, rating)})` }}
-                />
-            )}
+        <div style={props.style}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="75" height="15">
+                <defs>
+                    {starPaths.map((_, idx) => {
+                        return <StarGradient key={idx} starIdx={idx} rating={rating} />
+                    })}
+                </defs>
+                {starPaths.map((path, idx) =>
+                    <path key={idx}
+                        d={path}
+                        style={{ fill: `url(#grad-${starPercetage(idx, rating)})` }}
+                    />
+                )}
 
-        </svg>
+            </svg>
+        </div>
     );
 }
 

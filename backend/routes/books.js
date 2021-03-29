@@ -151,9 +151,9 @@ router.get("/:id/reviews", (req, res) => {
   }
 
   const queryString = `
-  SELECT *
-  FROM geektext.user_book_review
-  WHERE book_id = '${book_id}';
+  SELECT br.user_id, u.nickname, br.book_id, br.rating, br.comment, br.is_anonymous
+  FROM geektext.user_book_review br, geektext.user u
+  WHERE br.book_id = '${book_id}' AND u.id = br.user_id;
   `;
 
   mysqlx.getSession(credentials)
