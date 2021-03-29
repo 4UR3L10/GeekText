@@ -10,12 +10,18 @@ import AuthorPage from "./book-details/AuthorPage";
 import searchBook from "./book-browsing/src/utils";
 import Rating from "./book-browsing/src/components/Rating";
 import signin from "./profile-management/signin";
+import mngaccount from "./profile-management/mngaccount";
 
-function App() {
+function App() { // Function Remove the Token or Sign Out.
+    const signout = () => {
+        window.localStorage.removeItem("Token");
+        window.location.href = "http://localhost:3000/signin";
+    };
+
     return (
         <div> {/* NavBar.*/}
             <Navbar bg="primary" variant="dark">
-                <Navbar.Brand href="#home">GeekText</Navbar.Brand>
+                <Navbar.Brand href="/">GeekText</Navbar.Brand>
 
                 <Nav className="mr-auto">
                     <Nav.Link href="#">Top Sellers</Nav.Link>
@@ -43,12 +49,12 @@ function App() {
                         <NavDropdown.Item href="#">Sign Up</NavDropdown.Item>
                         <NavDropdown.Item href="/signin">Sign In</NavDropdown.Item>
                         <NavDropdown.Divider/>
-                        <NavDropdown.Item href="#">Profile</NavDropdown.Item>
+                        <NavDropdown.Item href="/mngaccount">Profile</NavDropdown.Item>
                         <NavDropdown.Item href="#">Settings</NavDropdown.Item>
                         <NavDropdown.Item href="#">Shipping Address</NavDropdown.Item>
                         <NavDropdown.Item href="#">Payment</NavDropdown.Item>
                         <NavDropdown.Divider/>
-                        <NavDropdown.Item href="#">SignOut</NavDropdown.Item>
+                        <NavDropdown.Item onClick={signout}>SignOut</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link href="#">Shopping Cart</Nav.Link>
                     <Nav.Link href="#">WishList</Nav.Link>
@@ -70,6 +76,9 @@ function App() {
                         </Route>
                         <Route exact path="/signin"
                             component={signin}/>
+                        <Route exact path="/mngaccount"
+                            component={mngaccount}/>
+
                         <Route path="/author/:authorId">
                             <AuthorPage />
                         </Route>
