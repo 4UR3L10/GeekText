@@ -16,8 +16,8 @@ const SearchBar = (props) => {
                     <option value = "Rating Bottom">Rating: Lowest</option>
                     <option value = "Price High">Price: Highest</option>
                     <option value = "Price Low">Price: Lowest</option>
-                    {/* <option value = "Author A">Author: A-Z </option>
-                    <option value = "Author Z">Author: Z-A </option> */}
+                    <option value = "Author A">Author: A-Z </option>
+                    <option value = "Author Z">Author: Z-A </option>
                     
                 </select>
             </form>

@@ -8,7 +8,7 @@ import { withRouter } from "react-router-dom";
 
 
 //searchField will be updated to whatever is typed in through handleSearch
-class Books extends Component{
+class TopSellers extends Component{
     constructor(props){
         super(props);
         this.genre = this.props.match.params.genre;
@@ -31,7 +31,7 @@ class Books extends Component{
         console.log(this.genre)
         // e.preventDefault();
         request
-            .get(this.genre ? `http://localhost:4000/api/books?genre=${this.genre}` : `http://localhost:4000/api/books` )
+            .get(this.genre ? `http://localhost:4000/api/books/genre/Fiction` : `http://localhost:4000/api/books` )
             .query({ q : this.state.searchField })
             .then((data) => {
                 console.log(data);
@@ -83,11 +83,11 @@ class Books extends Component{
                 return parseInt(a.price) - parseInt(b.price)
             }
             // else if(this.state.sort === 'Author A') {                
-            //     return (a.author_name) > (b.author_name)
+            //     return parseInt(b.author_name) - parseInt(a.author_name)
             // }
-            // else if(this.state.sort === 'Author Z') {
-            //     return parseInt(b.author_name.substring(0,1)) - parseInt(a.author_name.substring(0,1))
-            // }
+            // // else if(this.state.sort === 'Author Z') {
+            // //     return parseInt(b.author_name.substring(0,1)) - parseInt(a.author_name.substring(0,1))
+            // // }
             
             
         })
@@ -100,4 +100,4 @@ class Books extends Component{
     }
 }
 
-export default withRouter (Books);
+export default withRouter (TopSellers);
