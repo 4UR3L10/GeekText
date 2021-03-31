@@ -1,20 +1,14 @@
 const express = require('express')
 const mysqlx = require('@mysql/xdevapi');
 const credentials = require('./credentials');
-const { queryResultToJson } = require('./util');
+const { 
+    queryResultToJson, 
+    userIdSchema, 
+    bookIdSchema } = require('./util');
 const Joi = require('joi');
 const router = express.Router();
 
 router.use(express.json());
-
-const userIdSchema = Joi.number()
-    .integer()
-    .min(1);
-
-const bookIdSchema = Joi.number()
-    .integer()
-    .min(1000000000000)
-    .max(9999999999999);
 
 const shoppingCartSchema = Joi.object({
     user_id: userIdSchema
@@ -86,10 +80,7 @@ router.get('/:id/cart', function (req, res) {
     mysqlx.getSession(credentials)
         .then(session => session.sql(queryString).execute())
         .then(result => queryResultToJson(result))
-        .then(result => {
-            if (result.length == 0) return res.status(404).send(`No user or no books are found`)
-            return res.json(result)
-        })
+        .then(result => res.json(result))
         .catch((err) => {
             console.log(err)
             res.status(500).send('Server Error')
@@ -101,7 +92,7 @@ router.post('/:id/cart', function (req, res) {
 
     const { body } = req;
     const { error } = shoppingCartSchema.validate(body);
-    if (error) return res.status(400).json(error.details[0].message);
+    if (error) return res.status(400).json(error.message);
 
     const queryString = `
     INSERT INTO geektext.shopping_cart 
@@ -114,7 +105,7 @@ router.post('/:id/cart', function (req, res) {
         .then((_) => res.send(req.body))
         .catch((err) => {
             console.log(err)
-            return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+            return res.status(500).send(`Server Error <br> ${err.message}`);
         });
 });
 
@@ -127,7 +118,7 @@ router.delete('/:id/cart/:book_id', function (req, res) {
 
     const { params } = req;
     const { error } = schema.validate(params);
-    if (error) return res.status(400).json(error.details[0].message);
+    if (error) return res.status(400).json(error.message);
 
     const queryString = `
     DELETE FROM geektext.shopping_cart 
@@ -139,7 +130,7 @@ router.delete('/:id/cart/:book_id', function (req, res) {
         .then((result) => res.status(200).send(`Deleted successfully <br> Affected Items: ${result.getAffectedItemsCount()}`))
         .catch((err) => {
             console.log(err)
-            return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+            return res.status(500).send(`Server Error <br> ${err.message}`);
         });
 });
 
@@ -152,11 +143,11 @@ router.put('/:id/cart/:book_id', function (req, res) {
 
     const { params } = req;
     let result = schema.validate(params);
-    if (result.error) return res.status(400).json(result.error.details[0].message);
+    if (result.error) return res.status(400).json(result.error.message);
 
     const { body } = req;
     result = shoppingCartSchema.validate(body);
-    if (result.error) return res.status(400).json(result.error.details[0].message);
+    if (result.error) return res.status(400).json(result.error.message);
 
     const queryString = `
     UPDATE geektext.shopping_cart 
@@ -181,7 +172,7 @@ router.put('/:id/cart/:book_id', function (req, res) {
         .then(result => res.json(result))
         .catch((err) => {
             console.log(err)
-            return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+            return res.status(500).send(`Server Error <br> ${err.message}`);
         });
 });
 
@@ -262,7 +253,7 @@ router.route('/:id/saved-books')
             .then((_) => res.send(req.body))
             .catch((err) => {
                 console.log(err)
-                return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+                return res.status(500).send(`Server Error <br> ${err.message}`);
             });
     })
 
@@ -275,7 +266,7 @@ router.route('/:id/saved-books/:book_id')
     
         const { params } = req;
         const { error } = schema.validate(params);
-        if (error) return res.status(400).json(error.details[0].message);
+        if (error) return res.status(400).json(error.message);
     
         const queryString = `
         DELETE FROM geektext.user_saved_book
@@ -287,7 +278,7 @@ router.route('/:id/saved-books/:book_id')
             .then((result) => res.status(200).send(`Deleted successfully <br> Affected Items: ${result.getAffectedItemsCount()}`))
             .catch((err) => {
                 console.log(err)
-                return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+                return res.status(500).send(`Server Error <br> ${err.message}`);
             });
     })
 

@@ -1,3 +1,5 @@
+const Joi = require('joi');
+
 //https://dev.mysql.com/doc/x-devapi-userguide/en/result-set-classes.html
 exports.queryResultToJson = (result) => {
     let jsonResult = [];
@@ -14,3 +16,12 @@ exports.queryResultToJson = (result) => {
 
     return jsonResult;
 }
+
+exports.userIdSchema = Joi.number()
+    .integer()
+    .min(1);
+
+exports.bookIdSchema = Joi.number()
+    .integer()
+    .min(1000000000000)
+    .max(9999999999999);

@@ -6,19 +6,8 @@ const SearchBar = (props) => {
     return (
         <div className = "search-bar">
             {/* // the below will need to be changed to for each button, with the method (searchBook)} */}
-            <form onSubmit = { props.searchBook} action =""> 
+            <form onSubmit = {props.searchBook} action =""> 
                 {/* <input onChange={props.handleSearch}type="text"/> */}
-                <button type = "submit">All books</button>
-                <button type = "submit">Literature</button>
-                <button type = "submit">Manga</button>
-                <button type = "submit">Romance</button>
-                <button type = "submit">Fiction</button>
-                <button type = "submit">Science</button>
-                <button type = "submit">Sci-Fi</button>
-
-                
-               
-
                 <select defaultValue = "Sort" onChange = {props.handleSort}>
                     <option disabled value = "Sort">Sort</option>
                     <option value = "Newest">Date: Newest</option>
