@@ -20,6 +20,7 @@ import mngshipaddress from "./profile-management/mngshipaddress";
 import updateshipaddress from "./profile-management/updateshipaddress";
 import updatepayment from "./profile-management/updatepayment";
 import WishlistSelect from "./wishlist-management/WishlistSelect";
+import PaginaPrincipal from "./shopping-cart/src/components/PaginaPrincipal";
 
 function App() { // Function Remove the Token or Sign Out.
     const signout = () => {
@@ -65,7 +66,7 @@ function App() { // Function Remove the Token or Sign Out.
                         <NavDropdown.Divider/>
                         <NavDropdown.Item onClick={signout}>SignOut</NavDropdown.Item>
                     </NavDropdown>
-                    <Nav.Link href="#">Shopping Cart</Nav.Link>
+                    <Nav.Link href="/ShoppingCart">Shopping Cart</Nav.Link>
                     <Nav.Link href="/WishlistSelect">WishList</Nav.Link>
                 </Nav>
             </Navbar>
@@ -108,6 +109,8 @@ function App() { // Function Remove the Token or Sign Out.
                         </Route>
                         <Route exact path="/WishlistSelect"
                             component={WishlistSelect}/>
+                        <Route exact path="/ShoppingCart"
+                            component={PaginaPrincipal}/>
                         <Route path="/">
                             <Books/>
                         </Route>
