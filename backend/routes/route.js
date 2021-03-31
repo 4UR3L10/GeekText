@@ -3,3 +3,7 @@ exports.authors = require('./authors');
 exports.wishlists = require('./wishlists');
 exports.users = require('./users');
 exports.signin = require('./signin');
+exports.signup = require('./signup');
+exports.mngsettings = require('./mngsettings');
+exports.payment = require('./payment');
+exports.shipaddress = require('./shipaddress');
