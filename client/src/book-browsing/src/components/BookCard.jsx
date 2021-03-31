@@ -10,6 +10,7 @@ const BookCard = (props) => {
                <h3>Author: {props.author}</h3>               
                <h3>Date Published: {props.published.substring(0,4)}</h3>              
                <h3>Average Rating: {props.rating}</h3> 
+               <h3>ID: {props.id}</h3>
                <div>
                     <h3>Price: ${props.price} USD</h3> 
                     <a href = {`/books/${props.id}`}className ="details-button"> More Details</a>

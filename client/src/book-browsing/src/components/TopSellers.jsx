@@ -8,10 +8,10 @@ import { withRouter } from "react-router-dom";
 
 
 //searchField will be updated to whatever is typed in through handleSearch
-class TopSellers extends Component{
+class Rating extends Component{
     constructor(props){
         super(props);
-        this.genre = this.props.match.params.genre;
+        this.id = this.props.match.params.book_id;
         this.state = {
             books: [],
             searchField: '',
@@ -28,10 +28,10 @@ class TopSellers extends Component{
     //search term will be what is changed (key term) to pull info
   
     searchBook = () => {
-        console.log(this.genre)
+        console.log(this.book_id)
         // e.preventDefault();
         request
-            .get(this.genre ? `http://localhost:4000/api/books/genre/Fiction` : `http://localhost:4000/api/books` )
+            .get(this.id =  `http://localhost:4000/api/books/9781421582696`)
             .query({ q : this.state.searchField })
             .then((data) => {
                 console.log(data);
@@ -100,4 +100,4 @@ class TopSellers extends Component{
     }
 }
 
-export default withRouter (TopSellers);
+export default withRouter (Rating);
