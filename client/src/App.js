@@ -19,6 +19,7 @@ import mngpayment from "./profile-management/mngpayment";
 import mngshipaddress from "./profile-management/mngshipaddress";
 import updateshipaddress from "./profile-management/updateshipaddress";
 import updatepayment from "./profile-management/updatepayment";
+import WishlistSelect from "./wishlist-management/WishlistSelect";
 
 function App() { // Function Remove the Token or Sign Out.
     const signout = () => {
@@ -65,7 +66,7 @@ function App() { // Function Remove the Token or Sign Out.
                         <NavDropdown.Item onClick={signout}>SignOut</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link href="#">Shopping Cart</Nav.Link>
-                    <Nav.Link href="#">WishList</Nav.Link>
+                    <Nav.Link href="/WishlistSelect">WishList</Nav.Link>
                 </Nav>
             </Navbar>
 
@@ -105,6 +106,8 @@ function App() { // Function Remove the Token or Sign Out.
                         <Route path="/author/:authorId">
                             <AuthorPage/>
                         </Route>
+                        <Route exact path="/WishlistSelect"
+                            component={WishlistSelect}/>
                         <Route path="/">
                             <Books/>
                         </Route>
