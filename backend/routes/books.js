@@ -86,6 +86,23 @@ router.get("/", function (req, res) {
     });
 });
 
+router.get('/topsellers', (req, res) => {
+  let queryString = `
+  SELECT w.book_id, book_title, price, b.cover, genre, avg_rating, author_name, publisher_name, published_date
+  FROM geektext.author_wrote_book w, geektext.book b, geektext.author a, geektext.book_published bp, geektext.publisher p
+  WHERE b.id IN ('9781591167853', '9781593080143', '9780062909879', '9780345804327', '9780131103627', '9780374104108')
+  AND w.author_id = a.id AND w.book_id = b.id AND bp.book_id = b.id AND bp.publisher_id = p.id
+  `;
+
+  mysqlx.getSession(credentials)
+    .then(session => session.sql(queryString).execute())
+    .then(result => queryResultToJson(result))
+    .then(result => res.json(result))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send("Server Error");
+    });
+})
 
 router.get('/:id', (req, res) => {
 
@@ -151,20 +168,15 @@ router.get("/:id/reviews", (req, res) => {
   }
 
   const queryString = `
-  SELECT *
-  FROM geektext.user_book_review
-  WHERE book_id = '${book_id}';
+  SELECT br.user_id, u.nickname, br.book_id, br.rating, br.comment, br.is_anonymous
+  FROM geektext.user_book_review br, geektext.user u
+  WHERE br.book_id = '${book_id}' AND u.id = br.user_id;
   `;
 
   mysqlx.getSession(credentials)
     .then(session => session.sql(queryString).execute())
     .then(result => queryResultToJson(result))
-    .then(result => {
-      if (result.length == 0) {
-        return res.status(404).send(`Book with id ${book_id} is not found`);
-      }
-      return res.json(result);
-    })
+    .then(result => res.json(result))
     .catch((err) => {
       console.log(err);
       res.status(500).send("Server Error");

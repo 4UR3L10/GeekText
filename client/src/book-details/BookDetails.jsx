@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./BookDetails.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
@@ -6,12 +6,14 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
-import Toast from 'react-bootstrap/Toast';
 import { useParams } from "react-router-dom";
 import LoadingPage from './components/LoadingPage';
+import Overlay from 'react-bootstrap/Overlay';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Rating from './components/Rating';
 
-const textBodyStyle = { 
-    margin: "1.5rem", 
+const textBodyStyle = {
+    margin: "1.5rem",
     fontWeight: "500",
     textAlign: "left",
     fontSize: "1em"
@@ -25,14 +27,24 @@ function BookDetails(props) {
     const [hover, setHover] = useState(false);
     const [showLargeImage, setShowLargeImage] = useState(false);
     const [showCartNotif, setShowCartNotif] = useState(false);
+    const cartTarget = useRef(null);
     const [cartError, setCartError] = useState(false);
+    const [showWishlistSelect, setShowWishlistSelect] = useState(false);
+    const [wishlists, setWishlists] = useState([]);
+    const [wishlistError, setWishlistError] = useState(false);
+    const [showWishlistNotif, setShowWishlistNotif] = useState(false);
+    const wishlistTarget = useRef(null);
+    const [comments, setComments] = useState([]);
 
     useEffect(() => {
-        getBook();
+        getBook()
+            .then(() => {
+                getComments()
+            })
     }, []);
 
     function getBook() {
-        fetch(`http://localhost:4000/api/books/${bookId}`)
+        return fetch(`http://localhost:4000/api/books/${bookId}`)
             .then((response) => {
                 return response.json();
             })
@@ -41,6 +53,40 @@ function BookDetails(props) {
             })
             .catch((err) => console.log(err));
     };
+
+    function getWishlists() {
+        return fetch(`http://localhost:4000/api/wishlists/user/${userId}`)
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json);
+                setWishlists(json);
+            })
+    }
+
+    function addToWishlist(wishlist_id) {
+        return fetch(`http://localhost:4000/api/wishlists/list/${wishlist_id}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                wishlist_id: wishlist_id,
+                book_id: bookId,
+            })
+        })
+    }
+
+    function getComments() {
+        fetch(`http://localhost:4000/api/books/${bookId}/reviews`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                setComments(response);
+            })
+            .catch((err) => console.log(err));
+    }
 
     function handleBookClick() {
         setShowLargeImage(true);
@@ -63,11 +109,56 @@ function BookDetails(props) {
             .then(response => {
                 setCartError(!response.ok)
                 setShowCartNotif(true);
+                setTimeout(() => { setShowCartNotif(false) }, 3000)
             })
             .catch((err) => {
                 console.log(err);
             })
 
+    }
+
+    function handleWishlistModalClick() {
+        //show wishlist modal
+        getWishlists()
+            .then(() => {
+                setShowWishlistSelect(true);
+            })
+    }
+
+    function handleWishlistClick(index) {
+        addToWishlist(wishlists[index].id)
+            .then((response) => {
+                setShowWishlistSelect(false)
+                setWishlistError(!response.ok);
+                setShowWishlistNotif(true);
+                setTimeout(() => { setShowWishlistNotif(false) }, 3000)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    function WishlistSelect() {
+        return (
+            <Modal show={showWishlistSelect}
+                onHide={() => setShowWishlistSelect(false)}
+            >
+                <Modal.Header closeButton >
+                    <Modal.Title>Select a Wishlist</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {wishlists.length === 0 ? <>You have no wishlists</> :
+                        <ListGroup>
+                            {wishlists.map((list, index) =>
+                                <ListGroup.Item key={index} action
+                                    onClick={() => { handleWishlistClick(index) }}>
+                                    {list.wishlist_name}
+                                </ListGroup.Item>
+                            )}
+                        </ListGroup>
+                    }
+
+                </Modal.Body>
+            </Modal>
+        );
     }
 
 
@@ -104,21 +195,68 @@ function BookDetails(props) {
 
     function ShoppingCartNotificaiton() {
         return (
-            <Toast style={{
-                position: 'absolute',
-                top: "80%",
-                right: "0%",
-                width: "270px"
-            }}
-                onClose={() => setShowCartNotif(false)}
-                show={showCartNotif}
-                delay={3000} autohide>
-                <Toast.Body style={{ textAlign: "center" }}>
-                    {cartError ?
-                        "Book already in cart."
-                        : "Successfully added book to cart."}
-                </Toast.Body>
-            </Toast>
+            <Overlay target={cartTarget.current} show={showCartNotif} placement="top">
+                {(props) => (
+                    <div
+                        {...props}
+                        style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.50)',
+                            padding: '10px 10px',
+                            color: 'black',
+                            borderRadius: 3,
+                            ...props.style,
+                        }}
+                    >
+                        {cartError ?
+                            "Book already in cart."
+                            : "Successfully added book to cart."}
+                    </div>
+                )}
+            </Overlay>
+        );
+    }
+
+    function WishlistNotificaiton() {
+        return (
+            <Overlay target={wishlistTarget.current} show={showWishlistNotif} placement="top">
+                {(props) => (
+                    <div
+                        {...props}
+                        style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.50)',
+                            padding: '10px 10px',
+                            color: 'black',
+                            borderRadius: 3,
+                            ...props.style,
+                        }}
+                    >
+                        {wishlistError ?
+                            "Book already in wishlist."
+                            : "Successfully added book to wishlist."}
+                    </div>
+                )}
+            </Overlay>
+        );
+    }
+
+    function Comment(props) {
+        const { comment } = props;
+        return (
+            <ListGroup.Item style={{ marginTop: "10px" }}>
+                <Row>
+                    <Col>
+                        <h2 className="gt-bd-title" style={{ fontSize: "1.3rem" }}>
+                            {comment.is_anonymous ? 'Anonymous' : comment.nickname}
+                        </h2>
+                    </Col>
+                    <Col xs={9}>
+                        <Rating rating={comment.rating} style={{ marginBottom: "20px" }} />
+                        <div style={{ marginBottom: "10px" }}>
+                            {comment.comment}
+                        </div>
+                    </Col>
+                </Row>
+            </ListGroup.Item>
         );
     }
 
@@ -134,39 +272,38 @@ function BookDetails(props) {
                         </Col>
                         <Col>
                             <h1 className="gt-bd-title">{book.book_title}</h1>
-                            <h6>by <a href={`http://localhost:3000/author/${book.author_id}`} >
+                            <h6>by <a href={`/author/${book.author_id}`} >
                                 {book.author_name}
-                                </a> </h6>
+                            </a> </h6>
                             <h6 style={{ color: "gray" }}> {book.publisher_name}, {book.published_date.substring(0, 10)}, {book.genre}</h6>
-                            <h6><u>Rating:</u> {book.avg_rating}</h6>
+                            <Rating rating={book.avg_rating} />
                             <hr class="gt-bd-hr" />
+                            <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
+                                <b>Price</b>
+                            </h6>
                             <Row>
-                                <Col xs={2}>
+                                <Col xs={3} md="auto">
                                     <div>
-                                        <h6 style={{ fontWeight: "500", marginBottom: "0rem", fontFamily: "Lato,sans-serif" }}>
-                                            <b>Price</b>
-                                        </h6>
-                                        <span class="gt-bd-price-span" style={{ fontSize: "2rem", marginBottom: "2rem" }}>
+                                        <span className="gt-bd-price-span" style={{ fontSize: "2rem", marginBottom: "2rem" }}>
                                             <sup>$</sup>
-                                            {book.price}
+                                            {book.price.toFixed(2)}
                                         </span>
                                     </div>
                                 </Col>
-                                <Col>
-                                    <div>
-                                        <Button onClick={handleAddShoppingCart}
-                                            style={{
-                                                position: "absolute",
-                                                top: "50%",
-                                                transform: "translateY(-50%)",
-                                                msTransform: "translateY(-50%)"
-                                            }}>
-                                            Add to Cart
-                                        </Button>
-                                    </div>
+                                <Col xs={4} style={{ paddingLeft: '0' }} md="auto">
+                                    <Button ref={cartTarget} onClick={handleAddShoppingCart}>
+                                        Add to Cart
+                                    </Button>
                                     <ShoppingCartNotificaiton />
                                 </Col>
-                                <Col xs={5} />
+                                <Col xs={4} style={{ paddingLeft: '0' }} md="auto">
+                                    <Button ref={wishlistTarget} variant="outline-primary"
+                                        onClick={handleWishlistModalClick}>
+                                        Add to Wishlist
+                                    </Button>
+                                    <WishlistNotificaiton />
+                                </Col>
+                                <Col xs={1} />
 
                             </Row>
 
@@ -184,14 +321,36 @@ function BookDetails(props) {
                                 About the Author
                             </h2>
                             <div style={{ marginTop: "0rem", borderStyle: "solid", borderColor: "lightgray" }}>
-                                <p style={textBodyStyle} 
-                                dangerouslySetInnerHTML={{
-                                    __html: book.author_bio
-                                }} />
+                                <p style={textBodyStyle}
+                                    dangerouslySetInnerHTML={{
+                                        __html: book.author_bio
+                                    }} />
                             </div>
                         </div>
                     </Row>
+                    <div>
+                        <h2 className="gt-bd-title" style={{ fontSize: "1.5rem", textAlign: "center", marginBottom: "20px" }}>
+                            <Row>
+                                <Col><hr></hr></Col>
+                                <Col md="auto">Comments Review</Col>
+                                <Col><hr></hr></Col>
+                            </Row>
+                        </h2>
+                        <div style={{ marginBottom: "20px" }}>
+                            {comments.length == 0 ?
+                                <h3 className="gt-bd-title" style={{ textAlign: "center", fontSize: "1.2rem" }}>
+                                    No Comments
+                            </h3> :
+                                <ListGroup variant="flush" >
+                                    {comments.map((comment, idx) =>
+                                        <Comment key={idx} comment={comment} />
+                                    )}
+                                </ListGroup>
+                            }
+                        </div>
+                    </div>
                     <LargeBookImage />
+                    <WishlistSelect />
                 </Container>
             }
 
