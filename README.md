@@ -23,3 +23,13 @@ If FrontEnd or BackEnd is not working run in the appopiate directory
 /client 
 /backend
 ```npm install```
+
+## Requirements To Run The User Login:
+
+Client:
+* npm Install Axios
+* npm install jsonwebtoken
+* npm install jwt-decode
+
+Backend:
+* npm install mysql2

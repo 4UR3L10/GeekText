@@ -151,20 +151,15 @@ router.get("/:id/reviews", (req, res) => {
   }
 
   const queryString = `
-  SELECT *
-  FROM geektext.user_book_review
-  WHERE book_id = '${book_id}';
+  SELECT br.user_id, u.nickname, br.book_id, br.rating, br.comment, br.is_anonymous
+  FROM geektext.user_book_review br, geektext.user u
+  WHERE br.book_id = '${book_id}' AND u.id = br.user_id;
   `;
 
   mysqlx.getSession(credentials)
     .then(session => session.sql(queryString).execute())
     .then(result => queryResultToJson(result))
-    .then(result => {
-      if (result.length == 0) {
-        return res.status(404).send(`Book with id ${book_id} is not found`);
-      }
-      return res.json(result);
-    })
+    .then(result => res.json(result))
     .catch((err) => {
       console.log(err);
       res.status(500).send("Server Error");

@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
-// import "./signin.css";
-// import Axios from "axios";
+import "./signin.css";
+import Axios from "axios";
+import jwt_decode from "jwt-decode";
 
 // Boostrap.
 import "bootstrap/dist/css/bootstrap.min.css"; // Necessary For ReactBootsrap.
@@ -16,12 +17,58 @@ import Container from "react-bootstrap/Container"; // Container ReactBootsrap.
 import Alert from "react-bootstrap/Alert";
 // Alert ReactBootsrap.
 
+const jwt = require("jsonwebtoken");
+
 function SignIn() {
+    const [EmailAddressReg, setEmailAddressReg] = useState("");
+    const [PasswordReg, setPasswordReg] = useState("");
+
+    const token = jwt.sign({
+        EmailAddressReg
+    }, "mysupersecretpassword", {expiresIn: "7d"});
+
+    // Login User Arrow Function.
+    const login = () => {
+        try {
+            signInUser();
+            StoreToken();
+            DecodeToken();
+            window.location.href = "http://localhost:3000/mngaccount";
+        } catch (e) { // PopUp.
+            alert(e);
+        }
+    };
+
+    // Function to Post to login a user.
+    const signInUser = () => {
+        Axios.post("http://localhost:4000/api/signin/user", {
+            EmailAddress: EmailAddressReg,
+            Password: PasswordReg
+        }).then((response) => {
+            console.log(response);
+        });
+    };
+
+    const StoreToken = () => {
+        console.log("The token is " + token);
+
+        window.localStorage.setItem("Token", token);
+        // window.localStorage.setItem("Email", EmailAddressReg);
+    };
+
+    const DecodeToken = () => {
+        var decoded = jwt_decode(localStorage.getItem("Token"));
+
+        console.log(decoded);
+
+        console.log("BEST: " + decoded.EmailAddressReg);
+    };
 
     return (
-        <div className="App">
 
-            {/* TextHeader.*/}
+
+        <div className="Signin">
+            <br/> {/* TextHeader.*/}
             <div className="Mainheader">
                 <Container>
                     <h1>Sign in or Create an Account</h1>
@@ -44,7 +91,8 @@ function SignIn() {
                             </InputGroup.Prepend>
                             <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"
                                 onChange={
-                                    (e) => { /*setEmailAddressReg(e.target.value);*/
+                                    (e) => {
+                                        setEmailAddressReg(e.target.value);
                                     }
                                 }/>
                         </InputGroup>
@@ -58,7 +106,8 @@ function SignIn() {
                         </InputGroup.Prepend>
                         <FormControl type="password" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
                             onChange={
-                                (e) => { /* setPasswordReg(e.target.value);*/
+                                (e) => {
+                                    setPasswordReg(e.target.value);
                                 }
                             }/>
                     </InputGroup>
@@ -67,14 +116,14 @@ function SignIn() {
             {/* Buttons.*/}
             <div>
                 <Button variant="primary"
-                    /*onClick={login}*/
-                >
+                    onClick={login}>
                     Sign In
                 </Button>
+                {" "}
                 <Button variant="secondary" href="/">
                     Cancel
                 </Button>
-            </div>
+                {" "} </div>
         </div>
     </div>
 </div>
