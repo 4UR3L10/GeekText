@@ -30,37 +30,37 @@ function SignIn() {
     // Login User Arrow Function.
     const login = () => {
         try {
-            signInUser();
-            StoreToken();
-            DecodeToken();
-            window.location.href = "http://localhost:3000/mngaccount";
+            signInUser().then(() => {
+                StoreToken();
+                DecodeToken();
+            });
+            // window.location.href = "http://localhost:3000/mngaccount";
         } catch (e) { // PopUp.
             alert(e);
         }
+
     };
 
     // Function to Post to login a user.
     const signInUser = () => {
-        Axios.post("http://localhost:4000/api/signin/user", {
+        return Axios.post("http://localhost:4000/api/signin/user", {
             EmailAddress: EmailAddressReg,
             Password: PasswordReg
         }).then((response) => {
-            console.log(response);
-        });
+            window.localStorage.setItem("UserID", response.data[0].id);
+            window.location.href = "http://localhost:3000/mngaccount";
+        })
     };
 
     const StoreToken = () => {
         console.log("The token is " + token);
-
         window.localStorage.setItem("Token", token);
         // window.localStorage.setItem("Email", EmailAddressReg);
     };
 
     const DecodeToken = () => {
         var decoded = jwt_decode(localStorage.getItem("Token"));
-
         console.log(decoded);
-
         console.log("BEST: " + decoded.EmailAddressReg);
     };
 
@@ -70,8 +70,9 @@ function SignIn() {
         <div className="Signin">
             <br/> {/* TextHeader.*/}
             <div className="Mainheader">
+
+                <h1>Sign in or Create an Account</h1>
                 <Container>
-                    <h1>Sign in or Create an Account</h1>
                     <p>
                         Don't have an account?{" "}
                         <Alert.Link href="/signup">Create an Account</Alert.Link>.

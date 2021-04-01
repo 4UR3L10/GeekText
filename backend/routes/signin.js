@@ -19,13 +19,16 @@ router.post("/user", (req, res) => {
     const Password = req.body.Password;
 
     if (Password && EmailAddress) {
-        db.query(`SELECT email, password FROM user WHERE email = '${EmailAddress}' AND password = '${Password}'`, (error, results) => {
+        db.query(`SELECT email, id, password FROM user WHERE email = '${EmailAddress}' AND password = '${Password}'`, (error, results) => {
             console.log("testing the valueP: " + results);
 
             if (results == "") {
                 console.log("No results");
+                return res.status(404).send("user not found");
             } else {
                 console.log("results: " + results[0].email);
+                console.log("results: " + results[0].id);
+                return res.json(results);
             }
         });
 

@@ -18,7 +18,6 @@ import Alert from "react-bootstrap/Alert"; // Alert ReactBootsrap.
 import Form from "react-bootstrap/Form"; // Form ReactBootsrap.
 
 function ManageSettings() {
-    const [UserFullNameReg, setUserFullNameReg] = useState("");
     const [UserFirstNameReg, setUserFirstNameReg] = useState("");
     const [UserLastNameReg, setUserLastNameReg] = useState("");
     const [EmailAddressReg, setEmailAddressReg] = useState("");
@@ -37,8 +36,9 @@ function ManageSettings() {
 
     // Function Update Name.
     const updateName = () => { // Update Fullname.
-        Axios.put("http://localhost:3001/mngsettings/fullname", {
-            UserFullName: UserFullNameReg,
+        Axios.put("http://localhost:4000/api/mngsettings/fullname", {
+            UserFirstName: UserFirstNameReg,
+            UserLastName: UserLastNameReg,
             IdEmail: decoded.EmailAddressReg
         }).then((response) => {
             console.log(response);
@@ -71,7 +71,7 @@ function ManageSettings() {
 
     // Function Update Email.
     const updateEmail = () => { // Update Fullname.
-        Axios.put("http://localhost:3001/mngsettings/email", {
+        Axios.put("http://localhost:4000/api/mngsettings/email", {
             EmailAddress: EmailAddressReg,
             IdEmail: decoded.EmailAddressReg
         }).then((response) => {
@@ -83,7 +83,7 @@ function ManageSettings() {
 
     // Function Update Nickname.
     const updateNickname = () => { // Update NickName.
-        Axios.put("http://localhost:3001/mngsettings/nickname", {
+        Axios.put("http://localhost:4000/api/mngsettings/nickname", {
             NickName: NickNameReg,
             IdEmail: decoded.EmailAddressReg
         }).then((response) => {
@@ -170,9 +170,11 @@ function ManageSettings() {
         const saltRounds = 10;
         let passwordTemp = PasswordReg;
 
+        checkPassword();
+
         bcrypt.genSalt(saltRounds, function (err, salt) {
             bcrypt.hash(passwordTemp, salt, null, function (err, hash) { // Store hash in your password DB.
-                Axios.put("http://localhost:3001/mngsettings/password", {
+                Axios.put("http://localhost:4000/api/mngsettings/password", {
                     Password: hash,
                     IdEmail: decoded.EmailAddressReg
                 }).then((response) => {
@@ -180,7 +182,7 @@ function ManageSettings() {
                 });
 
                 // Refresh.
-                // window.location.reload();
+                window.location.reload();
             });
         });
     };
@@ -444,7 +446,7 @@ function ManageSettings() {
                             <Alert.Link href="/signup">SignUp
                             </Alert.Link>
                             to create a
-                                                                                                                                                                                                                  GeekText account. If you already have an account, please.{" "}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      GeekText account. If you already have an account, please.{" "}
                             <Alert.Link href="/signin">Sign In</Alert.Link>.
                         </p>
                     </Container>
