@@ -25,6 +25,7 @@ import PaginaPrincipal from "./shopping-cart/src/components/PaginaPrincipal";
 function App() { // Function Remove the Token or Sign Out.
     const signout = () => {
         window.localStorage.removeItem("Token");
+        window.localStorage.removeItem("UserID");
         window.location.href = "http://localhost:3000/signin";
     };
 
@@ -60,9 +61,6 @@ function App() { // Function Remove the Token or Sign Out.
                         <NavDropdown.Item href="/signin">Sign In</NavDropdown.Item>
                         <NavDropdown.Divider/>
                         <NavDropdown.Item href="/mngaccount">Profile</NavDropdown.Item>
-                        <NavDropdown.Item href="/mngsettings">Settings</NavDropdown.Item>
-                        <NavDropdown.Item href="/mngshipaddress">Shipping Address</NavDropdown.Item>
-                        <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
                         <NavDropdown.Divider/>
                         <NavDropdown.Item onClick={signout}>SignOut</NavDropdown.Item>
                     </NavDropdown>
