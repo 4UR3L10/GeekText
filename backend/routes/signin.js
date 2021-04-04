@@ -18,15 +18,16 @@ router.post("/user", (req, res) => {
 
   if (Password && EmailAddress) {
     db.query(
-      `SELECT EmailAddress, Password FROM user WHERE EmailAddress = '${EmailAddress}' AND Password = '${Password}'`,
+      `SELECT EmailAddress, Password, UserID FROM user WHERE EmailAddress = '${EmailAddress}' AND Password = '${Password}'`,
       (error, results) => {
         console.log("testing the valueP: " + results);
 
         if (results == "") {
           console.log("No results");
-          res.status(404).send({ msg: "Wrong Credentials" });
+          return res.status(404).send({ msg: "User Nto found" });
         } else {
           console.log("results: " + results[0].Password);
+          return res.json(results);
         }
       }
     );

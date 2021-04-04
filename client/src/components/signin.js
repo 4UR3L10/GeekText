@@ -31,10 +31,11 @@ function SignIn() {
   // Login User Arrow Function.
   const login = () => {
     try {
-      signInUser();
-      StoreToken();
-      DecodeToken();
-      window.location.href = "http://localhost:3000/mngaccount";
+      signInUser().then(() => {
+        StoreToken();
+        DecodeToken();
+        //window.location.href = "http://localhost:3000/mngaccount";
+      });
     } catch (e) {
       // PopUp.
       alert(e);
@@ -42,18 +43,14 @@ function SignIn() {
   };
 
   const signInUser = () => {
-    Axios.post("http://localhost:3001/signin/user", {
+    return Axios.post("http://localhost:3001/signin/user", {
       EmailAddress: EmailAddressReg,
       Password: PasswordReg,
-    })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        // what now?
-        console.log(err);
-        alert("Wrong Username or Password");
-      });
+    }).then((response) => {
+      console.log(response);
+      console.log(response.status);
+      console.log(response.data[0].UserId);
+    });
   };
 
   const StoreToken = () => {
