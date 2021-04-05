@@ -265,8 +265,7 @@ function BookDetails(props) {
     return (
         <Container style={{ width: "100%" }}>
 
-            <FakeNavBar />
-            <Write bookId={bookId} userId={userId}/>
+            <FakeNavBar />      
             {!book ? <LoadingPage /> :
                 <Container style={{ maxWidth: "1024px", margin: "auto" }}>
                     <Row>
@@ -339,6 +338,9 @@ function BookDetails(props) {
                                 <Col><hr></hr></Col>
                             </Row>
                         </h2>
+                        <div style={{ width: "100%", textAlign: "center"}}>
+                            <Write bookId={bookId} userId={userId}/>
+                        </div>
                         <div style={{ marginBottom: "20px" }}>
                             {comments.length == 0 ?
                                 <h3 className="gt-bd-title" style={{ textAlign: "center", fontSize: "1.2rem" }}>
