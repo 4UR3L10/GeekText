@@ -339,7 +339,7 @@ function BookDetails(props) {
                             </Row>
                         </h2>
                         <div style={{ width: "100%", textAlign: "center"}}>
-                            <Write bookId={bookId} userId={userId}/>
+                            <Write bookId={bookId} userId={userId} onSubmit={() => {getBook().then(getComments)}}/>
                         </div>
                         <div style={{ marginBottom: "20px" }}>
                             {comments.length == 0 ?
