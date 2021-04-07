@@ -24,15 +24,7 @@ function NewPayment() {
     const [CrdtHldrNameReg, setCrdtHldrNameReg] = useState("");
     const [ExpMonthReg, setExpMonthReg] = useState("");
     const [ExpYearReg, setExpYearReg] = useState("");
-
-    const [BillFirstNameReg, setBillFirstNameReg] = useState("");
-    const [BillLastNameReg, setBillLastNameReg] = useState("");
-    const [BillAddressReg, setBillAddressReg] = useState("");
-    const [BillAddress2Reg, setBillAddress2Reg] = useState("");
-    const [BillCityReg, setBillCityReg] = useState("");
-    const [BillStateReg, setBillStateReg] = useState("");
-    const [BillZipCodeReg, setBillZipCodeReg] = useState("");
-    const [BillCountryReg, setBillCountryReg] = useState("");
+    const [SecurityCodeReg, setSecurityCodeReg] = useState("");
 
     // Function Insert Shipping Address.
     const insertPaymentMethod = () => {
@@ -44,21 +36,13 @@ function NewPayment() {
             return;
         }
 
-        Axios.post("http://localhost:3001/payment/newpayment", {
+        Axios.post("http://localhost:4000/api/payment/newpayment", {
             CardType: CardTypeReg,
             CardNumber: CardNumberReg,
             CrdtHldrName: CrdtHldrNameReg,
             ExpMonth: ExpMonthReg,
             ExpYear: ExpYearReg,
-
-            BillFirstName: BillFirstNameReg,
-            BillLastName: BillLastNameReg,
-            BillAddress: BillAddressReg,
-            BillAddress2: BillAddress2Reg,
-            BillCity: BillCityReg,
-            BillState: BillStateReg,
-            BillZipCode: BillZipCodeReg,
-            BillCountry: BillCountryReg,
+            SecurityCode: SecurityCodeReg,
             IdEmail: decoded.EmailAddressReg
         }).then((response) => {
             console.log(response);
@@ -120,10 +104,10 @@ function NewPayment() {
                     <Container>
                         <p>
                             The payment method you select will be used as your default for
-                                          future payments. By setting up a default payment you will be able
-                                          to automatically purchase NOOK content. Any gift cards in your
-                                          account will be applied first. Gift cards do not apply to
-                                          subscriptions or purchases/extensions of current Textbook rentals.
+                                                                                                  future payments. By setting up a default payment you will be able
+                                                                                                  to automatically purchase NOOK content. Any gift cards in your
+                                                                                                  account will be applied first. Gift cards do not apply to
+                                                                                                  subscriptions or purchases/extensions of current Textbook rentals.
                         </p>
                     </Container>
                 </div>
@@ -201,82 +185,24 @@ function NewPayment() {
                     setExpYearReg(e.target.value);
                 }
             }/>
-    </InputGroup></label>{/* BillHeader.*/}<div className="billingheader">
-<Container>
-    <h1>Add a New Billing Address</h1>
-</Container></div><div className="Billing">
-    {/* Billing.*/}
-
-<label> {/* Country.*/}
-    <InputGroup size="sm" className="mb-3">
-        <InputGroup.Prepend>
-            <InputGroup.Text id="inputGroup-sizing-sm">
-                Country
-            </InputGroup.Text>
-        </InputGroup.Prepend>
-        <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"
-            onChange={
-                (e) => {
-                    setBillCountryReg(e.target.value);
-                }
-            }/>
     </InputGroup>
 
-{/* FirstName.*/}
+
+{/* Security Code.*/}
 <InputGroup size="sm" className="mb-3">
     <InputGroup.Prepend>
         <InputGroup.Text id="inputGroup-sizing-sm">
-            FirstName
+            Security Code
         </InputGroup.Text>
     </InputGroup.Prepend>
     <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"
         onChange={
             (e) => {
-                setBillFirstNameReg(e.target.value);
+                setSecurityCodeReg(e.target.value);
             }
         }/>
-</InputGroup>{/* LastName.*/}<InputGroup size="sm" className="mb-3">
-<InputGroup.Prepend>
-    <InputGroup.Text id="inputGroup-sizing-sm">
-        LastName
-    </InputGroup.Text>
-</InputGroup.Prepend>
-<FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"
-    onChange={
-        (e) => {
-            setBillLastNameReg(e.target.value);
-        }
-    }/></InputGroup>{/* Address.*/}<InputGroup size="sm" className="mb-3"><InputGroup.Prepend>
-<InputGroup.Text id="inputGroup-sizing-sm">
-    Address
-</InputGroup.Text></InputGroup.Prepend><FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"
-    onChange={
-        (e) => {
-            setBillAddressReg(e.target.value);
-        }
-    }/></InputGroup>{/* Address Aditional.*/}<InputGroup size="sm" className="mb-3"><InputGroup.Prepend><InputGroup.Text id="inputGroup-sizing-sm">
-Address Aditional</InputGroup.Text></InputGroup.Prepend><FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"
-    onChange={
-        (e) => {
-            setBillAddress2Reg(e.target.value);
-        }
-    }/></InputGroup>{/* City.*/}<InputGroup size="sm" className="mb-3"><InputGroup.Prepend><InputGroup.Text id="inputGroup-sizing-sm">City</InputGroup.Text></InputGroup.Prepend><FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"
-    onChange={
-        (e) => {
-            setBillCityReg(e.target.value);
-        }
-    }/></InputGroup>{/* State.*/}<InputGroup size="sm" className="mb-3"><InputGroup.Prepend><InputGroup.Text id="inputGroup-sizing-sm">State</InputGroup.Text></InputGroup.Prepend><FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"
-    onChange={
-        (e) => {
-            setBillStateReg(e.target.value);
-        }
-    }/></InputGroup>{/* Zip Code.*/}<InputGroup size="sm" className="mb-3"><InputGroup.Prepend><InputGroup.Text id="inputGroup-sizing-sm">Zip Code</InputGroup.Text></InputGroup.Prepend><FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"
-    onChange={
-        (e) => {
-            setBillZipCodeReg(e.target.value);
-        }
-    }/></InputGroup></label>{/* Buttons.*/}<div><Button variant="primary"
-    onClick={insertPaymentMethod}>Save</Button>{" "}<Button variant="secondary" href="/mngpayment">Cancel</Button>{" "} </div><br/></div> </div>
+</InputGroup></label>{/* Buttons.*/}<div><Button variant="primary"
+    onClick={insertPaymentMethod}>Save</Button>{" "}<Button variant="secondary" href="/mngpayment">Cancel</Button>{" "} </div><br/></div>
         );
     } else {
         return (
@@ -291,7 +217,7 @@ Address Aditional</InputGroup.Text></InputGroup.Prepend><FormControl aria-label=
                             <Alert.Link href="/signup">SignUp
                             </Alert.Link>
                             to create a
-                                          GeekText account. If you already have an account, please.{" "}
+                                                                                                  GeekText account. If you already have an account, please.{" "}
                             <Alert.Link href="/signin">Sign In</Alert.Link>.
                         </p>
                     </Container>

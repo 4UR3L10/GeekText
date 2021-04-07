@@ -1,0 +1,388 @@
+
+
+
+  .removeButton {
+    color: rgb(0, 0, 0);
+    background-color: rgb(228, 235, 245);
+    padding: 15px 22px;
+    font-size: 20px;
+    border: 3px solid rgb(228, 235, 245);
+    border-radius: 0px 15px 15px 0px;
+    font-weight: bold;
+    font-family: Arial;
+  }
+
+  .removeButton:hover
+  {
+    background: rgb(255, 255, 255);
+    transition-duration: 0.4s;
+    border: 3px solid rgb(230, 118, 118);
+  }
+
+  .removeButton:focus
+  {
+    outline: none;
+  }
+
+
+  .navbar {
+    display: flex;
+    justify-content: space-around;
+    background: rgb(3, 23, 43);
+    color: white;
+    align-items: center;
+
+  }
+
+
+  .edit-button{
+    color: rgb(255, 255, 255);
+    background-color: rgb(11, 40, 70);
+    font-family: Arial;
+    font-weight: bold;
+    border: 2px solid rgb(11, 40, 70);;
+    border-radius: 5px;
+    float:left;
+  }
+
+  .edit-button:hover
+  {
+    transition-duration: 0.5s;
+    color:rgb(11, 40, 70);
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(11, 40, 70);
+  }
+
+  .edit-text
+  {
+    border: 2px solid rgb(11, 40, 70);
+    float: left;
+    border-radius: 10px;
+    font-weight: bold;
+    width: 77%;
+  }
+
+  .edit-text:focus
+  {
+    outline: none;
+  }
+
+  .navlist{
+    color:white;
+    text-decoration: none;
+    border-bottom: solid;
+    border-color: rgb(3, 23, 43);
+    padding-right: 0px;
+  }
+
+  .navlist:hover{
+    color:rgb(100, 110, 250);
+    text-decoration: none;
+    border-bottom: solid;
+  }
+
+
+
+  .sub-navbar{
+    display: flex;
+    justify-content:center;
+    background: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    align-items: center;
+    padding: 10px 20px;
+    margin-left: 20px;
+  }
+
+  .wishlist-button {
+    color: rgb(255, 255, 255);
+    background-color: rgb(11, 40, 70);
+    font-size: 25px;
+    font-family: Arial;
+    font-weight: bold;
+    padding: 18px 58px;
+    border: 2px solid rgb(11, 40, 70);;
+    border-radius: 5px;
+    display: block;
+    margin-left: 20px;
+    margin-right: 20px;
+    
+  }
+
+  .wishlist-button:hover {
+    transition-duration: 0.5s;
+    color:rgb(11, 40, 70);
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(11, 40, 70);
+  }
+
+
+  .text {
+    color: rgb(114, 110, 110);
+    background: rgb(255, 255, 255);
+    padding: 15px 10px;
+    font-size: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
+    font-weight: bold;
+    justify-content: center;
+  }   
+
+  .text:focus
+  {
+    outline: none;
+  }
+
+  .addButton {
+    color: rgb(0, 0, 0);
+    background-color: rgb(228, 235, 245);
+    padding: 15px 20px;
+    font-size: 20px;
+    border: 3px solid rgb(228, 235, 245);
+    border-radius: 15px 15px 15px 15px;
+    font-weight: bold;
+  }
+
+  .addButton:focus
+  {
+    outline:none;
+  }
+
+  .addButton:hover{
+    background: rgb(255, 255, 255);
+    transition-duration: 0.4s;
+    border: 3px solid rgb(150, 238, 150);
+  }
+
+  .list{
+    display: flex;
+    align-items: center;
+    color: black;
+    background-color: rgb(255, 255, 255);
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-top: 0.5%;
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-bottom: 0.5%;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.514);
+  }
+
+  .list:hover{
+    background-color: rgb(5, 25, 53);
+    color: rgb(255, 255, 255);
+    transition-duration: 0.3s;
+    transform: scale(1.05);
+  }
+
+
+  .listdescription{
+    text-overflow: ellipsis;
+    max-width: 50%;
+  }
+  
+
+  .title{
+    font: 30px Arial;
+    font-weight: bold;
+    margin-top: -0.05%;
+    margin-left: 25px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .author{
+    font: 25px Arial;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+  }
+
+  .price{
+    font: 20px Arial;
+    margin-top: 10px;
+    margin-left: 25px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+  }
+
+  .bookimage{
+    border-radius: 10px;
+    width: 11%;
+    margin-left: 20px;
+
+  }
+
+  .listbuttons{
+    margin-left:auto;
+    margin-right: 2%;
+    position: relative;
+    
+  }
+
+  .remove {
+    color: rgb(0, 0, 0);
+    background-color: rgb(228, 235, 245);
+    padding: 10px 20px;
+    font-size: 20px;
+    border: 3px solid rgb(228, 235, 245);
+    border-radius: 1px;
+    font-weight: bold;
+    font-family: Arial;
+    display:block;
+
+  }
+
+  .remove:hover
+  {
+    background: rgb(236, 36, 86);
+    border: 3px solid rgb(236, 36, 86);
+    color:  rgb(255, 255, 255);
+    transition-duration: 0.4s;
+  }
+
+  .remove:focus
+  {
+    outline: none;
+  }
+
+  .addtoCart{
+    color: rgb(0, 0, 0);
+    background-color: rgb(228, 235, 245);
+    padding: 10px 20px;
+    font-size: 20px;
+    border: 3px solid rgb(228, 235, 245);
+    border-radius: 1px;
+    font-weight: bold;
+    font-family: Arial;
+    float:left;
+    margin-right: 1%;
+  }
+
+  .addtoCart:hover
+  {
+    background: rgb(38, 128, 231);
+    border: 3px solid rgb(38, 128, 231);
+    color:white;
+    transition-duration: 0.4s;
+  }
+
+  .addtoCart:focus
+  {
+    outline: none;
+  }
+
+
+  .moveNav{
+    display:inline-flex;
+  }
+
+  .moveButton{
+    color: rgb(0, 0, 0);
+    background-color: rgb(228, 235, 245);
+    padding: 10px 22px;
+    font-size: 20px;
+    border: 3px solid rgb(228, 235, 245);
+    font-weight: bold;
+    font-family: Arial;
+    display:left;
+    margin-top: 0px;
+    margin-bottom: 8%;
+  }
+
+  .moveButton:hover{
+    border: 3px solid rgb(80, 82, 223);
+    background: rgb(80, 82, 223);
+    color: white;
+    transition-duration: 0.4s;
+
+  }
+
+  .moveDiv{
+    text-align: center;
+  }
+
+
+
+  .modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    width: 800px;
+    max-width: 100%;
+    height: 600px;
+    max-height: 100%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    outline: none;
+    padding: 10px;
+  }
+
+  .exitButton{
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    padding: 5px 5px;
+    font-size: 20px;
+    font-family: Arial;
+    font-weight: bolder;
+    border: 3px solid rgb(255, 255, 255);
+    border-radius: 15px;
+    font-weight: bold;
+    font-family: Arial;
+    margin-left: -50%;
+  }
+
+
+  .settingtext {
+    color: rgb(114, 110, 110);
+    background: rgb(255, 255, 255);
+    padding: 15px 10px;
+    font-size: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
+    font-weight: bold;
+    justify-content: center;
+    margin-top: 1%;
+  }   
+
+  .settingtext:focus
+  {
+    outline: none;
+  }
+
+  .settingaddButton {
+    display: left;
+    color: rgb(0, 0, 0);
+    background-color: rgb(228, 235, 245);
+    padding: 15px 20px;
+    font-size: 20px;
+    border: 3px solid rgb(228, 235, 245);
+    border-radius: 15px 15px 15px 15px;
+    font-weight: bold;
+  }
+
+
+  .settingaddButton:focus
+  {
+    outline:none;
+  }
+
+  .settingaddButton:hover{
+    background: rgb(255, 255, 255);
+    transition-duration: 0.4s;
+    border: 3px solid rgb(150, 238, 150);
+  }
+
+
+  .noBook{
+    text-align: center;
+  }
+
+
+

@@ -19,12 +19,14 @@ import mngpayment from "./profile-management/mngpayment";
 import mngshipaddress from "./profile-management/mngshipaddress";
 import updateshipaddress from "./profile-management/updateshipaddress";
 import updatepayment from "./profile-management/updatepayment";
-import TopSellers from "./book-browsing/src/components/TopSellers";
+import WishlistSelect from "./wishlist-management/WishlistSelect";
+import PaginaPrincipal from "./shopping-cart/src/components/PaginaPrincipal";
 
 function App() {
   // Function Remove the Token or Sign Out.
   const signout = () => {
     window.localStorage.removeItem("Token");
+    window.localStorage.removeItem("UserID");
     window.location.href = "http://localhost:3000/signin";
   };
 
@@ -36,7 +38,7 @@ function App() {
         <Navbar.Brand href="/">GeekText</Navbar.Brand>
 
         <Nav className="mr-auto">
-          <Nav.Link href="/topsellers">Top Sellers</Nav.Link>
+          <Nav.Link href="#">Top Sellers</Nav.Link>
           <NavDropdown title="Rating" id="basic-nav-dropdown">
             <NavDropdown.Item href="/rating/1">1+ stars</NavDropdown.Item>
             <NavDropdown.Item href="/rating/2">2+ stars</NavDropdown.Item>
@@ -62,16 +64,11 @@ function App() {
             <NavDropdown.Item href="/signin">Sign In</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/mngaccount">Profile</NavDropdown.Item>
-            <NavDropdown.Item href="/mngsettings">Settings</NavDropdown.Item>
-            <NavDropdown.Item href="/mngshipaddress">
-              Shipping Address
-            </NavDropdown.Item>
-            <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={signout}>SignOut</NavDropdown.Item>
           </NavDropdown>
-          <Nav.Link href="#">Shopping Cart</Nav.Link>
-          <Nav.Link href="#">WishList</Nav.Link>
+          <Nav.Link href="/ShoppingCart">Shopping Cart</Nav.Link>
+          <Nav.Link href="/WishlistSelect">WishList</Nav.Link>
         </Nav>
       </Navbar>
       {/* ---------routing for drop down--------- */}
@@ -83,9 +80,6 @@ function App() {
             </Route>
             <Route strict path="/genre/:genre">
               <Books />
-            </Route>
-            <Route strict path="/topsellers">
-              <TopSellers />
             </Route>
             <Route strict path="/rating/:avg_rating">
               <Rating />
@@ -107,6 +101,8 @@ function App() {
             <Route path="/author/:authorId">
               <AuthorPage />
             </Route>
+            <Route exact path="/WishlistSelect" component={WishlistSelect} />
+            <Route exact path="/ShoppingCart" component={PaginaPrincipal} />
             <Route path="/">
               <Books />
             </Route>

@@ -11,6 +11,8 @@ import LoadingPage from './components/LoadingPage';
 import Overlay from 'react-bootstrap/Overlay';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Rating from './components/Rating';
+import Write from '../book-rating/Write';
+
 
 const textBodyStyle = {
     margin: "1.5rem",
@@ -263,7 +265,7 @@ function BookDetails(props) {
     return (
         <Container style={{ width: "100%" }}>
 
-            <FakeNavBar />
+            <FakeNavBar />      
             {!book ? <LoadingPage /> :
                 <Container style={{ maxWidth: "1024px", margin: "auto" }}>
                     <Row>
@@ -336,6 +338,9 @@ function BookDetails(props) {
                                 <Col><hr></hr></Col>
                             </Row>
                         </h2>
+                        <div style={{ width: "100%", textAlign: "center"}}>
+                            <Write bookId={bookId} userId={userId}/>
+                        </div>
                         <div style={{ marginBottom: "20px" }}>
                             {comments.length == 0 ?
                                 <h3 className="gt-bd-title" style={{ textAlign: "center", fontSize: "1.2rem" }}>
@@ -348,7 +353,9 @@ function BookDetails(props) {
                                 </ListGroup>
                             }
                         </div>
+                        
                     </div>
+                    
                     <LargeBookImage />
                     <WishlistSelect />
                 </Container>
@@ -366,7 +373,7 @@ function BookDetails(props) {
 function FakeNavBar() {
     return (
         <div style={{ backgroundColor: "white", height: "50px", width: "100%", marginBottom: "1.3rem" }}>
-
+            
         </div>
     );
 }

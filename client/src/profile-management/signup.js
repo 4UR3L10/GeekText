@@ -117,7 +117,7 @@ function SignUp() {
 
         bcrypt.genSalt(saltRounds, function (err, salt) {
             bcrypt.hash(passwordTemp, salt, null, function (err, hash) { // Store hash in your password DB.
-                Axios.post("http://localhost:3001/signup/user", {
+                Axios.post("http://localhost:4000/api/signup/user", {
                     UserFirstName: UserFirstNameReg,
                     UserLastName: UserLastNameReg,
                     EmailAddress: EmailAddressReg,
@@ -164,11 +164,11 @@ function SignUp() {
 
                 <br/> {/* TextHeader.*/}
                 <div className="mainheader">
+                    <h1>Create an Account</h1>
                     <Container>
-                        <h1>Create an Account</h1>
                         <p>
                             Fill in the fields below to create a GeekText account. If you
-                                                                                                                                                                                                                  already have an account, please.{" "}
+                                                                                                                                                                                                                                                                                                      already have an account, please.{" "}
                             <Alert.Link href="/signin">Sign In</Alert.Link>.
                         </p>
                     </Container>
