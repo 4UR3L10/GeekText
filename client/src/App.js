@@ -21,6 +21,7 @@ import updateshipaddress from "./profile-management/updateshipaddress";
 import updatepayment from "./profile-management/updatepayment";
 import WishlistSelect from "./wishlist-management/WishlistSelect";
 import PaginaPrincipal from "./shopping-cart/src/components/PaginaPrincipal";
+import TopSellers from "./book-browsing/src/components/TopSellers";
 
 function App() {
   // Function Remove the Token or Sign Out.
@@ -38,7 +39,7 @@ function App() {
         <Navbar.Brand href="/">GeekText</Navbar.Brand>
 
         <Nav className="mr-auto">
-          <Nav.Link href="#">Top Sellers</Nav.Link>
+          <Nav.Link href="/topsellers">Top Sellers</Nav.Link>
           <NavDropdown title="Rating" id="basic-nav-dropdown">
             <NavDropdown.Item href="/rating/1">1+ stars</NavDropdown.Item>
             <NavDropdown.Item href="/rating/2">2+ stars</NavDropdown.Item>
@@ -80,6 +81,9 @@ function App() {
             </Route>
             <Route strict path="/genre/:genre">
               <Books />
+            </Route>
+            <Route strict path="/topsellers">
+              <TopSellers />
             </Route>
             <Route strict path="/rating/:avg_rating">
               <Rating />
