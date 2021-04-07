@@ -29,9 +29,9 @@ const ListShippingAddress = () => {
   // Get all shipping addresses for a user.
   const getDataShip = async () => {
     const response = await axios.post(
-      "http://localhost:3001/shipaddress/getshipaddress",
+      "http://localhost:4000/api/shipaddress/getshipaddress",
       {
-        IdEmail: decoded.EmailAddressReg,
+        UserID: localStorage.getItem("UserID"),
       }
     );
     setEmployees(response.data.results);
@@ -40,7 +40,7 @@ const ListShippingAddress = () => {
   const removeData = async (ShipAddressID) => {
     window.location.reload();
     const response = await axios.post(
-      "http://localhost:3001/shipaddress/deleteshipaddress",
+      "http://localhost:4000/api/shipaddress/deleteshipaddress",
       {
         ShipAddressID: ShipAddressID,
       }
@@ -56,17 +56,12 @@ const ListShippingAddress = () => {
 
   const renderHeader = () => {
     let headerElement = [
-      "ShipAddressID",
-      "UserID",
-      "FirstName",
-      "LastName",
+      "AddressID",
       "Address",
-      "Address2",
       "City",
       "State",
       "ZipCode",
       "Country",
-      "DefaultAddress",
       "Update",
       "Delete",
     ];
@@ -79,53 +74,28 @@ const ListShippingAddress = () => {
   const renderBody = () => {
     return (
       employees &&
-      employees.map(
-        ({
-          ShipAddressID,
-          UserID,
-          FirstName,
-          LastName,
-          Address,
-          Address2,
-          City,
-          State,
-          ZipCode,
-          Country,
-          DefaultAddress,
-        }) => {
-          return (
-            <tr key={ShipAddressID}>
-              <td>{ShipAddressID}</td>
-              <td>{UserID}</td>
-              <td>{FirstName}</td>
-              <td>{LastName}</td>
-              <td>{Address}</td>
-              <td>{Address2}</td>
-              <td>{City}</td>
-              <td>{State}</td>
-              <td>{ZipCode}</td>
-              <td>{Country}</td>
-              <td>{DefaultAddress}</td>
-              <td className="opration">
-                <button
-                  className="buttonUpdate"
-                  onClick={() => updateData(ShipAddressID)}
-                >
-                  Update
-                </button>
-              </td>
-              <td className="opration">
-                <button
-                  className="button"
-                  onClick={() => removeData(ShipAddressID)}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          );
-        }
-      )
+      employees.map(({ id, street, city, state, zip_code, country }) => {
+        return (
+          <tr key={id}>
+            <td>{id}</td>
+            <td>{street}</td>
+            <td>{city}</td>
+            <td>{state}</td>
+            <td>{zip_code}</td>
+            <td>{country}</td>
+            <td className="opration">
+              <button className="buttonUpdate" onClick={() => updateData(id)}>
+                Update
+              </button>
+            </td>
+            <td className="opration">
+              <button className="button" onClick={() => removeData(id)}>
+                Delete
+              </button>
+            </td>
+          </tr>
+        );
+      })
     );
   };
 
@@ -176,41 +146,6 @@ const ListShippingAddress = () => {
       <div className="App">
         {/* Testing.*/}
 
-        {/* NavBar.*/}
-        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
-          <Navbar.Brand href="/">GeekText</Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="mr-auto">
-              <Nav.Link href="/signin">Sign In</Nav.Link>
-              <Nav.Link href="/signup">Sign Up</Nav.Link>
-              <NavDropdown title="Manage" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/mngaccount">Account</NavDropdown.Item>
-                <NavDropdown.Item href="/mngsettings">
-                  Settings
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="/mngshipaddress">
-                  Shipping Address
-                </NavDropdown.Item>
-                <NavDropdown.Item href="/newshipaddress">
-                  Shipping Address New
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="/mngpayment">Payment</NavDropdown.Item>
-                <NavDropdown.Item href="/newpayment">
-                  Payment New
-                </NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-            <Nav>
-              <Nav.Link href="#deets">Contact Us</Nav.Link>
-              <Nav.Link eventKey={2} href="#memes">
-                About
-              </Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
         <br />
 
         {/* TextHeader.*/}
