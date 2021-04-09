@@ -11,8 +11,6 @@ function Write({
   const [open, setOpen] = useState(false);
 
   const [review, setReview] = useState({
-    //id: "",
-    //username: "", // from who knows where
     comment: "",
     rating: "", // &#10029;
     title: "",
@@ -37,7 +35,7 @@ function Write({
 
   function handleSubmit(e) {
     e.preventDefault();
-    //onClick();
+    // onClick();
     console.log(review);
     /*
     if (review.comment.trim()) {
@@ -50,6 +48,7 @@ function Write({
       addReview({ ...review });
       setReview({ ...review, title: "" });
     }
+    inset: "100px 500px 300px 500px",
 */
 
     fetch(`http://localhost:4000/api/books/${bookId}/reviews`, {
@@ -69,7 +68,7 @@ function Write({
         return response.json();
       })
       .then((json) => {
-        console.log(json)
+        console.log(json);
       })
       .catch((err) => {
         console.log(err);
@@ -93,9 +92,16 @@ function Write({
       <Modal
         isOpen={open}
         style={{
-          overlay: { inset: "100px 500px 320px 500px", backgroundColor: "" },
+          overlay: {
+            inset: "100px 500px 300px 500px",
+            position: "fixed",
+            backgroundColor: "",
+          },
+          content: {},
         }}
+        className=""
       >
+        
         <form onSubmit={handleSubmit}>
           <h1> Write a review</h1>
           <div className="titlediv">Title:</div>
@@ -122,18 +128,14 @@ function Write({
             <div className="anondiv">
               Remain anonymous?
               <input type="radio" value="Yes" id="yes" name="anon" />
-              <label for="yes">Yes</label>
+              <label for="yes"> Yes </label>
               <input type="radio" value="No" id="no" name="anon" />
-              <label for="no">No</label>
+              <label for="no"> No </label>
             </div>
           </fieldset>
 
-          <button className="submitbutton" type="submit">
-            Submit
-          </button>
-
           <fieldset className="rating" onChange={handleRatingInputChange}>
-            <legend>Please rate:</legend>
+            <div className="pleaserate">Please rate:</div>
             <input type="radio" id="star5" name="rating" value="★★★★★" />
             <label for="star5" title="Rocks!">
               5 stars
@@ -156,6 +158,10 @@ function Write({
             </label>
           </fieldset>
         </form>
+
+        <button className="submitbutton" type="submit">
+          Submit
+        </button>
 
         <button
           className="closebutton"
