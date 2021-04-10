@@ -51,7 +51,14 @@ function BookDetails(props) {
                 return response.json();
             })
             .then((response) => {
-                setBook(response[0]);
+                let newBook = response[0];
+                newBook.description = newBook.description
+                    .replaceAll('xa0', `\xa0`)
+                    .replaceAll('x97', `\x97`);
+                newBook.author_bio = newBook.author_bio
+                    .replaceAll('xa0', `\xa0`)
+                    .replaceAll('x97', `\x97`);
+                setBook(newBook);
             })
             .catch((err) => console.log(err));
     };
