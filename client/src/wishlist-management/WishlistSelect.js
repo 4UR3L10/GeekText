@@ -34,7 +34,6 @@ export default function WishlistSelect() {
     {
         userID = localStorage.getItem("UserID");
 
-
         fetch(`http://localhost:4000/api/wishlists/user/${userID}`)
         .then((response) => response.json())
         .then((json) => {setWishlists(json)
