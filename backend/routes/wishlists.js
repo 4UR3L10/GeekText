@@ -170,6 +170,27 @@ router.delete('/list/:list/:book', function (req, res) {
 });
 
 
+//removes wishlist
+router.delete('/user/:user/:list', function (req, res) {
+
+  const list_id = req.params.list;
+  const user_id = req.params.user;
+
+  const queryString = `
+  DELETE FROM geektext.wishlist
+  WHERE id = ${list_id} AND user_id = '${user_id}';
+  `;
+
+  mysqlx.getSession(credentials)
+      .then(session => session.sql(queryString).execute())
+      .then((result) => res.status(200).send(`Deleted successfully <br> Affected Items: ${result.getAffectedItemsCount()}`))
+      .catch((err) => {
+          console.log(err)
+          return res.status(500).send(`Server Error <br> ${err.info.msg}`);
+      });
+});
+
+
 
 
 module.exports = router
