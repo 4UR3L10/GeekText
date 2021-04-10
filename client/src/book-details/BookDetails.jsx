@@ -166,7 +166,7 @@ function BookDetails(props) {
                 <Modal.Header closeButton >
                     <Modal.Title>Select a Wishlist</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body style={{padding: "5px"}}>
                     {wishlists.length === 0 ? <>You have no wishlists</> :
                         <ListGroup>
                             {wishlists.map((list, index) =>
@@ -188,7 +188,7 @@ function BookDetails(props) {
         return (
             <Modal style={modalStyle} show={showLargeImage} onHide={() => setShowLargeImage(false)}>
                 <Modal.Header closeButton />
-                <Modal.Body>
+                <Modal.Body style={{padding: "5px"}}>
                     <img src={book.cover} style={{
                         display: "block",
                         marginLeft: "auto",
