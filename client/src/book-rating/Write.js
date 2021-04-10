@@ -87,6 +87,7 @@ function Write({
         onClick={() => {
           setOpen(true);
         }}
+        
       >
         Write a Review
       </button>
@@ -105,7 +106,7 @@ function Write({
       >
         
         <form onSubmit={handleSubmit}>
-          <h1> Write a review</h1>
+          <h1 style={{textAlign:"center", fontSize:"25px"}}> Write a review</h1>
           <div className="titlediv">Title:</div>
           <textarea
             className="titleinput"
