@@ -194,6 +194,21 @@ export default function WishlistSelect() {
 
     }
 
+    function handleRemoveList(id)
+    {
+        fetch(`http://localhost:4000/api/wishlists/user/${userID}/${id}`,
+        {
+            method: 'DELETE',
+        })
+        .then((json) => {
+            getUserWish()
+        })
+        .then((json)=> {
+            displayList(0)
+        })
+
+    }
+
 
     function moveBook(moveTo, from, which)
     {
@@ -259,7 +274,7 @@ export default function WishlistSelect() {
 
             {currentId != 0 &&
             <div className = "sub-navbar">
-                <input className = "text" placeholder = 'Book' ref = {nameRef} type = "text"/>
+                <input className = "text" placeholder = 'Book ID' ref = {nameRef} type = "text"/>
                 <button className = "addButton" onClick = {() => addBook()}>+</button>
             </div>}
             {ids != null &&
@@ -283,6 +298,7 @@ export default function WishlistSelect() {
                                 <h1>Wishlist #1</h1>
                                 <input className = "wish_settingtext" placeholder = 'New Name' ref = {newName1} type = "text"/>
                                 <button className = "settingaddButton" onClick = {()=>editName(wishlists[0].id)}>confirm</button>
+                                <button className = "settingaddButton" onClick = {()=>handleRemoveList(wishlists[0].id)}>Remove</button>
                             </div>}
 
                             {wishlists.length >= 2 &&
@@ -290,6 +306,7 @@ export default function WishlistSelect() {
                                 <h1>Wishlist #2</h1>
                                 <input className = "wish_settingtext" placeholder = 'New Name' ref = {newName2} type = "text"/>
                                 <button className = "settingaddButton" onClick = {()=>editName(wishlists[1].id)}>confirm</button>
+                                <button className = "settingaddButton" onClick = {()=>handleRemoveList(wishlists[1].id)}>Remove</button>
                             </div>}
 
                             {wishlists.length >= 3 &&
@@ -297,6 +314,7 @@ export default function WishlistSelect() {
                                 <h1>Wishlist #3</h1>
                                 <input className = "wish_settingtext" placeholder = 'New Name' ref = {newName3} type = "text"/>
                                 <button className = "settingaddButton" onClick = {()=>editName(wishlists[2].id)}>confirm</button>
+                                <button className = "settingaddButton" onClick = {()=>handleRemoveList(wishlists[2].id)}>Remove</button>
                             </div>}
                         </div>
                     </div>}
