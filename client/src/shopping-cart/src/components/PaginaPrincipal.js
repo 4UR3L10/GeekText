@@ -7,7 +7,7 @@ function clickMe() {
   alert("You are about to be redirected to the Checkout");
 }
 
-const myUserId = 2;
+const myUserId = localStorage.getItem("UserID");
 
 class PaginaPrincipal extends Component {
   constructor() {
