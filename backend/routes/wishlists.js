@@ -20,6 +20,7 @@ router.get('/', function (req, res) {
 });
 
 
+//gets the all the wishlists of a specific user
 router.get('/user/:user', function (req, res) {
 
   const users_id = req.params.user;
@@ -37,43 +38,10 @@ router.get('/user/:user', function (req, res) {
 });
 
 
-router.get('/user/:user/listnames', function (req, res) {
+//gets the list of books for the wishlist where wishlist_id === list_id
+router.get('/list/:list_id', function (req, res) {
 
-  const users_id = req.params.user;
-
-  const queryString = `SELECT wishlist_name FROM geektext.wishlist
-  WHERE user_id = '${users_id}';`;
-  mysqlx.getSession(credentials)
-    .then(session => session.sql(queryString).execute())
-    .then(result => queryResultToJson(result))
-    .then(result => res.json(result))
-    .catch((err) => {
-      console.log(err)
-      res.status(500).send('Server Error')
-    });
-});
-
-
-router.get('/user/:user/listid', function (req, res) {
-
-  const users_id = req.params.user;
-
-  const queryString = `SELECT id FROM geektext.wishlist
-  WHERE user_id = '${users_id}';`;
-  mysqlx.getSession(credentials)
-    .then(session => session.sql(queryString).execute())
-    .then(result => queryResultToJson(result))
-    .then(result => res.json(result))
-    .catch((err) => {
-      console.log(err)
-      res.status(500).send('Server Error')
-    });
-});
-
-
-router.get('/list/:list', function (req, res) {
-
-  const list_id = req.params.list;
+  const list_id = req.params.list_id;
 
   const queryString = `SELECT * FROM geektext.wishlist_book WHERE wishlist_id = '${list_id}';`;
 
@@ -88,30 +56,15 @@ router.get('/list/:list', function (req, res) {
 });
 
 
-router.get('/list/:list/books', function (req, res) {
-
-  const list_id = req.params.list;
-
-  const queryString = `SELECT book_id FROM geektext.wishlist_book WHERE wishlist_id = '${list_id}';`;
-
-  mysqlx.getSession(credentials)
-    .then(session => session.sql(queryString).execute())
-    .then(result => queryResultToJson(result))
-    .then(result => res.json(result))
-    .catch((err) => {
-      console.log(err)
-      res.status(500).send('Server Error')
-    });
-});
-
 
 //adds a new book to a wishlist
 router.post('/list/:list', function (req, res) {
+  const listID = req.params.list
   const { body } = req;
   const queryString = `
   INSERT INTO geektext.wishlist_book
   (wishlist_id, book_id)
-  VALUES (${body.wishlist_id}, ${body.book_id})
+  VALUES (${listID}, ${body.book_id})
   `;
 
   mysqlx.getSession(credentials) 
@@ -122,6 +75,7 @@ router.post('/list/:list', function (req, res) {
           return res.status(500).send(`Server Error <br> ${err.info.msg}`);
       });
 });
+
 
 //adds a new wishlist
 router.post('/user/:userid', function (req, res) {
@@ -162,7 +116,8 @@ router.post('/user/:userid', function (req, res) {
 });
 
 
-router.put('/user/:list', function (req, res) {
+//updates the name of the wishlist where the user_id === user_id(paramater) and id === id(of wishlist)
+router.put('/user/:user_id', function (req, res) {
 
   const { body } = req;
 
@@ -194,6 +149,7 @@ router.put('/user/:list', function (req, res) {
 });
 
 
+//deletes book in wishlist
 router.delete('/list/:list/:book', function (req, res) {
 
   const list_id = req.params.list;

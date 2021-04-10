@@ -11,12 +11,27 @@ import LoadingPage from './components/LoadingPage';
 import Overlay from 'react-bootstrap/Overlay';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Rating from './components/Rating';
+import Write from '../book-rating/Write';
+
 
 const textBodyStyle = {
     margin: "1.5rem",
     fontWeight: "500",
     textAlign: "left",
     fontSize: "1em"
+}
+
+const modalStyle = {
+    position: "fixed",
+    top: "0",
+    left: "0",
+    zIndex: "1050",
+    width: "100%",
+    height: "100%",
+    outline: "0",
+    transform: "translate(0%, 0%)",
+    padding: "0",
+    backgroundColor: "#fff0"
 }
 
 function BookDetails(props) {
@@ -49,7 +64,14 @@ function BookDetails(props) {
                 return response.json();
             })
             .then((response) => {
-                setBook(response[0]);
+                let newBook = response[0];
+                newBook.description = newBook.description
+                    .replaceAll('xa0', `\xa0`)
+                    .replaceAll('x97', `\x97`);
+                newBook.author_bio = newBook.author_bio
+                    .replaceAll('xa0', `\xa0`)
+                    .replaceAll('x97', `\x97`);
+                setBook(newBook);
             })
             .catch((err) => console.log(err));
     };
@@ -138,13 +160,13 @@ function BookDetails(props) {
 
     function WishlistSelect() {
         return (
-            <Modal show={showWishlistSelect}
+            <Modal style={modalStyle} show={showWishlistSelect}
                 onHide={() => setShowWishlistSelect(false)}
             >
                 <Modal.Header closeButton >
                     <Modal.Title>Select a Wishlist</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body style={{padding: "5px"}}>
                     {wishlists.length === 0 ? <>You have no wishlists</> :
                         <ListGroup>
                             {wishlists.map((list, index) =>
@@ -164,9 +186,9 @@ function BookDetails(props) {
 
     function LargeBookImage() {
         return (
-            <Modal show={showLargeImage} onHide={() => setShowLargeImage(false)}>
+            <Modal style={modalStyle} show={showLargeImage} onHide={() => setShowLargeImage(false)}>
                 <Modal.Header closeButton />
-                <Modal.Body>
+                <Modal.Body style={{padding: "5px"}}>
                     <img src={book.cover} style={{
                         display: "block",
                         marginLeft: "auto",
@@ -263,7 +285,7 @@ function BookDetails(props) {
     return (
         <Container style={{ width: "100%" }}>
 
-            <FakeNavBar />
+            <FakeNavBar />      
             {!book ? <LoadingPage /> :
                 <Container style={{ maxWidth: "1024px", margin: "auto" }}>
                     <Row>
@@ -336,6 +358,9 @@ function BookDetails(props) {
                                 <Col><hr></hr></Col>
                             </Row>
                         </h2>
+                        <div style={{ width: "100%", textAlign: "center"}}>
+                            <Write bookId={bookId} userId={userId} onSubmit={() => {getBook().then(getComments)}}/>
+                        </div>
                         <div style={{ marginBottom: "20px" }}>
                             {comments.length == 0 ?
                                 <h3 className="gt-bd-title" style={{ textAlign: "center", fontSize: "1.2rem" }}>
@@ -348,7 +373,9 @@ function BookDetails(props) {
                                 </ListGroup>
                             }
                         </div>
+                        
                     </div>
+                    
                     <LargeBookImage />
                     <WishlistSelect />
                 </Container>
@@ -366,7 +393,7 @@ function BookDetails(props) {
 function FakeNavBar() {
     return (
         <div style={{ backgroundColor: "white", height: "50px", width: "100%", marginBottom: "1.3rem" }}>
-
+            
         </div>
     );
 }

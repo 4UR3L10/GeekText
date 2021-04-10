@@ -1,5 +1,5 @@
 -- MySQL Workbench Synchronization
--- Generated: 2021-03-05 10:42
+-- Generated: 2021-03-31 17:38
 -- Model: New Model
 -- Version: 1.0
 -- Project: Name of the project
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `geektext`.`user` (
   `user_firstname` VARCHAR(45) NOT NULL,
   `user_lastname` VARCHAR(45) NOT NULL,
   `nickname` VARCHAR(20) NOT NULL,
-  `password` VARCHAR(32) NOT NULL,
+  `password` VARCHAR(256) NOT NULL,
   `email` VARCHAR(100) NOT NULL COMMENT 'Assuming 1 unique email per user',
   `is_email_valid` TINYINT(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
@@ -182,6 +182,7 @@ CREATE TABLE IF NOT EXISTS `geektext`.`credit_card` (
   `holder_name` VARCHAR(100) NOT NULL,
   `expire_date` CHAR(5) NOT NULL,
   `security_code` VARCHAR(5) NOT NULL,
+  `is_card_valid` TINYINT(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
