@@ -2,6 +2,11 @@
 const { Router } = require("express");
 const db = require("../db");
 const router = Router();
+const express = require("express");
+
+// middleware
+router.use(express.json());
+router.use(express.urlencoded());
 
 // Default.
 router.get("/", (req, res) => {
@@ -10,36 +15,38 @@ router.get("/", (req, res) => {
 
 // [Address] Insert User Information..
 router.post("/newshipaddress", (req, res) => {
-  const FirstName = req.body.FirstName;
-  const LastName = req.body.LastName;
   const Address = req.body.Address;
-  const Address2 = req.body.Address2;
   const City = req.body.City;
   const State = req.body.State;
   const ZipCode = req.body.ZipCode;
   const Country = req.body.Country;
-  const IdEmail = req.body.IdEmail;
+  const UserID = req.body.UserID;
 
-  if (FirstName && LastName && Address && City && State && ZipCode && Country) {
+  if (Address && City && State && ZipCode && Country && UserID) {
     try {
-      db.query(
-        `SELECT UserID FROM user WHERE EmailAddress = '${IdEmail}'`,
-        (error, results) => {
-          if (results == "") {
-            console.log("No results");
-          } else {
-            console.log("results: " + results[0].UserID);
+      db.promise()
+        .query(
+          `INSERT INTO address VALUES('${0}','${Address}','${City}','${State}','${ZipCode}','${Country}')`
+        )
+        .then((response) => {
+          db.query(
+            `SELECT id FROM address WHERE street = '${Address}'`,
+            (error, results) => {
+              if (results == "") {
+                console.log("No results");
+              } else {
+                console.log("results: " + results[0].id);
 
-            db.promise().query(
-              `INSERT INTO shipping_address VALUES('${0}','${
-                results[0].UserID
-              }','${FirstName}','${LastName}','${Address}','${Address2}','${City}','${State}','${ZipCode}','${Country}','N')`
-            );
-            console.log("User Shipping Address Inserted");
-            res.status(201).send({ msg: "Shipping Address Inserted" });
-          }
-        }
-      );
+                db.promise().query(
+                  `INSERT INTO user_shipping_address VALUES('${results[0].id}','${UserID}')`
+                );
+              }
+            }
+          );
+        });
+
+      console.log("User Shipping Address Inserted");
+      //res.status(201).send({ msg: "Shipping Address Inserted" });
     } catch (err) {
       console.log(err);
     }
@@ -48,25 +55,16 @@ router.post("/newshipaddress", (req, res) => {
 
 // [Address] Get Information.
 router.post("/getshipaddress", (req, res) => {
-  const IdEmail = req.body.IdEmail;
+  const UserID = req.body.UserID;
 
   try {
     db.query(
-      `SELECT UserID FROM user WHERE EmailAddress = '${IdEmail}'`,
+      `SELECT * FROM address WHERE id IN (SELECT address_id FROM user_shipping_address WHERE user_id = '${UserID}')`,
       (error, results) => {
         if (results == "") {
           console.log("No results");
         } else {
-          db.query(
-            `SELECT * FROM shipping_address WHERE UserID = '${results[0].UserID}'`,
-            (error, results) => {
-              if (results == "") {
-                console.log("No results");
-              } else {
-                res.status(200).send({ results });
-              }
-            }
-          );
+          res.status(200).send({ results });
         }
       }
     );
@@ -78,9 +76,11 @@ router.post("/getshipaddress", (req, res) => {
 // [Address] Delete Information.
 router.post("/deleteshipaddress", (req, res) => {
   const ShipAddressID = req.body.ShipAddressID;
+
   try {
+    db.query(`DELETE FROM address WHERE id = '${ShipAddressID}'`);
     db.query(
-      `DELETE FROM shipping_address WHERE ShipAddressID = '${ShipAddressID}'`
+      `DELETE FROM user_shipping_address WHERE address_id = '${ShipAddressID}'`
     );
   } catch (err) {
     console.log(err);
@@ -89,10 +89,7 @@ router.post("/deleteshipaddress", (req, res) => {
 
 // [Address] Update User Information..
 router.post("/updateshipaddress", (req, res) => {
-  const FirstName = req.body.FirstName;
-  const LastName = req.body.LastName;
   const Address = req.body.Address;
-  const Address2 = req.body.Address2;
   const City = req.body.City;
   const State = req.body.State;
   const ZipCode = req.body.ZipCode;
@@ -102,7 +99,7 @@ router.post("/updateshipaddress", (req, res) => {
   if (ShipAddressID) {
     try {
       db.promise().query(
-        `UPDATE shipping_address SET FirstName = '${FirstName}', LastName = '${LastName}', Address = '${Address}', Address2 = '${Address2}', City = '${City}', State = '${State}', ZipCode = '${ZipCode}', Country = '${Country}' WHERE ShipAddressID = '${ShipAddressID}'`
+        `UPDATE address SET street = '${Address}', city = '${City}', state = '${State}', zip_code = '${ZipCode}', country = '${Country}' WHERE id = '${ShipAddressID}'`
       );
       console.log("User Shipping Address Updated");
       res.status(201).send({ msg: "Shipping Address Updated" });

@@ -2,6 +2,11 @@
 const { Router } = require("express");
 const db = require("../db");
 const router = Router();
+const express = require("express");
+
+// middleware
+router.use(express.json());
+router.use(express.urlencoded());
 
 // Default.
 router.get("/", (req, res) => {
@@ -10,13 +15,14 @@ router.get("/", (req, res) => {
 
 // [FullName] Update User Information.
 router.put("/fullname", (req, res) => {
-  const UserFullName = req.body.UserFullName;
+  const UserFirstName = req.body.UserFirstName;
+  const UserLastName = req.body.UserLastName;
   const IdEmail = req.body.IdEmail;
 
-  if (UserFullName) {
+  if (UserFirstName && UserLastName) {
     try {
       db.promise().query(
-        `UPDATE user SET UserFullName = '${UserFullName}' WHERE EmailAddress = '${IdEmail}'`
+        `UPDATE user SET user_firstname = '${UserFirstName}', user_lastname = '${UserLastName}'  WHERE email = '${IdEmail}'`
       );
 
       console.log("User Fullname Updated");
@@ -35,7 +41,7 @@ router.put("/email", (req, res) => {
   if (EmailAddress) {
     try {
       db.promise().query(
-        `UPDATE user SET EmailAddress = '${EmailAddress}' WHERE EmailAddress = '${IdEmail}'`
+        `UPDATE user SET email = '${EmailAddress}' WHERE email = '${IdEmail}'`
       );
 
       console.log("User EmailAddress Updated");
@@ -54,7 +60,7 @@ router.put("/nickname", (req, res) => {
   if (NickName) {
     try {
       db.promise().query(
-        `UPDATE user SET NickName = '${NickName}' WHERE EmailAddress = '${IdEmail}'`
+        `UPDATE user SET nickname = '${NickName}' WHERE email = '${IdEmail}'`
       );
 
       console.log("User NickName Updated");
@@ -68,12 +74,11 @@ router.put("/nickname", (req, res) => {
 // [Anonymus Status] Update User Information.
 router.put("/status", (req, res) => {
   const AnonymusStat = req.body.AnonymusStat;
-  const IdEmail = req.body.IdEmail;
+  const UserID = req.body.UserID;
 
-  //if (AnonymusStat) {
   try {
     db.promise().query(
-      `UPDATE user SET AnonymusStat = '${AnonymusStat}'  WHERE EmailAddress = '${IdEmail}'` // CHANGE TO DYNAMIC USERRRRRR
+      `UPDATE user_book_review SET is_anonymous = '${AnonymusStat}'  WHERE user_id = '${UserID}'` // CHANGE TO DYNAMIC USERRRRRR
     );
 
     console.log("User AnonymusStat Updated");
@@ -81,7 +86,6 @@ router.put("/status", (req, res) => {
   } catch (err) {
     console.log(err);
   }
-  // }
 });
 
 // [Password] Insert User Information..
@@ -92,7 +96,7 @@ router.put("/password", (req, res) => {
   if (Password) {
     try {
       db.promise().query(
-        `UPDATE user SET Password = '${Password}' WHERE EmailAddress = '${IdEmail}'` // CHANGE TO DYNAMIC USERRRRRR
+        `UPDATE user SET Password = '${Password}' WHERE email = '${IdEmail}'` // CHANGE TO DYNAMIC USERRRRRR
       );
       console.log("User Password Updated");
       res.status(201).send({ msg: "Created User" });
@@ -105,26 +109,26 @@ router.put("/password", (req, res) => {
 // [Address] Insert User Information..
 router.put("/address", (req, res) => {
   const Address = req.body.Address;
-  const Address2 = req.body.Address2;
   const City = req.body.City;
   const State = req.body.State;
   const ZipCode = req.body.ZipCode;
   const Country = req.body.Country;
-  const IdEmail = req.body.IdEmail;
+  const UserID = req.body.UserID;
 
   if (Address && City && State && ZipCode && Country) {
     try {
       db.query(
-        `SELECT UserID FROM user WHERE EmailAddress = '${IdEmail}'`,
+        `SELECT address_id FROM user_home_address WHERE user_id = '${UserID}'`,
         (error, results) => {
           if (results == "") {
             console.log("No results");
           } else {
-            console.log("results: " + results[0].UserID);
+            console.log("results: " + results[0].address_id);
 
             db.promise().query(
-              `UPDATE home_address SET Address = '${Address}',Address2 = '${Address2}',City = '${City}',State = '${State}',ZipCode = '${ZipCode}',Country = '${Country}', HmAddrssVld = 'N' WHERE UserID = '${results[0].UserID}'`
+              `UPDATE address SET street = '${Address}', city = '${City}',state = '${State}',zip_code = '${ZipCode}',country = '${Country}' WHERE id = '${results[0].address_id}'`
             );
+
             console.log("User home_address Updated");
             res.status(201).send({ msg: "Updated User home_address" });
           }

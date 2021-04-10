@@ -2,6 +2,11 @@
 const { Router } = require("express");
 const db = require("../db");
 const router = Router();
+const express = require("express");
+
+// middleware
+router.use(express.json());
+router.use(express.urlencoded());
 
 // Default.
 router.get("/", (req, res) => {
@@ -15,75 +20,35 @@ router.post("/newpayment", (req, res) => {
   const CrdtHldrName = req.body.CrdtHldrName;
   const ExpMonth = req.body.ExpMonth;
   const ExpYear = req.body.ExpYear;
-  const BillFirstName = req.body.BillFirstName;
-  const BillLastName = req.body.BillLastName;
-  const BillAddress = req.body.BillAddress;
-  const BillAddress2 = req.body.BillAddress2;
-  const BillCity = req.body.BillCity;
-  const BillState = req.body.BillState;
-  const BillZipCode = req.body.BillZipCode;
-  const BillCountry = req.body.BillCountry;
-  const IdEmail = req.body.IdEmail;
+  const SecurityCode = req.body.SecurityCode;
+  const UserID = req.body.UserID;
+  const formatDate = ExpYear[2] + ExpYear[3];
+  const dateTemp = ExpMonth + "/" + formatDate;
 
-  console.log("CardType: " + CardType);
-  console.log("CardNumber: " + CardNumber);
-  console.log("CrdtHldrName: " + CrdtHldrName);
-  console.log("ExpMonth: " + ExpMonth);
-  console.log("ExpYear: " + ExpYear);
-  console.log("BillFirstName: " + BillFirstName);
-  console.log("BillLastName: " + BillLastName);
-  console.log("BillAddress: " + BillAddress);
-  console.log("BillAddress2: " + BillAddress2);
-  console.log("BillCity: " + BillCity);
-  console.log("BillState: " + BillState);
-  console.log("BillZipCode: " + BillZipCode);
-  console.log("BillCountry: " + BillCountry);
-
-  console.log("Before IF");
-  if (
-    CardType &&
-    CardNumber &&
-    CrdtHldrName &&
-    ExpMonth &&
-    ExpYear &&
-    BillFirstName &&
-    BillLastName &&
-    BillAddress &&
-    BillCity &&
-    BillState &&
-    BillZipCode &&
-    BillCountry
-  ) {
+  if (CardType && CardNumber && CrdtHldrName && dateTemp && SecurityCode) {
     console.log("First Try");
     try {
+      db.promise().query(
+        `INSERT INTO credit_card VALUES('${0}','${CardNumber}','${CardType}','${CrdtHldrName}','${dateTemp}','${SecurityCode}', '0')`
+      );
+
       db.query(
-        `SELECT UserID FROM user WHERE EmailAddress = '${IdEmail}'`,
+        `SELECT id FROM credit_card WHERE card_number = '${CardNumber}'`,
         (error, results) => {
           if (results == "") {
             console.log("No results");
           } else {
-            console.log("results: " + results[0].UserID);
+            console.log("results: " + results[0].id);
 
             db.promise().query(
-              `INSERT INTO credit_card VALUES('${CardNumber}','${results[0].UserID}','${CardType}','${CrdtHldrName}','${ExpMonth}','${ExpYear}','N','N')`
+              `INSERT INTO user_credit_card VALUES('${UserID}','${results[0].id}')`
             );
-            console.log("User Credit Card Inserted");
-            /*res.status(201).send({ msg: "Credit Card Inserted" });*/
-
-            console.log("Second Try");
-
-            try {
-              db.promise().query(
-                `INSERT INTO billing_address VALUES('${0}','${CardNumber}','${BillFirstName}','${BillLastName}','${BillAddress}','${BillAddress2}','${BillCity}','${BillState}','${BillZipCode}','${BillCountry}','+17861234567')` // CHANGE TO DYNAMIC USERRRRRR
-              );
-              console.log("User Billing Address Inserted");
-              res.status(201).send({ msg: "Billing Address Inserted" });
-            } catch (err) {
-              console.log(err);
-            }
           }
         }
       );
+
+      console.log("User Credit Card Inserted");
+      /*res.status(201).send({ msg: "Credit Card Inserted" });*/
     } catch (err) {
       console.log(err);
     }
@@ -94,25 +59,16 @@ router.post("/newpayment", (req, res) => {
 
 // [Payment] Get Information.
 router.post("/getpayment", (req, res) => {
-  const IdEmail = req.body.IdEmail;
+  const UserID = req.body.UserID;
 
   try {
     db.query(
-      `SELECT UserID FROM user WHERE EmailAddress = '${IdEmail}'`,
+      `SELECT * FROM credit_card WHERE id IN (SELECT credit_card_id FROM user_credit_card WHERE user_id = '${UserID}')`,
       (error, results) => {
         if (results == "") {
           console.log("No results");
         } else {
-          db.query(
-            `SELECT * FROM credit_card WHERE UserID = '${results[0].UserID}'`,
-            (error, results) => {
-              if (results == "") {
-                console.log("No results");
-              } else {
-                res.status(200).send({ results });
-              }
-            }
-          );
+          res.status(200).send({ results });
         }
       }
     );
@@ -123,24 +79,10 @@ router.post("/getpayment", (req, res) => {
 
 // [Payment] Delete Information.
 router.post("/deletepayment", (req, res) => {
-  const CardNumber = req.body.CardNumber;
+  const CardID = req.body.CardID;
   try {
-    db.query(
-      `SELECT PurchaseID FROM purchase WHERE  CardNumber = '${CardNumber}'`,
-      (error, results) => {
-        if (results == "") {
-          console.log("No results");
-        } else {
-          db.query(
-            `DELETE FROM purchase_details WHERE PurchaseID = '${results[0].PurchaseID}'`
-          );
-          db.query(`DELETE FROM purchase WHERE CardNumber = '${CardNumber}'`);
-          db.query(
-            `DELETE FROM credit_card WHERE CardNumber = '${CardNumber}'`
-          );
-        }
-      }
-    );
+    db.query(`DELETE FROM credit_card WHERE id = '${CardID}'`);
+    db.query(`DELETE FROM user_credit_card WHERE credit_card_id = '${CardID}'`);
   } catch (err) {
     console.log(err);
   }
@@ -153,31 +95,20 @@ router.post("/updatepayment", (req, res) => {
   const CrdtHldrName = req.body.CrdtHldrName;
   const ExpMonth = req.body.ExpMonth;
   const ExpYear = req.body.ExpYear;
-  const BillFirstName = req.body.BillFirstName;
-  const BillLastName = req.body.BillLastName;
-  const BillAddress = req.body.BillAddress;
-  const BillAddress2 = req.body.BillAddress2;
-  const BillCity = req.body.BillCity;
-  const BillState = req.body.BillState;
-  const BillZipCode = req.body.BillZipCode;
-  const BillCountry = req.body.BillCountry;
-  const IdEmail = req.body.IdEmail;
-  const CardNumberOld = req.body.CardNumberOld;
+  const SecurityCode = req.body.SecurityCode;
+  const CardID = req.body.CardID;
+  const formatDate = ExpYear[2] + ExpYear[3];
+  const dateTemp = ExpMonth + "/" + formatDate;
 
-  console.log("Result CardNumberOld: " + CardNumberOld);
+  console.log("Result CardID: " + CardID);
 
   if (CardNumber) {
     try {
       db.query(
-        `UPDATE credit_card SET CardNumber = '${CardNumber}', CardType = '${CardType}', CrdtHldrName = '${CrdtHldrName}', ExpMonth = '${ExpMonth}', ExpYear = '${ExpYear}' WHERE CardNumber = '${CardNumberOld}'`
+        `UPDATE credit_card SET card_number = '${CardNumber}', card_type = '${CardType}', holder_name = '${CrdtHldrName}', expire_date = '${dateTemp}', security_code = '${SecurityCode}' WHERE id = '${CardID}'`
       );
 
       console.log("User Credit Card Info Updated");
-
-      db.query(
-        `UPDATE billing_address SET BillFirstName = '${BillFirstName}', BillLastName = '${BillLastName}', BillAddress = '${BillAddress}', BillAddress2 = '${BillAddress2}', BillCity = '${BillCity}', BillState = '${BillState}', BillZipCode = '${BillZipCode}', BillCountry = '${BillCountry}' WHERE  CardNumber = '${CardNumber}'`
-      );
-      console.log("User Billing Address Info Updated");
     } catch (err) {
       console.log(err);
     }

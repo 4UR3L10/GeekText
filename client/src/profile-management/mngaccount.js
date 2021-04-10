@@ -24,7 +24,7 @@ function ManageAccount() {
             <div className="App">
                 {/* Testing.*/}
 
-                {/* TextHeader.*/}
+                <br/> {/* TextHeader.*/}
                 <div className="Mainheader">
                     <Container>
                         <h1>Welcome {
@@ -67,12 +67,13 @@ function ManageAccount() {
 
                 {/* TextHeader.*/}
                 <div className="mainheader">
+
+                    <h1>Create an Account or Sign In</h1>
                     <Container>
-                        <h1>Create an Account or Sign In</h1>
                         <p>
                             <Alert.Link href="/signup">SignUp{" "} </Alert.Link>
                             to create a
-                                                                                                  GeekText account. If you already have an account, please.{" "}
+                                                                                                                                                          GeekText account. If you already have an account, please.{" "}
                             <Alert.Link href="/signin">Sign In</Alert.Link>.
                         </p>
                     </Container>
