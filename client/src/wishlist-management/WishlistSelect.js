@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 let currentId = 0;
 let name;
 let WishlistName;
-let userID = 2;
+let userID = 0;
 let newnameList;
 
 Modal.setAppElement('#root')
@@ -33,6 +33,7 @@ export default function WishlistSelect() {
     function getUserWish()
     {
         userID = localStorage.getItem("UserID");
+        console.log(userID)
 
         fetch(`http://localhost:4000/api/wishlists/user/${userID}`)
         .then((response) => response.json())
@@ -266,6 +267,10 @@ export default function WishlistSelect() {
     return (
         
         <div>
+            {userID === null &&
+            <div className = "noBook">
+                    <h1>You might want to sign in or sign up</h1>
+            </div>}
         {wishlists.length > 0 &&
             <div className = "sub-navbar">
                 {wishlists.map((name,idx) => (<button key = {idx} className = "wishlist-button" onClick = {()=>displayList(name.id)}>{name.wishlist_name}</button>))}
