@@ -21,6 +21,19 @@ const textBodyStyle = {
     fontSize: "1em"
 }
 
+const modalStyle = {
+    position: "fixed",
+    top: "0",
+    left: "0",
+    zIndex: "1050",
+    width: "100%",
+    height: "100%",
+    outline: "0",
+    transform: "translate(0%, 0%)",
+    padding: "0",
+    backgroundColor: "#fff0"
+}
+
 function BookDetails(props) {
     const { bookId } = useParams();
     const { userId } = props;
@@ -147,7 +160,7 @@ function BookDetails(props) {
 
     function WishlistSelect() {
         return (
-            <Modal show={showWishlistSelect}
+            <Modal style={modalStyle} show={showWishlistSelect}
                 onHide={() => setShowWishlistSelect(false)}
             >
                 <Modal.Header closeButton >
@@ -173,7 +186,7 @@ function BookDetails(props) {
 
     function LargeBookImage() {
         return (
-            <Modal show={showLargeImage} onHide={() => setShowLargeImage(false)}>
+            <Modal style={modalStyle} show={showLargeImage} onHide={() => setShowLargeImage(false)}>
                 <Modal.Header closeButton />
                 <Modal.Body>
                     <img src={book.cover} style={{
