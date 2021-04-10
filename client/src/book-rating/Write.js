@@ -75,7 +75,7 @@ function Write({
       .catch((err) => {
         console.log(err);
       });
-
+      console.log("yoooooooooooooooo");
     setOpen(false);
   }
 
@@ -105,7 +105,7 @@ function Write({
         className=""
       >
         
-        <form onSubmit={handleSubmit}>
+        <form >
           <h1 style={{textAlign:"center", fontSize:"25px"}}> Write a review</h1>
           <div className="titlediv">Title:</div>
           <textarea
@@ -162,7 +162,7 @@ function Write({
           </fieldset>
         </form>
 
-        <button className="submitbutton" type="submit">
+        <button className="submitbutton" type="submit" onClick={handleSubmit}>
           Submit
         </button>
 
