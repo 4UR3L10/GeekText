@@ -29,42 +29,41 @@ const ManagePayment = () => {
   // Get all payments for a user.
   const getDataPay = async () => {
     const response = await axios.post(
-      "http://localhost:3001/payment/getpayment",
+      "http://localhost:4000/api/payment/getpayment",
       {
-        IdEmail: decoded.EmailAddressReg,
+        UserID: localStorage.getItem("UserID"),
       }
     );
     setEmployees(response.data.results);
   };
 
   // Remove Credit card info.
-  const removeData = async (CardNumber) => {
+  const removeData = async (CardID) => {
     window.location.reload();
     const response = await axios.post(
-      "http://localhost:3001/payment/deletepayment",
+      "http://localhost:4000/api/payment/deletepayment",
       {
-        CardNumber: CardNumber,
+        CardID: CardID,
       }
     );
 
     window.location.reload();
   };
 
-  const updateData = async (CardNumber) => {
-    window.localStorage.setItem("CardNumber", CardNumber);
+  const updateData = async (CardID) => {
+    window.localStorage.setItem("CardID", CardID);
     window.location.href = "/updatepayment";
   };
 
   const renderHeader = () => {
     let headerElement = [
+      "CardID",
       "CardNumber",
-      "UserID",
       "CardType",
       "CrdtHldrName",
-      "ExpMonth",
-      "ExpYear",
+      "ExpDate",
+      "SecurityCode",
       "CrdtCrdVld",
-      "DefaultCard",
       "Update",
       "Delete",
     ];
@@ -79,38 +78,30 @@ const ManagePayment = () => {
       employees &&
       employees.map(
         ({
-          CardNumber,
-          UserID,
-          CardType,
-          CrdtHldrName,
-          ExpMonth,
-          ExpYear,
-          CrdtCrdVld,
-          DefaultCard,
+          id,
+          card_number,
+          card_type,
+          holder_name,
+          expire_date,
+          security_code,
+          is_card_valid,
         }) => {
           return (
-            <tr key={CardNumber}>
-              <td>{CardNumber}</td>
-              <td>{UserID}</td>
-              <td>{CardType}</td>
-              <td>{CrdtHldrName}</td>
-              <td>{ExpMonth}</td>
-              <td>{ExpYear}</td>
-              <td>{CrdtCrdVld}</td>
-              <td>{DefaultCard}</td>
+            <tr key={id}>
+              <td>{id}</td>
+              <td>{card_number}</td>
+              <td>{card_type}</td>
+              <td>{holder_name}</td>
+              <td>{expire_date}</td>
+              <td>{security_code}</td>
+              <td>{is_card_valid}</td>
               <td className="opration">
-                <button
-                  className="buttonUpdate"
-                  onClick={() => updateData(CardNumber)}
-                >
+                <button className="buttonUpdate" onClick={() => updateData(id)}>
                   Update
                 </button>
               </td>
               <td className="opration">
-                <button
-                  className="button"
-                  onClick={() => removeData(CardNumber)}
-                >
+                <button className="button" onClick={() => removeData(id)}>
                   Delete
                 </button>
               </td>
@@ -128,7 +119,6 @@ const ManagePayment = () => {
   };
 
   if (localStorage.getItem("Token") != null) {
-  
     var decoded = jwt_decode(localStorage.getItem("Token"));
     console.log("decoded: " + decoded.EmailAddressReg);
 

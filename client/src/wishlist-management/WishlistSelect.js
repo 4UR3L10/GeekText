@@ -281,27 +281,27 @@ export default function WishlistSelect() {
                             {wishlists.length >= 1 &&
                             <div>
                                 <h1>Wishlist #1</h1>
-                                <input className = "settingtext" placeholder = 'New Name' ref = {newName1} type = "text"/>
+                                <input className = "wish_settingtext" placeholder = 'New Name' ref = {newName1} type = "text"/>
                                 <button className = "settingaddButton" onClick = {()=>editName(wishlists[0].id)}>confirm</button>
                             </div>}
 
                             {wishlists.length >= 2 &&
                             <div>
                                 <h1>Wishlist #2</h1>
-                                <input className = "settingtext" placeholder = 'New Name' ref = {newName2} type = "text"/>
+                                <input className = "wish_settingtext" placeholder = 'New Name' ref = {newName2} type = "text"/>
                                 <button className = "settingaddButton" onClick = {()=>editName(wishlists[1].id)}>confirm</button>
                             </div>}
 
                             {wishlists.length >= 3 &&
                             <div>
                                 <h1>Wishlist #3</h1>
-                                <input className = "settingtext" placeholder = 'New Name' ref = {newName3} type = "text"/>
+                                <input className = "wish_settingtext" placeholder = 'New Name' ref = {newName3} type = "text"/>
                                 <button className = "settingaddButton" onClick = {()=>editName(wishlists[2].id)}>confirm</button>
                             </div>}
                         </div>
                     </div>}
                     </div>
-                <div className = "listbuttons">
+                <div className = "wish_listbuttons">
                     <button className = "exitButton" onClick = {() => setmodalISOpen(false)}>x</button>
                 </div>
             </Modal>
@@ -310,9 +310,12 @@ export default function WishlistSelect() {
                 {wishlists.length < 3 && 
                     <div>
                         <h1>Add new wishlist</h1>
-                        <input className = "settingtext" placeholder = 'Name' ref = {nameList} type = "text"/>
+                        <input className = "wish_settingtext" placeholder = 'Name' ref = {nameList} type = "text"/>
                         <button onClick = {() => handleNewList()}className = "settingaddButton">ADD</button>
                     </div>}
+                    <div className = "wish_listbuttons">
+                    <button className = "exitButton" onClick = {() => setadd_modalISOpen(false)}>x</button>
+                </div>
 
             </Modal>
             

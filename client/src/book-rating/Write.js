@@ -7,6 +7,7 @@ function Write({
   //addReview
   bookId,
   userId,
+  onSubmit = () => {}
 }) {
   const [open, setOpen] = useState(false);
 
@@ -68,7 +69,8 @@ function Write({
         return response.json();
       })
       .then((json) => {
-        console.log(json);
+        console.log(json)
+        onSubmit();
       })
       .catch((err) => {
         console.log(err);

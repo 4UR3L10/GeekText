@@ -1,30 +1,4 @@
 
-
-
-  .removeButton {
-    color: rgb(0, 0, 0);
-    background-color: rgb(228, 235, 245);
-    padding: 15px 22px;
-    font-size: 20px;
-    border: 3px solid rgb(228, 235, 245);
-    border-radius: 0px 15px 15px 0px;
-    font-weight: bold;
-    font-family: Arial;
-  }
-
-  .removeButton:hover
-  {
-    background: rgb(255, 255, 255);
-    transition-duration: 0.4s;
-    border: 3px solid rgb(230, 118, 118);
-  }
-
-  .removeButton:focus
-  {
-    outline: none;
-  }
-
-
   .navbar {
     display: flex;
     justify-content: space-around;
@@ -153,7 +127,7 @@
     border: 3px solid rgb(150, 238, 150);
   }
 
-  .list{
+  .wish_list{
     display: flex;
     align-items: center;
     color: black;
@@ -167,7 +141,7 @@
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.514);
   }
 
-  .list:hover{
+  .wish_list:hover{
     background-color: rgb(5, 25, 53);
     color: rgb(255, 255, 255);
     transition-duration: 0.3s;
@@ -175,13 +149,13 @@
   }
 
 
-  .listdescription{
+  .wish_listdescription{
     text-overflow: ellipsis;
-    max-width: 50%;
+    max-width: 45%;
   }
   
 
-  .title{
+  .wish_title{
     font: 30px Arial;
     font-weight: bold;
     margin-top: -0.05%;
@@ -193,7 +167,7 @@
     overflow: hidden;
   }
 
-  .author{
+  .wish_author{
     font: 25px Arial;
     margin-top: 5px;
     margin-left: 25px;
@@ -201,7 +175,7 @@
     margin-bottom: 0px;
   }
 
-  .price{
+  .wish_price{
     font: 20px Arial;
     margin-top: 10px;
     margin-left: 25px;
@@ -209,34 +183,33 @@
     margin-bottom: 0px;
   }
 
-  .bookimage{
+  .wish_bookimage{
     border-radius: 10px;
     width: 11%;
     margin-left: 20px;
 
   }
 
-  .listbuttons{
+  .wish_listbuttons{
     margin-left:auto;
     margin-right: 2%;
     position: relative;
     
   }
 
-  .remove {
+  .wish_remove {
     color: rgb(0, 0, 0);
     background-color: rgb(228, 235, 245);
-    padding: 10px 20px;
+    padding: 10px 25px;
     font-size: 20px;
     border: 3px solid rgb(228, 235, 245);
     border-radius: 1px;
     font-weight: bold;
     font-family: Arial;
     display:block;
-
   }
 
-  .remove:hover
+  .wish_remove:hover
   {
     background: rgb(236, 36, 86);
     border: 3px solid rgb(236, 36, 86);
@@ -244,12 +217,12 @@
     transition-duration: 0.4s;
   }
 
-  .remove:focus
+  .wish_remove:focus
   {
     outline: none;
   }
 
-  .addtoCart{
+  .wish_addtoCart{
     color: rgb(0, 0, 0);
     background-color: rgb(228, 235, 245);
     padding: 10px 20px;
@@ -259,10 +232,9 @@
     font-weight: bold;
     font-family: Arial;
     float:left;
-    margin-right: 1%;
   }
 
-  .addtoCart:hover
+  .wish_addtoCart:hover
   {
     background: rgb(38, 128, 231);
     border: 3px solid rgb(38, 128, 231);
@@ -270,7 +242,7 @@
     transition-duration: 0.4s;
   }
 
-  .addtoCart:focus
+  .wish_addtoCart:focus
   {
     outline: none;
   }
@@ -280,12 +252,13 @@
     display:inline-flex;
   }
 
-  .moveButton{
+  .wish_moveButton{
     color: rgb(0, 0, 0);
     background-color: rgb(228, 235, 245);
     padding: 10px 22px;
     font-size: 20px;
     border: 3px solid rgb(228, 235, 245);
+    border-radius: 1px;
     font-weight: bold;
     font-family: Arial;
     display:left;
@@ -293,7 +266,7 @@
     margin-bottom: 8%;
   }
 
-  .moveButton:hover{
+  .wish_moveButton:hover{
     border: 3px solid rgb(80, 82, 223);
     background: rgb(80, 82, 223);
     color: white;
@@ -339,7 +312,7 @@
   }
 
 
-  .settingtext {
+  .wish_settingtext {
     color: rgb(114, 110, 110);
     background: rgb(255, 255, 255);
     padding: 15px 10px;
@@ -351,7 +324,7 @@
     margin-top: 1%;
   }   
 
-  .settingtext:focus
+  .wish_settingtext:focus
   {
     outline: none;
   }
